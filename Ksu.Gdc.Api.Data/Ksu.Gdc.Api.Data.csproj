@@ -10,4 +10,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Ksu.Gdc.Api.Core\Ksu.Gdc.Api.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="DbContexts\" />
+  </ItemGroup>
 </Project>
