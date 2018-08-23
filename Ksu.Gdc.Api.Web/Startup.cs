@@ -16,6 +16,8 @@ using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Web.Services;
 using Ksu.Gdc.Api.Data.DbContexts;
 using Ksu.Gdc.Api.Data.Extensions;
+using Ksu.Gdc.Api.Data.Entities;
+using Ksu.Gdc.Api.Core.Models;
 
 namespace Ksu.Gdc.Api.Web
 {
@@ -49,28 +51,34 @@ namespace Ksu.Gdc.Api.Web
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, MemberContext memberContext)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseExceptionHandler();
-                app.UseHsts();
-            }
-
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<MemberContext>();
-                dbContext.Database.EnsureDeleted();
-                dbContext.Database.EnsureCreated();
+                var memberDBContext = serviceScope.ServiceProvider.GetRequiredService<MemberContext>();
+                if (env.IsDevelopment())
+                {
+                    app.UseDeveloperExceptionPage();
+                    memberDBContext.Database.EnsureDeleted();
+                }
+                else
+                {
+                    app.UseExceptionHandler();
+                    app.UseHsts();
+                }
+                memberDBContext.Database.EnsureCreated();
+
+                memberContext.EnsureSeedDataForContext();
+
+                app.UseHttpsRedirection();
+                app.UseStatusCodePages();
+
+                AutoMapper.Mapper.Initialize(cfg =>
+                {
+                    cfg.CreateMap<OfficerDbEntity, OfficerDto>();
+                    cfg.CreateMap<UserDbEntity, UserDto>();
+                });
+
+                app.UseMvc();
             }
-
-            memberContext.EnsureSeedDataForContext();
-
-            app.UseHttpsRedirection();
-            app.UseStatusCodePages();
-            app.UseMvc();
         }
     }
 }
