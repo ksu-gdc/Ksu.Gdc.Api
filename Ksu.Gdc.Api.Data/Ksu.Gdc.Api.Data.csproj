@@ -5,12 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.2" />
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0-msbuild2-final" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ksu.Gdc.Api.Core\Ksu.Gdc.Api.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="DbContexts\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Extensions\" />
   </ItemGroup>
 </Project>

@@ -33,5 +33,7 @@ namespace Ksu.Gdc.Api.Core.Models
                 return Environment.GetEnvironmentVariable("OfficerImageDataStoreUrl") + "/" + Regex.Replace(User.Username, "[^a-zA-Z0-9]", "");
             }
         }
+
+        public string Description { get; set; }
     }
 }

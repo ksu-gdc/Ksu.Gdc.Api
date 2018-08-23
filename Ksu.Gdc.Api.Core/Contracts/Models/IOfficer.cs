@@ -36,5 +36,11 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// </summary>
         /// <value>The last name.</value>
         string LastName { get; set; }
+
+        /// <summary>
+        /// Gets or sets the description.
+        /// </summary>
+        /// <value>The description.</value>
+        string Description { get; set; }
     }
 }
