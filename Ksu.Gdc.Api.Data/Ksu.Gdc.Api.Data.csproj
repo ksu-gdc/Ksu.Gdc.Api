@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.2" />
-    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="1.0.0-msbuild2-final" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ksu.Gdc.Api.Core\Ksu.Gdc.Api.Core.csproj" />

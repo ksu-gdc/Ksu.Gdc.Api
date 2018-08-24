@@ -15,19 +15,49 @@ namespace Ksu.Gdc.Api.Web.Controllers
     [Route("api/[controller]")]
     public class UsersController : Controller
     {
+        public IUserService _userService;
+
+        public UsersController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         [HttpGet]
         [Route("{id}", Name = "GetUserById")]
         public async Task<IActionResult> GetUserById([FromRoute] int id)
         {
-            return Ok();
-            //throw new NotImplementedException();
+            try
+            {
+                var user = await _userService.GetUserByIdAsync(id);
+                return Ok(user);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet]
-        [Route("{username}", Name = "GetUserByUsername")]
-        public async Task<IActionResult> GetUserByUsername([FromRoute] string username)
+        [Route("", Name = "GetUserByUsername")]
+        public async Task<IActionResult> GetUserByUsername([FromQuery] string username)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _userService.GetUserByUsernameAsync(username);
+                return Ok(user);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }

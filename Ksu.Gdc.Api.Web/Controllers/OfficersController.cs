@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Data.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,31 +25,20 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("", Name = "GetOfficers")]
-        public async Task<IActionResult> GetOfficers()
+        public async Task<IActionResult> GetOfficers([FromQuery] string position)
         {
             try
             {
-                var officers = await _officerService.GetOfficersAsync();
-                return Ok(officers);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("{position}", Name = "GetOfficersByPosition")]
-        public async Task<IActionResult> GetOfficersByPosition([FromRoute] string position)
-        {
-            try
-            {
-                var officers = await _officerService.GetOfficersByPositionAsync(position);
-                return Ok(officers);
+                if (!string.IsNullOrEmpty(position))
+                {
+                    var officers = await _officerService.GetOfficersByPositionAsync(position);
+                    return Ok(officers);
+                }
+                else
+                {
+                    var officers = await _officerService.GetOfficersAsync();
+                    return Ok(officers);
+                }
             }
             catch (NotFoundException ex)
             {

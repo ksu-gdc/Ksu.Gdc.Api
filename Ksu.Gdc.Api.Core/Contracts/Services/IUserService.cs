@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 
+using Ksu.Gdc.Api.Core.Models;
+
 namespace Ksu.Gdc.Api.Core.Contracts
 {
     /// <summary>
@@ -13,27 +15,27 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// </summary>
         /// <returns>The user by identifier.</returns>
         /// <param name="id">Identifier.</param>
-        IUser GetUserById(int id);
+        UserDto GetUserById(int id);
 
         /// <summary>
         /// Gets the user by identifier async.
         /// </summary>
         /// <returns>The user by identifier async.</returns>
         /// <param name="id">Identifier.</param>
-        Task<IUser> GetUserByIdAsync(int id);
+        Task<UserDto> GetUserByIdAsync(int id);
 
         /// <summary>
         /// Gets the user by username.
         /// </summary>
         /// <returns>The user by username.</returns>
         /// <param name="username">Username.</param>
-        IUser GetUserByUsername(string username);
+        UserDto GetUserByUsername(string username);
 
         /// <summary>
         /// Gets the user by username async.
         /// </summary>
         /// <returns>The user by username async.</returns>
         /// <param name="username">Username.</param>
-        Task<IUser> GetUserByUsernameAsync(string username);
+        Task<UserDto> GetUserByUsernameAsync(string username);
     }
 }

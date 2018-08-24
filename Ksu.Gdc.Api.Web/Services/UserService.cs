@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
+using AutoMapper;
 
+using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.DbContexts;
+using Ksu.Gdc.Api.Data.Entities;
 
 namespace Ksu.Gdc.Api.Web.Services
 {
@@ -16,24 +22,36 @@ namespace Ksu.Gdc.Api.Web.Services
             _memberContext = memberContext;
         }
 
-        public IUser GetUserById(int id)
+        public UserDto GetUserById(int id)
         {
             return GetUserByIdAsync(id).Result;
         }
 
-        public async Task<IUser> GetUserByIdAsync(int id)
+        public async Task<UserDto> GetUserByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var dbUser = await _memberContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            if (dbUser == null)
+            {
+                throw new NotFoundException($"No user with Id '{id}' was found.");
+            }
+            var userDto = Mapper.Map<UserDto>(dbUser);
+            return userDto;
         }
 
-        public IUser GetUserByUsername(string username)
+        public UserDto GetUserByUsername(string username)
         {
             return GetUserByUsernameAsync(username).Result;
         }
 
-        public async Task<IUser> GetUserByUsernameAsync(string username)
+        public async Task<UserDto> GetUserByUsernameAsync(string username)
         {
-            throw new NotImplementedException();
+            var dbUser = await _memberContext.Users.Where(u => u.Username == username).FirstOrDefaultAsync<IUser>();
+            if (dbUser == null)
+            {
+                throw new NotFoundException($"No user with username '{username}' was found.");
+            }
+            var userDto = Mapper.Map<UserDto>(dbUser);
+            return userDto;
         }
     }
 }

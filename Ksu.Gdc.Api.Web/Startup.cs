@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 
+using Ksu.Gdc.Api.Core;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Web.Services;
 using Ksu.Gdc.Api.Data.DbContexts;
@@ -32,6 +33,7 @@ namespace Ksu.Gdc.Api.Web
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
+            AppConfiguration.Configuration = Configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -41,8 +43,8 @@ namespace Ksu.Gdc.Api.Web
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddTransient<IOfficerService, OfficerService>();
-            services.AddTransient<IUserService, UserService>();
+            services.AddScoped<IOfficerService, OfficerService>();
+            services.AddScoped<IUserService, UserService>();
 
             var connectionString = Configuration["connectionStrings:memberDBConnectionString"];
             services.AddDbContext<MemberContext>(options => options.UseMySql(connectionString));

@@ -8,10 +8,7 @@ namespace Ksu.Gdc.Api.Data.DbContexts
 {
     public class MemberContext : DbContext
     {
-        public MemberContext(DbContextOptions<MemberContext> options) : base(options)
-        {
-
-        }
+        public MemberContext(DbContextOptions<MemberContext> options) : base(options) { }
 
         public DbSet<OfficerDbEntity> Officers { get; set; }
 
