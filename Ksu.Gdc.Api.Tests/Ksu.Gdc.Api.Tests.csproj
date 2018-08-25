@@ -17,4 +17,7 @@
     <Folder Include="ControllerTests\" />
     <Folder Include="ServiceTests\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Ksu.Gdc.Api.Tests.csproj" />
+  </ItemGroup>
 </Project>

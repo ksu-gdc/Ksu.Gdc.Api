@@ -15,11 +15,11 @@ namespace Ksu.Gdc.Api.Web.Services
 {
     public class UserService : IUserService
     {
-        private readonly MemberContext _memberContext;
+        private readonly KsuGdcContext _ksuGdcContext;
 
-        public UserService(MemberContext memberContext)
+        public UserService(KsuGdcContext ksuGdcContext)
         {
-            _memberContext = memberContext;
+            _ksuGdcContext = ksuGdcContext;
         }
 
         public UserDto GetUserById(int id)
@@ -29,7 +29,7 @@ namespace Ksu.Gdc.Api.Web.Services
 
         public async Task<UserDto> GetUserByIdAsync(int id)
         {
-            var dbUser = await _memberContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            var dbUser = await _ksuGdcContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
             if (dbUser == null)
             {
                 throw new NotFoundException($"No user with Id '{id}' was found.");
@@ -45,7 +45,7 @@ namespace Ksu.Gdc.Api.Web.Services
 
         public async Task<UserDto> GetUserByUsernameAsync(string username)
         {
-            var dbUser = await _memberContext.Users.Where(u => u.Username == username).FirstOrDefaultAsync<IUser>();
+            var dbUser = await _ksuGdcContext.Users.Where(u => u.Username == username).FirstOrDefaultAsync();
             if (dbUser == null)
             {
                 throw new NotFoundException($"No user with username '{username}' was found.");

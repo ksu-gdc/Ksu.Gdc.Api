@@ -1,15 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text.RegularExpressions;
-using System.Configuration;
 
-using Ksu.Gdc.Api.Core;
-using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Core.Configurations;
 
 namespace Ksu.Gdc.Api.Core.Models
 {
-
-    public class OfficerDto : IOfficer<UserDto>
+    public class OfficerDto
     {
         public string Position { get; set; }
 
@@ -19,16 +16,14 @@ namespace Ksu.Gdc.Api.Core.Models
         {
             get
             {
-                var baseUrl = AppConfiguration.GetConfig("officerImageDataStoreUrl");
-                var title = User.FullName.ToLower();
-                title = Regex.Replace(title, "[ ]", "-");
-                title = Regex.Replace(title, "[^a-zA-Z0-9-]", "");
-                return baseUrl + "/" + title + ".png";
+                var baseUrl = OfficerConfig.ImageDataStoreUrl;
+                var title = User.Id.ToString();
+                return baseUrl + "/" + title + ".jpg";
             }
         }
     }
 
-    public class OfficerForCreationDto : IOfficer<UserForCreationDto>
+    public class OfficerForCreationDto
     {
         [Required]
         public string Position { get; set; }

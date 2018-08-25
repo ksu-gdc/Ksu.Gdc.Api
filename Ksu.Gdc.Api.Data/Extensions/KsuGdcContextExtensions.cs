@@ -7,9 +7,9 @@ using Ksu.Gdc.Api.Data.DbContexts;
 
 namespace Ksu.Gdc.Api.Data.Extensions
 {
-    public static class MemberContextExtensions
+    public static class KsuGdcContextExtensions
     {
-        public static void EnsureSeedDataForContext(this MemberContext context)
+        public static void EnsureSeedDataForContext(this KsuGdcContext context)
         {
             if (context.Officers.Any())
             {

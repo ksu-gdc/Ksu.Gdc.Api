@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 using Ksu.Gdc.Api.Core.Contracts;
 
 namespace Ksu.Gdc.Api.Core.Models
 {
-    public class UserDto : IUser
+    public class UserDto
     {
         public int Id { get; set; }
 
@@ -34,20 +35,12 @@ namespace Ksu.Gdc.Api.Core.Models
         }
     }
 
-    public class UserForCreationDto : IUser
+    public class UserForCreationDto
     {
         [Required]
         public int Id { get; set; }
 
         [Required]
         public string Username { get; set; }
-
-        [Required]
-        public string FirstName { get; set; }
-
-        [Required]
-        public string LastName { get; set; }
-
-        public string Description { get; set; }
     }
 }

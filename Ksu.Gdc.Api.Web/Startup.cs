@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -42,33 +43,34 @@ namespace Ksu.Gdc.Api.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddCors();
 
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
 
-            var connectionString = Configuration["connectionStrings:memberDBConnectionString"];
-            services.AddDbContext<MemberContext>(options => options.UseMySql(connectionString));
+            services.AddDbContext<KsuGdcContext>(options => options
+                                                 .UseMySql(AppConfiguration.GetConfig("connectionStrings:DBConnectionString")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, MemberContext memberContext)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, KsuGdcContext ksuGdcContext)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
-                var memberDBContext = serviceScope.ServiceProvider.GetRequiredService<MemberContext>();
+                var memberDBContext = serviceScope.ServiceProvider.GetRequiredService<KsuGdcContext>();
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
-                    memberDBContext.Database.EnsureDeleted();
+                    ksuGdcContext.Database.EnsureDeleted();
                 }
                 else
                 {
                     app.UseExceptionHandler();
                     app.UseHsts();
                 }
-                memberDBContext.Database.EnsureCreated();
+                ksuGdcContext.Database.EnsureCreated();
 
-                memberContext.EnsureSeedDataForContext();
+                ksuGdcContext.EnsureSeedDataForContext();
 
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();
@@ -77,8 +79,13 @@ namespace Ksu.Gdc.Api.Web
                 {
                     cfg.CreateMap<OfficerDbEntity, OfficerDto>();
                     cfg.CreateMap<UserDbEntity, UserDto>();
+                    cfg.CreateMap<GroupDbEntity, GroupDto>();
+                    cfg.CreateMap<GameDbEntity, GameDto>();
                 });
 
+                app.UseCors(builder => builder.WithOrigins(
+                    AppConfiguration.GetConfig("AppHostUrl")
+                ));
                 app.UseMvc();
             }
         }

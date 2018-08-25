@@ -15,4 +15,10 @@
     <Folder Include="Entities\" />
     <Folder Include="Extensions\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Ksu.Gdc.Api.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="DbContexts\PortfolioContext.cs" />
+  </ItemGroup>
 </Project>

@@ -20,10 +20,6 @@ namespace Ksu.Gdc.Api.Web
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                   .UseKestrel(options =>
-                   {
-                       options.Listen(IPAddress.Loopback, 5000);  // http:localhost:5000
-                   })
                    .UseStartup<Startup>();
     }
 }

@@ -211,6 +211,8 @@ _pkginfo.txt
 !*.[Cc]ache/
 
 # Others
+Storage/*
+!Storage/.gitkeep
 ClientBin/
 ~$*
 *~

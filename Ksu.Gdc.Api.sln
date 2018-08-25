@@ -9,6 +9,14 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksu.Gdc.Api.Data", "Ksu.Gdc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksu.Gdc.Api.Tests", "Ksu.Gdc.Api.Tests\Ksu.Gdc.Api.Tests.csproj", "{03E4D2A2-9A9A-4667-A99F-CBEFAC5334D3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{956975F3-B02F-4D88-9ED2-27AF2FEB2DF2}"
+	ProjectSection(SolutionItems) = preProject
+        .gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
+		Ksu.Gdc.Api.sln = Ksu.Gdc.Api.sln
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

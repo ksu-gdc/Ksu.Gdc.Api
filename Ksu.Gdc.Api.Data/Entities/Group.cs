@@ -1,21 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-using Ksu.Gdc.Api.Core.Contracts;
-
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class UserDbEntity : IUser
+    public class GroupDbEntity
     {
         [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public string Username { get; set; }
-
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
+        [Required]
+        public string Name { get; set; }
 
         public string Description { get; set; }
     }

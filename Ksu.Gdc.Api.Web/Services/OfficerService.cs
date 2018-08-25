@@ -15,11 +15,11 @@ namespace Ksu.Gdc.Api.Web.Services
 {
     public class OfficerService : IOfficerService
     {
-        private readonly MemberContext _memberContext;
+        private readonly KsuGdcContext _ksuGdcContext;
 
-        public OfficerService(MemberContext memberContext)
+        public OfficerService(KsuGdcContext ksuGdcContext)
         {
-            _memberContext = memberContext;
+            _ksuGdcContext = ksuGdcContext;
         }
 
         public List<OfficerDto> GetOfficers()
@@ -29,7 +29,7 @@ namespace Ksu.Gdc.Api.Web.Services
 
         public async Task<List<OfficerDto>> GetOfficersAsync()
         {
-            var dbOfficers = await _memberContext.Officers.Include(o => o.User).ToListAsync();
+            var dbOfficers = await _ksuGdcContext.Officers.Include(o => o.User).ToListAsync();
             if (dbOfficers.Count == 0)
             {
                 throw new NotFoundException("No officers were found.");
@@ -45,7 +45,7 @@ namespace Ksu.Gdc.Api.Web.Services
 
         public async Task<List<OfficerDto>> GetOfficersByPositionAsync(string position)
         {
-            var dbOfficers = await _memberContext.Officers.Include(o => o.User).Where(o => o.Position == position).ToListAsync();
+            var dbOfficers = await _ksuGdcContext.Officers.Include(o => o.User).Where(o => o.Position == position).ToListAsync();
             if (dbOfficers.Count == 0)
             {
                 throw new NotFoundException($"No officers for position '{position}' were found.");
