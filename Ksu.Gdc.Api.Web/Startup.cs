@@ -47,6 +47,7 @@ namespace Ksu.Gdc.Api.Web
 
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IPortfolioService, PortfolioService>();
 
             services.AddDbContext<KsuGdcContext>(options => options
                                                  .UseMySql(AppConfiguration.GetConfig("connectionStrings:DBConnectionString")));

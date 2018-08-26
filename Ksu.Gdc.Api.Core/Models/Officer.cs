@@ -8,19 +8,11 @@ namespace Ksu.Gdc.Api.Core.Models
 {
     public class OfficerDto
     {
+        public int Id { get; set; }
+
         public string Position { get; set; }
 
         public UserDto User { get; set; }
-
-        public string ImageUrl
-        {
-            get
-            {
-                var baseUrl = OfficerConfig.ImageDataStoreUrl;
-                var title = User.Id.ToString();
-                return baseUrl + "/" + title + ".jpg";
-            }
-        }
     }
 
     public class OfficerForCreationDto

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Core.Configurations;
 
 namespace Ksu.Gdc.Api.Core.Models
 {
@@ -25,6 +25,14 @@ namespace Ksu.Gdc.Api.Core.Models
         }
 
         public string Description { get; set; }
+
+        public string ImageUrl
+        {
+            get
+            {
+                return UserConfig.DataStoreUrl + "/" + Id + "/" + "profile.jpg";
+            }
+        }
 
         public string Email
         {
