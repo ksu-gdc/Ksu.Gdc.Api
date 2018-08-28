@@ -50,7 +50,7 @@ namespace Ksu.Gdc.Api.Web
             services.AddScoped<IPortfolioService, PortfolioService>();
 
             services.AddDbContext<KsuGdcContext>(options => options
-                                                 .UseMySql(AppConfiguration.GetConfig("connectionStrings:DBConnectionString")));
+                                                 .UseMySql(AppConfiguration.GetConfig("connectionStrings:MYSQLCONNSTR_localdb")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
