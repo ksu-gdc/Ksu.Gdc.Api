@@ -85,7 +85,8 @@ namespace Ksu.Gdc.Api.Web
                 });
 
                 app.UseCors(builder => builder.WithOrigins(
-                    AppConfiguration.GetConfig("CorsUrls")
+                    AppConfiguration.GetConfig("CorsUrl_WebApp"),
+                    AppConfiguration.GetConfig("CorsUrl_WebApp_Testing")
                 ));
                 app.UseMvc();
             }
