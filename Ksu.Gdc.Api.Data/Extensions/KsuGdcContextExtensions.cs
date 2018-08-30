@@ -20,22 +20,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
             {
                 new OfficerDbEntity()
                 {
-                    Position = "President",
-                    User = new UserDbEntity()
-                    {
-                        Id = 1,
-                        Username = "laurenlynch",
-                        FirstName = "Lauren",
-                        LastName = "Lynch",
-                        Description = "Lauren's Description."
-                    }
-                },
-                new OfficerDbEntity()
-                {
                     Position = "Advisor",
                     User = new UserDbEntity()
                     {
-                        Id = 2,
+                        Id = 1,
                         Username = "nathanbean",
                         FirstName = "Nathan",
                         LastName = "Bean",
@@ -44,14 +32,26 @@ namespace Ksu.Gdc.Api.Data.Extensions
                 },
                 new OfficerDbEntity()
                 {
+                    Position = "President",
+                    User = new UserDbEntity()
+                    {
+                        Id = 2,
+                        Username = "kyletoom",
+                        FirstName = "Kyle",
+                        LastName = "Toom",
+                        Description = "Kyle's Description."
+                    }
+                },
+                new OfficerDbEntity()
+                {
                     Position = "Vice President",
                     User = new UserDbEntity()
                     {
                         Id = 3,
-                        Username = "carsonholt",
-                        FirstName = "Carson",
-                        LastName = "Holt",
-                        Description = "Carson's Description."
+                        Username = "bripriddle",
+                        FirstName = "Bri",
+                        LastName = "Priddle",
+                        Description = "Bri's Description."
                     }
                 },
                 new OfficerDbEntity()
@@ -68,35 +68,23 @@ namespace Ksu.Gdc.Api.Data.Extensions
                 },
                 new OfficerDbEntity()
                 {
-                    Position = "Event Manager",
+                    Position = "Secretary",
                     User = new UserDbEntity()
                     {
                         Id = 5,
-                        Username = "nathanmcclain",
-                        FirstName = "Nathan",
-                        LastName = "McClain",
-                        Description = "Nathan's Description."
+                        Username = "carsonholt",
+                        FirstName = "Carson",
+                        LastName = "Holt",
+                        Description = "Carson's Description."
                     }
                 },
                 new OfficerDbEntity()
                 {
-                    Position = "Industry Liaison",
+                    Position = "Web Manager",
                     User = new UserDbEntity()
                     {
                         Id = 6,
-                        Username = "jessemolenda",
-                        FirstName = "Jesse",
-                        LastName = "Molenda",
-                        Description = "Jesse's Description."
-                    }
-                },
-                new OfficerDbEntity()
-                {
-                    Position = "Website Manager",
-                    User = new UserDbEntity()
-                    {
-                        Id = 7,
-                        Username = "daytonltaylor",
+                        Username = "daytontaylor",
                         FirstName = "Dayton",
                         LastName = "Taylor",
                         Description = "Dayton's Description."
@@ -107,11 +95,59 @@ namespace Ksu.Gdc.Api.Data.Extensions
                     Position = "Social Media Manager",
                     User = new UserDbEntity()
                     {
+                        Id = 7,
+                        Username = "timothyprice",
+                        FirstName = "Timothy",
+                        LastName = "Price",
+                        Description = "Dayton's Description."
+                    }
+                },
+                new OfficerDbEntity()
+                {
+                    Position = "Industry Liaison",
+                    User = new UserDbEntity()
+                    {
                         Id = 8,
-                        Username = "kyleingram",
-                        FirstName = "Kyle",
-                        LastName = "Ingram",
-                        Description = "Kyle's Description."
+                        Username = "jessemolenda",
+                        FirstName = "Jesse",
+                        LastName = "Molenda",
+                        Description = "Jesse's Description."
+                    }
+                },
+                new OfficerDbEntity()
+                {
+                    Position = "Industry Liaison",
+                    User = new UserDbEntity()
+                    {
+                        Id = 9,
+                        Username = "johnchapple",
+                        FirstName = "John",
+                        LastName = "Chapple",
+                        Description = "John's Description."
+                    }
+                },
+                new OfficerDbEntity()
+                {
+                    Position = "Event Coordinator",
+                    User = new UserDbEntity()
+                    {
+                        Id = 10,
+                        Username = "nathanmcclain",
+                        FirstName = "Nathan",
+                        LastName = "McClain",
+                        Description = "Nathan's Description."
+                    }
+                },
+                new OfficerDbEntity()
+                {
+                    Position = "Recruitment and Retention Officer",
+                    User = new UserDbEntity()
+                    {
+                        Id = 11,
+                        Username = "lilyfulton",
+                        FirstName = "Lily",
+                        LastName = "Fulton",
+                        Description = "Lily's Description"
                     }
                 }
             };

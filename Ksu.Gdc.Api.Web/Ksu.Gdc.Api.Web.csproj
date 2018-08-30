@@ -11,13 +11,11 @@
         <PackageReference Include="Microsoft.AspNetCore.App" />
         <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />
         <PackageReference Include="AutoMapper" Version="7.0.1" />
+        <PackageReference Include="AspNetCore.Security.CAS" Version="2.0.4" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Ksu.Gdc.Api.Core\Ksu.Gdc.Api.Core.csproj" />
         <ProjectReference Include="..\Ksu.Gdc.Api.Data\Ksu.Gdc.Api.Data.csproj" />
-    </ItemGroup>
-    <ItemGroup>
-        <Compile Remove="Controllers\ValuesController.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="Ksu.Gdc.Api.Web.csproj" />
