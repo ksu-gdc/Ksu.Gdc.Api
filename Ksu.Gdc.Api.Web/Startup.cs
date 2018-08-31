@@ -55,7 +55,6 @@ namespace Ksu.Gdc.Api.Web
                     })
                     .AddCAS(options =>
                     {
-                        options.ServiceHost = AppConfiguration.GetConfig("KsuCas_ServiceHost");
                         options.ServiceForceHTTPS = true;
                         options.CasServerUrlBase = AppConfiguration.GetConfig("KsuCas_BaseUrl");
                         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
