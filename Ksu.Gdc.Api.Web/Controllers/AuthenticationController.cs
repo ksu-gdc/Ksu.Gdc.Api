@@ -19,18 +19,24 @@ namespace Ksu.Gdc.Api.Web.Controllers
     public class AuthenticationController : Controller
     {
         private readonly Core.Contracts.IAuthenticationService _authService;
+        private readonly IUserService _userService;
 
-        public AuthenticationController(Core.Contracts.IAuthenticationService authService)
+        public AuthenticationController(Core.Contracts.IAuthenticationService authService, IUserService userService)
         {
             _authService = authService;
+            _userService = userService;
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
-        [Route("cas", Name = "CAS_Validation")]
-        public async Task<IActionResult> CAS_Validation([FromQuery] string returnUrl)
+        [Route("cas", Name = "CAS_Login")]
+        public async Task CAS_Login([FromQuery] string returnUrl)
         {
-            return Ok(Json(User.Identity.Name));
+            var properties = new AuthenticationProperties()
+            {
+                RedirectUri = returnUrl
+            };
+            await HttpContext.ChallengeAsync("CAS", properties);
         }
     }
 }

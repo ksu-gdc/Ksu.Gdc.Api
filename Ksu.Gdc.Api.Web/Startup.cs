@@ -102,8 +102,8 @@ namespace Ksu.Gdc.Api.Web
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();
                 app.UseCors(builder => builder.WithOrigins(
-                    AppConfiguration.GetConfig("CorsUrl_WebApp"),
-                    AppConfiguration.GetConfig("CorsUrl_WebApp_Testing")
+                    AppConfiguration.GetConfig("WebApp_Url"),
+                    AppConfiguration.GetConfig("WebApp__Url_Testing")
                 ));
                 app.UseAuthentication();
                 app.UseMvc();
