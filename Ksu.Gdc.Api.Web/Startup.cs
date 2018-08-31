@@ -52,7 +52,7 @@ namespace Ksu.Gdc.Api.Web
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
-                        options.LoginPath = new PathString("/login");
+                        options.LoginPath = new PathString("/logn");
                     })
                     .AddCAS(options =>
                     {
