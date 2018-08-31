@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 
 using AspNetCore.Security.CAS;
 
-using Ksu.Gdc.Api.Core;
+using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Web.Services;
 using Ksu.Gdc.Api.Data.DbContexts;
@@ -56,10 +56,12 @@ namespace Ksu.Gdc.Api.Web
                     })
                     .AddCAS(options =>
                     {
+                        options.ServiceForceHTTPS = true;
                         options.CasServerUrlBase = AppConfiguration.GetConfig("KsuCas_BaseUrl");
                         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                     });
 
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPortfolioService, PortfolioService>();

@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 
-namespace Ksu.Gdc.Api.Core
+namespace Ksu.Gdc.Api.Core.Configurations
 {
     public static class AppConfiguration
     {
