@@ -17,6 +17,5 @@ namespace Ksu.Gdc.Api.Web.Services
 {
     public class AuthenticationService : Core.Contracts.IAuthenticationService
     {
-
     }
 }

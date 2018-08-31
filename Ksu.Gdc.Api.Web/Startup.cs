@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
-
 using AspNetCore.Security.CAS;
 
 using Ksu.Gdc.Api.Core.Configurations;
@@ -52,10 +51,11 @@ namespace Ksu.Gdc.Api.Web
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
-                        options.LoginPath = new PathString("/");
+                        options.LoginPath = new PathString("/login");
                     })
                     .AddCAS(options =>
                     {
+                        options.ServiceHost = AppConfiguration.GetConfig("KsuCas_ServiceHost");
                         options.ServiceForceHTTPS = true;
                         options.CasServerUrlBase = AppConfiguration.GetConfig("KsuCas_BaseUrl");
                         options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
