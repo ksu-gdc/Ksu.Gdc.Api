@@ -48,11 +48,11 @@ namespace Ksu.Gdc.Api.Web
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
-
+            var Str = new PathString("/");
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                     .AddCookie(options =>
                     {
-                        options.LoginPath = new PathString("/logn");
+                        options.LoginPath = new PathString("/");
                     })
                     .AddCAS(options =>
                     {

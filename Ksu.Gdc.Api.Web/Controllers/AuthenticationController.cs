@@ -32,9 +32,16 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             var properties = new AuthenticationProperties()
             {
-                RedirectUri = returnUrl
+                RedirectUri = Request.Host + "/api/authentication/cas?returnUrl=" + returnUrl
             };
             await HttpContext.ChallengeAsync("CAS", properties);
+        }
+
+        [HttpPost]
+        [Route("cas")]
+        public async Task ValidateCASResponse([FromQuery] string returnUrl, [FromBody] object body)
+        {
+            throw new Exception(body.ToString());
         }
     }
 }
