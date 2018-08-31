@@ -30,13 +30,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
         [AllowAnonymous]
         [HttpGet]
         [Route("cas", Name = "CAS_Login")]
-        public async Task CAS_Login([FromQuery] string returnUrl)
+        public async Task<IActionResult> CAS_Login([FromQuery] string returnUrl)
         {
             var properties = new AuthenticationProperties()
             {
                 RedirectUri = returnUrl
             };
             await HttpContext.ChallengeAsync("CAS", properties);
+            return Ok(Json(User.Identity));
         }
     }
 }
