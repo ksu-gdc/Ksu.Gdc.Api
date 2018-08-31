@@ -25,23 +25,12 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _authService = authService;
         }
 
-        [AllowAnonymous]
+        [Authorize]
         [HttpGet]
-        [Route("cas", Name = "CAS_Login")]
-        public async Task CAS_Login([FromQuery] string returnUrl)
+        [Route("cas", Name = "CAS_Validation")]
+        public async Task<IActionResult> CAS_Validation([FromQuery] string returnUrl)
         {
-            var properties = new AuthenticationProperties()
-            {
-                RedirectUri = returnUrl
-            };
-            await HttpContext.ChallengeAsync("CAS", properties);
-        }
-
-        [HttpGet]
-        [Route("user")]
-        public async Task<IActionResult> GetLoggedInUser()
-        {
-            return Ok(Json(User.Identity));
+            return Ok(Json(User.Identity.Name));
         }
     }
 }
