@@ -41,7 +41,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         [Route("cas/validate", Name = "ValidateCASResponse")]
         public async Task<IActionResult> ValidateCASResponse([FromQuery] string returnUrl)
         {
-            return Ok(User);
+            return Ok(Json(User.Identity));
         }
     }
 }
