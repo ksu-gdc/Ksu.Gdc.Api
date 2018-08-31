@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
@@ -17,5 +18,6 @@ namespace Ksu.Gdc.Api.Web.Services
 {
     public class AuthenticationService : Core.Contracts.IAuthenticationService
     {
+
     }
 }

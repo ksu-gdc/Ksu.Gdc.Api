@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
-using AspNetCore.Security.CAS;
 
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
@@ -27,21 +27,19 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        [Route("cas", Name = "ValidateUserByCAS")]
-        public async Task ValidateUserByCAS([FromQuery] string returnUrl)
+        [Route("cas", Name = "CAS_Login")]
+        public async Task CAS_Login([FromQuery] string returnUrl)
         {
             var properties = new AuthenticationProperties()
             {
-                RedirectUri = "/api/authentication/cas/validate?returnUrl=" + returnUrl
+                RedirectUri = returnUrl
             };
             await HttpContext.ChallengeAsync("CAS", properties);
         }
 
-        [HttpGet]
-        [Route("cas/validate", Name = "ValidateCASResponse")]
-        public async Task<IActionResult> ValidateCASResponse([FromQuery] string returnUrl)
+        public async Task<IActionResult> Test()
         {
-            return Ok(Json(User.Identity.Name));
+            return Ok(HttpContext.Response);
         }
     }
 }
