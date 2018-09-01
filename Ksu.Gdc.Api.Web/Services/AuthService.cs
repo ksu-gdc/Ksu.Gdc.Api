@@ -18,7 +18,7 @@ using Ksu.Gdc.Api.Data.Entities;
 
 namespace Ksu.Gdc.Api.Web.Services
 {
-    public class AuthenticationService : Core.Contracts.IAuthenticationService
+    public class AuthService : IAuthService
     {
 
     }

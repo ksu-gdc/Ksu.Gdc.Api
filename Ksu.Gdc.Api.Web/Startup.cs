@@ -47,7 +47,7 @@ namespace Ksu.Gdc.Api.Web
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
 
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPortfolioService, PortfolioService>();

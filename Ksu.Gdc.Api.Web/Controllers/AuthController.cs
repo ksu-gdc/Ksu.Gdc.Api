@@ -18,13 +18,15 @@ using Ksu.Gdc.Api.Data.Entities;
 namespace Ksu.Gdc.Api.Web.Controllers
 {
     [Route("[controller]")]
-    public class AuthenticationController : Controller
+    public class AuthController : Controller
     {
-        private readonly Core.Contracts.IAuthenticationService _authService;
+        private readonly IAuthService _authService;
+        private readonly IUserService _userService;
 
-        public AuthenticationController(Core.Contracts.IAuthenticationService authService, IUserService userService)
+        public AuthController(IAuthService authService, IUserService userService)
         {
             _authService = authService;
+            _userService = userService;
         }
 
         [AllowAnonymous]

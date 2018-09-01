@@ -7,7 +7,7 @@ using Ksu.Gdc.Api.Core.Models;
 
 namespace Ksu.Gdc.Api.Core.Contracts
 {
-    public interface IAuthenticationService
+    public interface IAuthService
     {
 
     }

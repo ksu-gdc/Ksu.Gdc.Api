@@ -80,7 +80,7 @@ namespace Ksu.Gdc.Api.Data.Extensions
                 },
                 new OfficerDbEntity()
                 {
-                    Position = "Web Manager",
+                    Position = "Website Manager",
                     User = new UserDbEntity()
                     {
                         Id = 6,

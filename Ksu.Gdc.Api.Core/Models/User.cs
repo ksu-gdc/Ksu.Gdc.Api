@@ -16,14 +16,6 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public string LastName { get; set; }
 
-        public string FullName
-        {
-            get
-            {
-                return FirstName + " " + LastName;
-            }
-        }
-
         public string Description { get; set; }
 
         public string ImageUrl
