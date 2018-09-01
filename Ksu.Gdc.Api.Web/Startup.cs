@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using AspNetCore.Security.CAS;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Contracts;
@@ -47,18 +46,6 @@ namespace Ksu.Gdc.Api.Web
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
-
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                    .AddCookie(options =>
-                    {
-                        options.LoginPath = new PathString("/login");
-                    })
-                    .AddCAS(options =>
-                    {
-                        options.ServiceForceHTTPS = true;
-                        options.CasServerUrlBase = AppConfiguration.GetConfig("KsuCas_BaseUrl");
-                        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    });
 
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IOfficerService, OfficerService>();
@@ -105,7 +92,6 @@ namespace Ksu.Gdc.Api.Web
                     AppConfiguration.GetConfig("WebApp_Url"),
                     AppConfiguration.GetConfig("WebApp__Url_Testing")
                 ));
-                app.UseAuthentication();
                 app.UseMvc();
             }
         }

@@ -13,8 +13,8 @@ using Ksu.Gdc.Api.Data.Entities;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("api/[controller]")]
-    public class PortfolioController : Controller
+    [Route("[controller]")]
+    public class PortfolioController : ControllerBase
     {
         private readonly IPortfolioService _portfolioService;
 

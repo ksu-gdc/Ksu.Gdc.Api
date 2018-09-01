@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Security.Claims;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
@@ -8,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication;
 using AutoMapper;
 
+using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;

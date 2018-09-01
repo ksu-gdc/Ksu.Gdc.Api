@@ -13,8 +13,8 @@ using Ksu.Gdc.Api.Data.Entities;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("api/[controller]")]
-    public class OfficersController : Controller
+    [Route("[controller]")]
+    public class OfficersController : ControllerBase
     {
         private readonly IOfficerService _officerService;
 

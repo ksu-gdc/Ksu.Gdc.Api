@@ -12,8 +12,8 @@ using Ksu.Gdc.Api.Core.Contracts;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("api/[controller]")]
-    public class UsersController : Controller
+    [Route("[controller]")]
+    public class UsersController : ControllerBase
     {
         public IUserService _userService;
 
