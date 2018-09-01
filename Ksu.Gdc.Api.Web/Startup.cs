@@ -90,7 +90,7 @@ namespace Ksu.Gdc.Api.Web
                 app.UseStatusCodePages();
                 app.UseCors(builder => builder.WithOrigins(
                     AppConfiguration.GetConfig("WebApp_Url"),
-                    AppConfiguration.GetConfig("WebApp__Url_Testing")
+                    AppConfiguration.GetConfig("WebApp_Url_Testing")
                 ));
                 app.UseMvc();
             }
