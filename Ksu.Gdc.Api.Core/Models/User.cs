@@ -42,5 +42,11 @@ namespace Ksu.Gdc.Api.Core.Models
 
         [Required]
         public string Username { get; set; }
+
+        public UserForCreationDto(CASAttributes attributes)
+        {
+            Id = attributes.KsuPersonWildcatId[0];
+            Username = attributes.Uid[0];
+        }
     }
 }

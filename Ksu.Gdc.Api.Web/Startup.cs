@@ -14,10 +14,11 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Mvc.Formatters;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Contracts;
-using Ksu.Gdc.Api.Web.Services;
+using Ksu.Gdc.Api.Core.Services;
 using Ksu.Gdc.Api.Data.DbContexts;
 using Ksu.Gdc.Api.Data.Extensions;
 using Ksu.Gdc.Api.Data.Entities;
@@ -27,6 +28,8 @@ namespace Ksu.Gdc.Api.Web
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -36,15 +39,17 @@ namespace Ksu.Gdc.Api.Web
                 .AddEnvironmentVariables();
 
             Configuration = builder.Build();
-            AppConfiguration.Configuration = Configuration;
+            AppConfiguration.Initialize(Configuration);
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .AddMvcOptions(options =>
+                    {
+                        options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                    });
             services.AddCors();
 
             services.AddScoped<IAuthService, AuthService>();
@@ -78,19 +83,10 @@ namespace Ksu.Gdc.Api.Web
                     app.UseHsts();
                 }
 
-                AutoMapper.Mapper.Initialize(cfg =>
-                {
-                    cfg.CreateMap<OfficerDbEntity, OfficerDto>();
-                    cfg.CreateMap<UserDbEntity, UserDto>();
-                    cfg.CreateMap<GroupDbEntity, GroupDto>();
-                    cfg.CreateMap<GameDbEntity, GameDto>();
-                });
-
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();
                 app.UseCors(builder => builder.WithOrigins(
-                    AppConfiguration.GetConfig("WebApp_Url"),
-                    AppConfiguration.GetConfig("WebApp_Url_Testing")
+                    AppConfiguration.GetConfig("App_Url")
                 ));
                 app.UseMvc();
             }

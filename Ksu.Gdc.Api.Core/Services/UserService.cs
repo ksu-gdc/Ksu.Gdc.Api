@@ -11,7 +11,7 @@ using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.DbContexts;
 using Ksu.Gdc.Api.Data.Entities;
 
-namespace Ksu.Gdc.Api.Web.Services
+namespace Ksu.Gdc.Api.Core.Services
 {
     public class UserService : IUserService
     {
@@ -52,6 +52,18 @@ namespace Ksu.Gdc.Api.Web.Services
             }
             var userDto = Mapper.Map<UserDto>(dbUser);
             return userDto;
+        }
+
+        public UserDto AddUser(UserForCreationDto newUser)
+        {
+            return AddUserAsync(newUser).Result;
+        }
+
+        public async Task<UserDto> AddUserAsync(UserForCreationDto newUser)
+        {
+            var newDbUser = Mapper.Map<UserDbEntity>(newUser);
+            await _ksuGdcContext.Users.AddAsync(newDbUser);
+            return Mapper.Map<UserDto>(newDbUser);
         }
     }
 }

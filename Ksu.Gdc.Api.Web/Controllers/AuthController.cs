@@ -12,6 +12,7 @@ using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Data.Entities;
+using Ksu.Gdc.Api.Core.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,60 +22,62 @@ namespace Ksu.Gdc.Api.Web.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
-        private readonly IUserService _userService;
 
         public AuthController(IAuthService authService, IUserService userService)
         {
             _authService = authService;
-            _userService = userService;
         }
 
         [AllowAnonymous]
         [HttpGet]
         [Route("cas/login", Name = "CAS_Login")]
-        public RedirectResult CAS_Login([FromQuery] string returnUrl)
+        public IActionResult CAS_Login([FromQuery] string service)
         {
-            var serviceUrl = AuthConfig.LoginUrl;
-            if (!string.IsNullOrWhiteSpace(returnUrl))
+            if (string.IsNullOrWhiteSpace(service))
             {
-                serviceUrl = returnUrl;
+                return BadRequest();
             }
             var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/login?"
-                + $"service={serviceUrl}"
+                + $"service={service}"
                 + $"&logoutCallback={AuthConfig.LogoutUrl}"
-                + $"&serviceName={AppConfiguration.GetConfig("WebApp_Name")}";
+                + $"&serviceName={AppConfiguration.GetConfig("App_Name")}";
             return Redirect(url);
         }
 
         [HttpGet]
         [Route("cas/validate", Name = "CAS_Validate")]
-        public async Task<IActionResult> CAS_Validate([FromQuery] string ticket)
+        public async Task<IActionResult> CAS_Validate([FromQuery] string service, [FromQuery] string ticket)
         {
-            if (string.IsNullOrWhiteSpace(ticket))
+            try
             {
-                return BadRequest();
+                if (string.IsNullOrWhiteSpace(ticket) || string.IsNullOrWhiteSpace(service))
+                {
+                    return BadRequest();
+                }
+                var user = await _authService.ValidateCASTicketAsync(service, ticket);
+                return Ok(user);
+
             }
-            using (var client = new HttpClient())
+            catch (NotAuthorizedException)
             {
-                var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/serviceValidate?"
-                    + $"service={AuthConfig.LoginUrl}"
-                    + $"&ticket={ticket}";
-                var response = await client.GetAsync(url);
-                return Ok(response);
+                return StatusCode(StatusCodes.Status401Unauthorized);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpGet]
         [Route("cas/logout", Name = "CAS_Logout")]
-        public RedirectResult CAS_Logout([FromQuery] string returnUrl)
+        public IActionResult CAS_Logout([FromQuery] string service)
         {
-            var serviceUrl = AppConfiguration.GetConfig("WebApp_Url");
-            if (!string.IsNullOrWhiteSpace(returnUrl))
+            if (string.IsNullOrWhiteSpace(service))
             {
-                serviceUrl = returnUrl;
+                service = AuthConfig.LogoutUrl;
             }
             var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/logout?"
-                + $"url={serviceUrl}";
+                + $"url={service}";
             return Redirect(url);
         }
     }

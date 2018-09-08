@@ -37,5 +37,9 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// <returns>The user by username async.</returns>
         /// <param name="username">Username.</param>
         Task<UserDto> GetUserByUsernameAsync(string username);
+
+        UserDto AddUser(UserForCreationDto newUser);
+
+        Task<UserDto> AddUserAsync(UserForCreationDto newUser);
     }
 }
