@@ -85,9 +85,11 @@ namespace Ksu.Gdc.Api.Web
 
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();
-                app.UseCors(builder => builder.WithOrigins(
-                    AppConfiguration.GetConfig("App_Url")
-                ));
+                app.UseCors(builder =>
+                {
+                    builder.WithOrigins(AppConfiguration.GetConfig("App_Url"));
+                    builder.AllowAnyMethod();
+                });
                 app.UseMvc();
             }
         }
