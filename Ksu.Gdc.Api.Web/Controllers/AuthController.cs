@@ -22,10 +22,12 @@ namespace Ksu.Gdc.Api.Web.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
 
         public AuthController(IAuthService authService, IUserService userService)
         {
             _authService = authService;
+            _userService = userService;
         }
 
         [AllowAnonymous]
@@ -54,8 +56,23 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest();
                 }
-                var user = await _authService.ValidateCASTicketAsync(service, ticket);
-                return Ok(user);
+                var response = await _authService.ValidateCASTicketAsync(service, ticket);
+                if (!response.Validated)
+                {
+                    throw new NotAuthorizedException();
+                }
+                try
+                {
+                    var id = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
+                    var userDto = await _userService.GetUserByIdAsync(id);
+                    return Ok(userDto);
+                }
+                catch (NotFoundException)
+                {
+                    var newUser = new UserForCreationDto(response.ServiceResponse.AuthenticationSuccess.Attributes);
+                    var userDto = await _userService.AddUserAsync(newUser);
+                    return StatusCode(StatusCodes.Status201Created, userDto);
+                }
 
             }
             catch (NotAuthorizedException)

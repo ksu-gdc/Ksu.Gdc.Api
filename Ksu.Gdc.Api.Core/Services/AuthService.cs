@@ -19,19 +19,12 @@ namespace Ksu.Gdc.Api.Core.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IUserService _userService;
-
-        public AuthService(IUserService userService)
-        {
-            _userService = userService;
-        }
-
-        public UserDto ValidateCASTicket(string service, string ticket)
+        public CASValidationResponse ValidateCASTicket(string service, string ticket)
         {
             return ValidateCASTicketAsync(service, ticket).Result;
         }
 
-        public async Task<UserDto> ValidateCASTicketAsync(string service, string ticket)
+        public async Task<CASValidationResponse> ValidateCASTicketAsync(string service, string ticket)
         {
             using (var client = new HttpClient())
             {
@@ -40,22 +33,7 @@ namespace Ksu.Gdc.Api.Core.Services
                     + $"&ticket={ticket}"
                     + $"&format=JSON";
                 var response = new CASValidationResponse(JsonConvert.DeserializeObject(await client.GetStringAsync(url)));
-                if (!response.Validated)
-                {
-                    throw new NotAuthorizedException();
-                }
-                try
-                {
-                    var id = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
-                    var userDto = await _userService.GetUserByIdAsync(id);
-                    return userDto;
-                }
-                catch (NotFoundException)
-                {
-                    var newUser = new UserForCreationDto(response.ServiceResponse.AuthenticationSuccess.Attributes);
-                    var userDto = await _userService.AddUserAsync(newUser);
-                    return userDto;
-                }
+                return response;
             }
         }
     }

@@ -20,6 +20,7 @@ namespace Ksu.Gdc.Api.Core.Configurations
                 cfg.CreateMap<OfficerDbEntity, OfficerDto>();
                 cfg.CreateMap<UserDbEntity, UserDto>();
                 cfg.CreateMap<UserForCreationDto, UserDbEntity>();
+                cfg.CreateMap<UserForUpdateDto, UserDbEntity>();
                 cfg.CreateMap<GroupDbEntity, GroupDto>();
                 cfg.CreateMap<GameDbEntity, GameDto>();
             });

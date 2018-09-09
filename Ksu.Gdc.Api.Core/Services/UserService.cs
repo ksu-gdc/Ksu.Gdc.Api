@@ -63,7 +63,26 @@ namespace Ksu.Gdc.Api.Core.Services
         {
             var newDbUser = Mapper.Map<UserDbEntity>(newUser);
             await _ksuGdcContext.Users.AddAsync(newDbUser);
+            await _ksuGdcContext.SaveChangesAsync();
             return Mapper.Map<UserDto>(newDbUser);
+        }
+
+        public bool UpdateUser(int id, UserForUpdateDto user)
+        {
+            return UpdateUserAsync(id, user).Result;
+        }
+
+        public async Task<bool> UpdateUserAsync(int id, UserForUpdateDto user)
+        {
+            var dbUser = await _ksuGdcContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            if (dbUser == null)
+            {
+                throw new NotFoundException($"No user with id '{id}' was found.");
+            }
+            _ksuGdcContext.Users.Attach(dbUser);
+            _ksuGdcContext.Entry(dbUser).CurrentValues.SetValues(user);
+            await _ksuGdcContext.SaveChangesAsync();
+            return true;
         }
     }
 }

@@ -49,4 +49,15 @@ namespace Ksu.Gdc.Api.Core.Models
             Username = attributes.Uid[0];
         }
     }
+
+    public class UserForUpdateDto
+    {
+        public string Username { get; set; }
+
+        public string FirstName { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Description { get; set; }
+    }
 }

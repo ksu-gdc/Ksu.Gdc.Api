@@ -15,7 +15,7 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// <returns>The CAST icket.</returns>
         /// <param name="service">Service.</param>
         /// <param name="ticket">Ticket.</param>
-        UserDto ValidateCASTicket(string service, string ticket);
+        CASValidationResponse ValidateCASTicket(string service, string ticket);
 
         /// <summary>
         /// Validates the CAST icket async.
@@ -23,6 +23,6 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// <returns>The CAST icket async.</returns>
         /// <param name="service">Service.</param>
         /// <param name="ticket">Ticket.</param>
-        Task<UserDto> ValidateCASTicketAsync(string service, string ticket);
+        Task<CASValidationResponse> ValidateCASTicketAsync(string service, string ticket);
     }
 }
