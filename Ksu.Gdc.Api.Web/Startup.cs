@@ -89,6 +89,7 @@ namespace Ksu.Gdc.Api.Web
                 {
                     builder.WithOrigins(AppConfiguration.GetConfig("App_Url"));
                     builder.AllowAnyMethod();
+                    builder.AllowAnyHeader();
                 });
                 app.UseMvc();
             }
