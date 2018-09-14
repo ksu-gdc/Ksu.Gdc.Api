@@ -11,7 +11,7 @@ using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.DbContexts;
 using Ksu.Gdc.Api.Data.Entities;
 
-namespace Ksu.Gdc.Api.Web.Services
+namespace Ksu.Gdc.Api.Core.Services
 {
     public class PortfolioService : IPortfolioService
     {

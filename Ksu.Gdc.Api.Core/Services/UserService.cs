@@ -11,7 +11,7 @@ using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.DbContexts;
 using Ksu.Gdc.Api.Data.Entities;
 
-namespace Ksu.Gdc.Api.Web.Services
+namespace Ksu.Gdc.Api.Core.Services
 {
     public class UserService : IUserService
     {
@@ -52,6 +52,37 @@ namespace Ksu.Gdc.Api.Web.Services
             }
             var userDto = Mapper.Map<UserDto>(dbUser);
             return userDto;
+        }
+
+        public UserDto AddUser(UserForCreationDto newUser)
+        {
+            return AddUserAsync(newUser).Result;
+        }
+
+        public async Task<UserDto> AddUserAsync(UserForCreationDto newUser)
+        {
+            var newDbUser = Mapper.Map<UserDbEntity>(newUser);
+            await _ksuGdcContext.Users.AddAsync(newDbUser);
+            await _ksuGdcContext.SaveChangesAsync();
+            return Mapper.Map<UserDto>(newDbUser);
+        }
+
+        public bool UpdateUser(int id, UserForUpdateDto user)
+        {
+            return UpdateUserAsync(id, user).Result;
+        }
+
+        public async Task<bool> UpdateUserAsync(int id, UserForUpdateDto user)
+        {
+            var dbUser = await _ksuGdcContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            if (dbUser == null)
+            {
+                throw new NotFoundException($"No user with id '{id}' was found.");
+            }
+            _ksuGdcContext.Users.Attach(dbUser);
+            _ksuGdcContext.Entry(dbUser).CurrentValues.SetValues(user);
+            await _ksuGdcContext.SaveChangesAsync();
+            return true;
         }
     }
 }

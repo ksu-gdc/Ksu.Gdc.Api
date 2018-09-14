@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Core.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -57,6 +58,44 @@ namespace Ksu.Gdc.Api.Web.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("{id}", Name = "UpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UserForUpdateDto user)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                await _userService.UpdateUserAsync(id, user);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("{id}/profile-image", Name = "UpdateUserProfileImage")]
+        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int id)
+        {
+            try
+            {
+                var image = Request.Form.Files[0];
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
     }
