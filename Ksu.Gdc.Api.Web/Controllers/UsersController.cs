@@ -78,9 +78,24 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 return NotFound(ex.Message);
             }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("{id}/profile-image", Name = "UpdateUserProfileImage")]
+        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int id)
+        {
+            try
+            {
+                var image = Request.Form.Files[0];
+                return Ok();
+            }
             catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.InnerException);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
     }

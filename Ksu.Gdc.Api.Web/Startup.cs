@@ -79,7 +79,7 @@ namespace Ksu.Gdc.Api.Web
                 else
                 {
                     ksuGdcContext.Database.EnsureCreated();
-                    app.UseExceptionHandler();
+                    //app.UseExceptionHandler();
                     app.UseHsts();
                 }
 
