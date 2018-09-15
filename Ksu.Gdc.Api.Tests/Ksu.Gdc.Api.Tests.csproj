@@ -14,10 +14,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ControllerTests\" />
-    <Folder Include="ServiceTests\" />
+    <None Include="Ksu.Gdc.Api.Tests.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ksu.Gdc.Api.Tests.csproj" />
+    <Folder Include="Integration\" />
   </ItemGroup>
 </Project>

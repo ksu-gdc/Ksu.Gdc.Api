@@ -28,8 +28,6 @@ namespace Ksu.Gdc.Api.Web
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-
         public Startup(IConfiguration configuration, IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
@@ -38,8 +36,7 @@ namespace Ksu.Gdc.Api.Web
                 .AddJsonFile($"appSettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                 .AddEnvironmentVariables();
 
-            Configuration = builder.Build();
-            AppConfiguration.Initialize(Configuration);
+            AppConfiguration.Initialize(builder.Build());
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

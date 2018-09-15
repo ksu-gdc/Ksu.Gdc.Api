@@ -7,14 +7,14 @@
         <Folder Include="Controllers\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.App" />
-        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.1" />
+        <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.1" />
+        <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
     </ItemGroup>
     <ItemGroup>
         <ProjectReference Include="..\Ksu.Gdc.Api.Core\Ksu.Gdc.Api.Core.csproj" />
         <ProjectReference Include="..\Ksu.Gdc.Api.Data\Ksu.Gdc.Api.Data.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <None Include="Ksu.Gdc.Api.Web.csproj" />
+        <None Include="Ksu.Gdc.Api.Web.csproj" />
     </ItemGroup>
 </Project>
