@@ -15,6 +15,10 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Amazon.Runtime;
+using Amazon;
+using Amazon.S3;
+using Amazon.Extensions.NETCore.Setup;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Contracts;
@@ -53,6 +57,14 @@ namespace Ksu.Gdc.Api.Web
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPortfolioService, PortfolioService>();
+
+            var awsOptions = new AWSOptions()
+            {
+                Credentials = new BasicAWSCredentials(AppConfiguration.GetConfig("AWS_S3_AccessKey"),
+                                                      AppConfiguration.GetConfig("AWS_S3_SecretKey")),
+                Region = RegionEndpoint.USEast2
+            };
+            services.AddAWSService<IAmazonS3>(awsOptions);
 
             services.AddDbContext<KsuGdcContext>(options =>
             {

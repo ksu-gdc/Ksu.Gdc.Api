@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 
 using Ksu.Gdc.Api.Core.Models;
@@ -67,5 +68,21 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// <param name="id">Identifier.</param>
         /// <param name="user">User.</param>
         Task<bool> UpdateUserAsync(int id, UserForUpdateDto user);
+
+        /// <summary>
+        /// Updates the user profile image.
+        /// </summary>
+        /// <returns><c>true</c>, if user profile image was updated, <c>false</c> otherwise.</returns>
+        /// <param name="id">Identifier.</param>
+        /// <param name="imageStream">Image stream.</param>
+        bool UpdateUserProfileImage(int id, Stream imageStream);
+
+        /// <summary>
+        /// Updates the user profile image async.
+        /// </summary>
+        /// <returns>The user profile image async.</returns>
+        /// <param name="id">Identifier.</param>
+        /// <param name="imageStream">Image stream.</param>
+        Task<bool> UpdateUserProfileImageAsync(int id, Stream imageStream);
     }
 }

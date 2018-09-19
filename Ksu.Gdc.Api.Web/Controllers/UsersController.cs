@@ -16,7 +16,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
     [Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        public IUserService _userService;
+        private readonly IUserService _userService;
 
         public UsersController(IUserService userService)
         {
@@ -86,11 +86,15 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpPost, DisableRequestSizeLimit]
         [Route("{id}/profile-image", Name = "UpdateUserProfileImage")]
-        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int id)
+        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int id, [FromForm] IFormFile image)
         {
             try
             {
-                var image = Request.Form.Files[0];
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                await _userService.UpdateUserProfileImageAsync(id, image.OpenReadStream());
                 return Ok();
             }
             catch (Exception ex)
