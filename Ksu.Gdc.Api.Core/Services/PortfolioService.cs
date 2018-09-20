@@ -61,6 +61,26 @@ namespace Ksu.Gdc.Api.Core.Services
             return gameDto;
         }
 
+        public bool UpdateGameThumbnailImage(int id, Stream imageStream)
+        {
+            return UpdateGameThumbnailImageAsync(id, imageStream).Result;
+        }
+
+        public async Task<bool> UpdateGameThumbnailImageAsync(int id, Stream imageStream)
+        {
+            var transferUtility = new TransferUtility(_s3Client);
+            var transferRequest = new TransferUtilityUploadRequest()
+            {
+                BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
+                Key = $"{GameConfig.DataStoreDirPath}/{id}/thumbnail.jpg",
+                InputStream = imageStream,
+                StorageClass = S3StorageClass.Standard,
+                CannedACL = S3CannedACL.PublicRead
+            };
+            await transferUtility.UploadAsync(transferRequest);
+            return true;
+        }
+
         public Stream GetGameThumbnailImage(int id)
         {
             return GetGameThumbnailImageAsync(id).Result;

@@ -63,6 +63,25 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("games/{id}/thumbnail-image", Name = "UpdateGameThumbnailImage")]
+        public async Task<IActionResult> UpdateGameThumbnailImage([FromRoute] int id, [FromForm] IFormFile image)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                await _portfolioService.UpdateGameThumbnailImageAsync(id, image.OpenReadStream());
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet]
         [Route("games/{id}/thumbnail-image", Name = "GetGameThumbnailImage")]
         public async Task<IActionResult> GetGameThumbnailImage([FromRoute] int id)

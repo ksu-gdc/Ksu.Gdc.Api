@@ -37,6 +37,22 @@ namespace Ksu.Gdc.Api.Core.Contracts
         Task<GameDto> GetGameByIdAsync(int id);
 
         /// <summary>
+        /// Updates the game thumbnail image.
+        /// </summary>
+        /// <returns><c>true</c>, if game thumbnail image was updated, <c>false</c> otherwise.</returns>
+        /// <param name="id">Identifier.</param>
+        /// <param name="imageStream">Image stream.</param>
+        bool UpdateGameThumbnailImage(int id, Stream imageStream);
+
+        /// <summary>
+        /// Updates the game thumbnail image async.
+        /// </summary>
+        /// <returns>The game thumbnail image async.</returns>
+        /// <param name="id">Identifier.</param>
+        /// <param name="imageStream">Image stream.</param>
+        Task<bool> UpdateGameThumbnailImageAsync(int id, Stream imageStream);
+
+        /// <summary>
         /// Gets the game thumbnail image.
         /// </summary>
         /// <returns>The game thumbnail image.</returns>
