@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 
+using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Data.Entities;
@@ -39,6 +41,44 @@ namespace Ksu.Gdc.Api.Web.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("games/{id}", Name = "GetGameById")]
+        public async Task<IActionResult> GetGameById(int id)
+        {
+            try
+            {
+                var game = await _portfolioService.GetGameByIdAsync(id);
+                return Ok(game);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("games/{id}/thumbnail-image", Name = "GetGameThumbnailImage")]
+        public async Task<IActionResult> GetGameThumbnailImage([FromRoute] int id)
+        {
+            try
+            {
+                var stream = await _portfolioService.GetGameThumbnailImageAsync(id);
+                return File(stream, "image/jpg");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
     }

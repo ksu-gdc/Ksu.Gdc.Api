@@ -22,7 +22,7 @@ namespace Ksu.Gdc.Api.Core.Models
         {
             get
             {
-                return UserConfig.DataStoreUrl + "/" + Id + "/" + "profile.jpg";
+                return AppConfiguration.GetConfig("Api_Url") + "/users/" + Id + "/profile-image";
             }
         }
 

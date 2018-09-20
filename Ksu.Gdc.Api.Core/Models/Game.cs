@@ -20,7 +20,7 @@ namespace Ksu.Gdc.Api.Core.Models
         {
             get
             {
-                return GameConfig.DataStoreUrl + "/" + Id + "/" + "thumbnail.jpg";
+                return AppConfiguration.GetConfig("Api_Url") + "/portfolio/games/" + Id + "/" + "thumbnail-image";
             }
         }
     }

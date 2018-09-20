@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
+using System.Net.Http;
 
+using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
@@ -96,6 +98,25 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 }
                 await _userService.UpdateUserProfileImageAsync(id, image.OpenReadStream());
                 return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{id}/profile-image", Name = "GetUserProfileImage")]
+        public async Task<IActionResult> GetUserProfileImage([FromRoute] int id)
+        {
+            try
+            {
+                var stream = await _userService.GetUserProfileImageAsync(id);
+                return File(stream, "image/jpg");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception ex)
             {

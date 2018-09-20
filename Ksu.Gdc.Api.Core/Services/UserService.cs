@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
@@ -103,13 +104,41 @@ namespace Ksu.Gdc.Api.Core.Services
             var transferRequest = new TransferUtilityUploadRequest()
             {
                 BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
+                Key = $"{UserConfig.DataStoreDirPath}/{id}/profile.jpg",
                 InputStream = imageStream,
-                Key = $"{UserConfig.UserDataStoreDir}/{id}/profile.jpg",
                 StorageClass = S3StorageClass.Standard,
                 CannedACL = S3CannedACL.PublicRead
             };
             await transferUtility.UploadAsync(transferRequest);
             return true;
+        }
+
+        public Stream GetUserProfileImage(int id)
+        {
+            return GetUserProfileImageAsync(id).Result;
+        }
+
+        public async Task<Stream> GetUserProfileImageAsync(int id)
+        {
+            try
+            {
+                var transferUtility = new TransferUtility(_s3Client);
+                var transferRequest = new TransferUtilityOpenStreamRequest()
+                {
+                    BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
+                    Key = $"{UserConfig.DataStoreDirPath}/{id}/profile.jpg"
+                };
+                var stream = await transferUtility.OpenStreamAsync(transferRequest);
+                return stream;
+            }
+            catch (AmazonS3Exception ex)
+            {
+                if (ex.Message.Contains("key does not exist"))
+                {
+                    throw new NotFoundException($"No profile image for user with id '{id}' was found.");
+                }
+                throw ex;
+            }
         }
     }
 }

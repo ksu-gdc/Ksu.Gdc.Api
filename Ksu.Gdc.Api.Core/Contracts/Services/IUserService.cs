@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 using Ksu.Gdc.Api.Core.Models;
 
@@ -84,5 +85,19 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// <param name="id">Identifier.</param>
         /// <param name="imageStream">Image stream.</param>
         Task<bool> UpdateUserProfileImageAsync(int id, Stream imageStream);
+
+        /// <summary>
+        /// Gets the user profile image.
+        /// </summary>
+        /// <returns>The user profile image.</returns>
+        /// <param name="id">Identifier.</param>
+        Stream GetUserProfileImage(int id);
+
+        /// <summary>
+        /// Gets the user profile image async.
+        /// </summary>
+        /// <returns>The user profile image async.</returns>
+        /// <param name="id">Identifier.</param>
+        Task<Stream> GetUserProfileImageAsync(int id);
     }
 }

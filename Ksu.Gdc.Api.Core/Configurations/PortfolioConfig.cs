@@ -2,9 +2,9 @@
 
 namespace Ksu.Gdc.Api.Core.Configurations
 {
-    public static class UserConfig
+    public static class PortfolioConfig
     {
-        public static string DataStoreDirPath => "users";
+        public static string DataStoreDirPath => "portfolio";
         public static string DataStoreUrl => AppConfiguration.GetConfig("DataStoreUrl") + "/" + DataStoreDirPath;
     }
 }
