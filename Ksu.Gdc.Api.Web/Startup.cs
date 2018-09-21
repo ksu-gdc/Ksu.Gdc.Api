@@ -24,7 +24,6 @@ using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Services;
 using Ksu.Gdc.Api.Data.DbContexts;
-using Ksu.Gdc.Api.Data.Extensions;
 using Ksu.Gdc.Api.Data.Entities;
 using Ksu.Gdc.Api.Core.Models;
 
@@ -56,6 +55,7 @@ namespace Ksu.Gdc.Api.Web
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IPortfolioService, PortfolioService>();
 
             var awsOptions = new AWSOptions()
@@ -82,15 +82,13 @@ namespace Ksu.Gdc.Api.Web
                 {
                     app.UseDeveloperExceptionPage();
                     ksuGdcContext.Database.EnsureDeleted();
-                    ksuGdcContext.Database.EnsureCreated();
-                    ksuGdcContext.EnsureSeedDataForContext();
                 }
                 else
                 {
-                    ksuGdcContext.Database.EnsureCreated();
                     //app.UseExceptionHandler();
                     app.UseHsts();
                 }
+                ksuGdcContext.Database.EnsureCreated();
 
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();

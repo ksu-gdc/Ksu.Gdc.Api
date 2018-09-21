@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class Group_User
+    public class JoinEntity_UserGroup
     {
-        [Key]
         public int UserId { get; set; }
 
-        [Key]
         public int GroupId { get; set; }
     }
 }

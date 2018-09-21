@@ -5,15 +5,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class GroupDbEntity
+    public class ModelEntity_Group
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int GroupId { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
 
+        [MaxLength(1000)]
         public string Description { get; set; }
+
+        public ICollection<JoinEntity_UserGroup> Users { get; set; } = new List<JoinEntity_UserGroup>();
     }
 }

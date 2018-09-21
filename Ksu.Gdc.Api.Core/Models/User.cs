@@ -6,9 +6,9 @@ using Ksu.Gdc.Api.Core.Configurations;
 
 namespace Ksu.Gdc.Api.Core.Models
 {
-    public class UserDto
+    public class Dto_User
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         public string Username { get; set; }
 
@@ -18,46 +18,37 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public string Description { get; set; }
 
-        public string ImageUrl
-        {
-            get
-            {
-                return AppConfiguration.GetConfig("Api_Url") + "/users/" + Id + "/profile-image";
-            }
-        }
+        public string ImageUrl => AppConfiguration.GetConfig("Api_Url") + "/users/" + UserId + "/profile-image";
 
-        public string Email
-        {
-            get
-            {
-                return Username + "@ksu.edu";
-            }
-        }
+        public string Email => Username + "@ksu.edu";
+
+        public ICollection<Dto_Group> Groups { get; set; } = new List<Dto_Group>();
     }
 
-    public class UserForCreationDto
+    public class CreateDto_User
     {
         [Required]
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         public string Username { get; set; }
 
-        public UserForCreationDto(CASAttributes attributes)
+        public CreateDto_User(CASAttributes attributes)
         {
-            Id = attributes.KsuPersonWildcatId[0];
+            UserId = attributes.KsuPersonWildcatId[0];
             Username = attributes.Uid[0];
         }
     }
 
-    public class UserForUpdateDto
+    public class UpdateDto_User
     {
-        public string Username { get; set; }
-
+        [MaxLength(50)]
         public string FirstName { get; set; }
 
+        [MaxLength(50)]
         public string LastName { get; set; }
 
+        [MaxLength(1000)]
         public string Description { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -12,28 +13,20 @@ namespace Ksu.Gdc.Api.Data.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User_Game>()
-                        .HasKey(m => new { m.UserId, m.GameId });
-            modelBuilder.Entity<User_Role>()
-                        .HasKey(m => new { m.UserId, m.RoleId });
-            modelBuilder.Entity<Group_User>()
-                        .HasKey(m => new { m.GroupId, m.UserId });
+            modelBuilder.Entity<JoinEntity_UserGroup>()
+                        .HasKey(m => new { m.UserId, m.GroupId });
         }
 
-        public DbSet<OfficerDbEntity> Officers { get; set; }
+        public DbSet<ModelEntity_Officer> Officers { get; set; }
 
-        public DbSet<UserDbEntity> Users { get; set; }
+        public DbSet<ModelEntity_User> Users { get; set; }
 
-        public DbSet<RoleDbEntity> Roles { get; set; }
+        public DbSet<ModelEntity_Group> Groups { get; set; }
 
-        public DbSet<GroupDbEntity> Groups { get; set; }
+        public DbSet<ModelEntity_Role> Roles { get; set; }
 
-        public DbSet<GameDbEntity> Games { get; set; }
+        public DbSet<ModelEntity_Game> Games { get; set; }
 
-        public DbSet<User_Game> Users_Games { get; set; }
-
-        public DbSet<User_Role> Users_Roles { get; set; }
-
-        public DbSet<Group_User> Groups_Users { get; set; }
+        public DbSet<JoinEntity_UserGroup> UsersGroups { get; set; }
     }
 }

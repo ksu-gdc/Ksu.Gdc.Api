@@ -27,12 +27,20 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("games", Name = "GetGames")]
-        public async Task<IActionResult> GetGames()
+        public async Task<IActionResult> GetGames([FromQuery] int userId)
         {
             try
             {
-                var games = await _portfolioService.GetGamesAsync();
-                return Ok(games);
+                if (userId == 0)
+                {
+                    var games = await _portfolioService.GetGamesAsync();
+                    return Ok(games);
+                }
+                else
+                {
+                    var games = await _portfolioService.GetGamesByUserIdAsync(userId);
+                    return Ok(games);
+                }
             }
             catch (NotFoundException ex)
             {
@@ -95,9 +103,9 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

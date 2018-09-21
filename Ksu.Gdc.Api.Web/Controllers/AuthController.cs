@@ -64,14 +64,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 try
                 {
                     var id = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
-                    var userDto = await _userService.GetUserByIdAsync(id);
-                    return Ok(userDto);
+                    var Dto_User = await _userService.GetUserByIdAsync(id);
+                    return Ok(Dto_User);
                 }
                 catch (NotFoundException)
                 {
-                    var newUser = new UserForCreationDto(response.ServiceResponse.AuthenticationSuccess.Attributes);
-                    var userDto = await _userService.AddUserAsync(newUser);
-                    return StatusCode(StatusCodes.Status201Created, userDto);
+                    var newUser = new CreateDto_User(response.ServiceResponse.AuthenticationSuccess.Attributes);
+                    var Dto_User = await _userService.AddUserAsync(newUser);
+                    return StatusCode(StatusCodes.Status201Created, Dto_User);
                 }
 
             }

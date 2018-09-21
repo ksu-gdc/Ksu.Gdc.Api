@@ -17,12 +17,12 @@ namespace Ksu.Gdc.Api.Core.Configurations
             Configuration = config;
             Mapper.Initialize(cfg =>
             {
-                cfg.CreateMap<OfficerDbEntity, OfficerDto>();
-                cfg.CreateMap<UserDbEntity, UserDto>();
-                cfg.CreateMap<UserForCreationDto, UserDbEntity>();
-                cfg.CreateMap<UserForUpdateDto, UserDbEntity>();
-                cfg.CreateMap<GroupDbEntity, GroupDto>();
-                cfg.CreateMap<GameDbEntity, GameDto>();
+                cfg.CreateMap<ModelEntity_Officer, Dto_Officer>();
+                cfg.CreateMap<ModelEntity_User, Dto_User>();
+                cfg.CreateMap<CreateDto_User, ModelEntity_User>();
+                cfg.CreateMap<UpdateDto_User, ModelEntity_User>();
+                cfg.CreateMap<ModelEntity_Group, Dto_Group>();
+                cfg.CreateMap<ModelEntity_Game, Dto_Game>();
             });
         }
 

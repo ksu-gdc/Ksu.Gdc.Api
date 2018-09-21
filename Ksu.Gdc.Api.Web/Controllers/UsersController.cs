@@ -65,7 +65,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpPut]
         [Route("{id}", Name = "UpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UserForUpdateDto user)
+        public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UpdateDto_User user)
         {
             try
             {
@@ -118,9 +118,9 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

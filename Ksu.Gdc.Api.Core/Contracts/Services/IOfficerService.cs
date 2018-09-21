@@ -15,26 +15,26 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// Gets the officers.
         /// </summary>
         /// <returns>The officers.</returns>
-        List<OfficerDto> GetOfficers();
+        List<Dto_Officer> GetOfficers();
 
         /// <summary>
         /// Gets the officers async.
         /// </summary>
         /// <returns>The officers async.</returns>
-        Task<List<OfficerDto>> GetOfficersAsync();
+        Task<List<Dto_Officer>> GetOfficersAsync();
 
         /// <summary>
         /// Gets the officers by position.
         /// </summary>
         /// <returns>The officers by position.</returns>
         /// <param name="position">Position.</param>
-        List<OfficerDto> GetOfficersByPosition(string position);
+        List<Dto_Officer> GetOfficersByPosition(string position);
 
         /// <summary>
         /// Gets the officers by position async.
         /// </summary>
         /// <returns>The officers by position async.</returns>
         /// <param name="position">Position.</param>
-        Task<List<OfficerDto>> GetOfficersByPositionAsync(string position);
+        Task<List<Dto_Officer>> GetOfficersByPositionAsync(string position);
     }
 }

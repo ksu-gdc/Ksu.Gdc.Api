@@ -6,21 +6,22 @@ using Ksu.Gdc.Api.Core.Configurations;
 
 namespace Ksu.Gdc.Api.Core.Models
 {
-    public class OfficerDto
+    public class Dto_Officer
     {
-        public int Id { get; set; }
+        public int OfficerId { get; set; }
 
         public string Position { get; set; }
 
-        public UserDto User { get; set; }
+        public Dto_User User { get; set; }
     }
 
-    public class OfficerForCreationDto
+    public class CreateDto_Officer
     {
-        [Required]
-        public string Position { get; set; }
 
-        [Required]
-        public UserForCreationDto User { get; set; }
+    }
+
+    public class UpdateDto_Officer
+    {
+
     }
 }

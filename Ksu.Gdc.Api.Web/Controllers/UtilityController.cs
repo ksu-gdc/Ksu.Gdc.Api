@@ -20,9 +20,9 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 return Ok("API is awake!");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

@@ -5,19 +5,24 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class UserDbEntity
+    public class ModelEntity_User
     {
         [Key]
         [Required]
-        public int Id { get; set; }
+        public int UserId { get; set; }
 
         [Required]
         public string Username { get; set; }
 
+        [MaxLength(50)]
         public string FirstName { get; set; }
 
+        [MaxLength(50)]
         public string LastName { get; set; }
 
+        [MaxLength(1000)]
         public string Description { get; set; }
+
+        public ICollection<JoinEntity_UserGroup> Groups { get; set; } = new List<JoinEntity_UserGroup>();
     }
 }

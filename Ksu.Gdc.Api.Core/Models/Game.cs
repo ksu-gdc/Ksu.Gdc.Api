@@ -6,9 +6,9 @@ using Ksu.Gdc.Api.Core.Configurations;
 
 namespace Ksu.Gdc.Api.Core.Models
 {
-    public class GameDto
+    public class Dto_Game
     {
-        public int Id { get; set; }
+        public int GameId { get; set; }
 
         public string Title { get; set; }
 
@@ -16,12 +16,16 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public string Url { get; set; }
 
-        public string ImageUrl
-        {
-            get
-            {
-                return AppConfiguration.GetConfig("Api_Url") + "/portfolio/games/" + Id + "/" + "thumbnail-image";
-            }
-        }
+        public string ImageUrl => AppConfiguration.GetConfig("Api_Url") + "/portfolio/games/" + Id + "/" + "thumbnail-image";
+    }
+
+    public class CreateDto_Game
+    {
+
+    }
+
+    public class UpdateDto_Game
+    {
+
     }
 }

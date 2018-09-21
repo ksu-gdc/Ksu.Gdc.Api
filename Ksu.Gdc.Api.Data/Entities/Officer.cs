@@ -5,16 +5,16 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class OfficerDbEntity
+    public class ModelEntity_Officer
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int OfficerId { get; set; }
 
         [Required]
         public string Position { get; set; }
 
         [ForeignKey("Id")]
-        public UserDbEntity User { get; set; }
+        public ModelEntity_User User { get; set; }
     }
 }

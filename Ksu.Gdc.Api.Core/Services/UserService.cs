@@ -30,62 +30,62 @@ namespace Ksu.Gdc.Api.Core.Services
             _s3Client = s3Client;
         }
 
-        public UserDto GetUserById(int id)
+        public Dto_User GetUserById(int userId)
         {
-            return GetUserByIdAsync(id).Result;
+            return GetUserByIdAsync(userId).Result;
         }
 
-        public async Task<UserDto> GetUserByIdAsync(int id)
+        public async Task<Dto_User> GetUserByIdAsync(int userId)
         {
-            var dbUser = await _ksuGdcContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            var dbUser = await _ksuGdcContext.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
             if (dbUser == null)
             {
-                throw new NotFoundException($"No user with Id '{id}' was found.");
+                throw new NotFoundException($"No user with Id '{userId}' was found.");
             }
-            var userDto = Mapper.Map<UserDto>(dbUser);
-            return userDto;
+            var Dto_User = Mapper.Map<Dto_User>(dbUser);
+            return Dto_User;
         }
 
-        public UserDto GetUserByUsername(string username)
+        public Dto_User GetUserByUsername(string username)
         {
             return GetUserByUsernameAsync(username).Result;
         }
 
-        public async Task<UserDto> GetUserByUsernameAsync(string username)
+        public async Task<Dto_User> GetUserByUsernameAsync(string username)
         {
             var dbUser = await _ksuGdcContext.Users.Where(u => u.Username == username).FirstOrDefaultAsync();
             if (dbUser == null)
             {
                 throw new NotFoundException($"No user with username '{username}' was found.");
             }
-            var userDto = Mapper.Map<UserDto>(dbUser);
-            return userDto;
+            var Dto_User = Mapper.Map<Dto_User>(dbUser);
+            return Dto_User;
         }
 
-        public UserDto AddUser(UserForCreationDto newUser)
+        public Dto_User AddUser(CreateDto_User newUser)
         {
             return AddUserAsync(newUser).Result;
         }
 
-        public async Task<UserDto> AddUserAsync(UserForCreationDto newUser)
+        public async Task<Dto_User> AddUserAsync(CreateDto_User newUser)
         {
-            var newDbUser = Mapper.Map<UserDbEntity>(newUser);
+            var newDbUser = Mapper.Map<ModelEntity_User>(newUser);
             await _ksuGdcContext.Users.AddAsync(newDbUser);
             await _ksuGdcContext.SaveChangesAsync();
-            return Mapper.Map<UserDto>(newDbUser);
+            return Mapper.Map<Dto_User>(newDbUser);
         }
 
-        public bool UpdateUser(int id, UserForUpdateDto user)
+        public bool UpdateUser(int userId, UpdateDto_User user)
         {
-            return UpdateUserAsync(id, user).Result;
+            return UpdateUserAsync(userId, user).Result;
         }
 
-        public async Task<bool> UpdateUserAsync(int id, UserForUpdateDto user)
+        public async Task<bool> UpdateUserAsync(int userId, UpdateDto_User user)
         {
-            var dbUser = await _ksuGdcContext.Users.Where(u => u.Id == id).FirstOrDefaultAsync();
+            var dbUser = await _ksuGdcContext.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
             if (dbUser == null)
             {
-                throw new NotFoundException($"No user with id '{id}' was found.");
+                throw new NotFoundException($"No user with id '{userId}' was found.");
             }
             _ksuGdcContext.Users.Attach(dbUser);
             _ksuGdcContext.Entry(dbUser).CurrentValues.SetValues(user);
@@ -93,18 +93,18 @@ namespace Ksu.Gdc.Api.Core.Services
             return true;
         }
 
-        public bool UpdateUserProfileImage(int id, Stream imageStream)
+        public bool UpdateUserProfileImage(int userId, Stream imageStream)
         {
-            return UpdateUserProfileImageAsync(id, imageStream).Result;
+            return UpdateUserProfileImageAsync(userId, imageStream).Result;
         }
 
-        public async Task<bool> UpdateUserProfileImageAsync(int id, Stream imageStream)
+        public async Task<bool> UpdateUserProfileImageAsync(int userId, Stream imageStream)
         {
             var transferUtility = new TransferUtility(_s3Client);
             var transferRequest = new TransferUtilityUploadRequest()
             {
                 BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                Key = $"{UserConfig.DataStoreDirPath}/{id}/profile.jpg",
+                Key = $"{UserConfig.DataStoreDirPath}/{userId}/profile.jpg",
                 InputStream = imageStream,
                 StorageClass = S3StorageClass.Standard,
                 CannedACL = S3CannedACL.PublicRead
@@ -113,12 +113,12 @@ namespace Ksu.Gdc.Api.Core.Services
             return true;
         }
 
-        public Stream GetUserProfileImage(int id)
+        public Stream GetUserProfileImage(int userId)
         {
-            return GetUserProfileImageAsync(id).Result;
+            return GetUserProfileImageAsync(userId).Result;
         }
 
-        public async Task<Stream> GetUserProfileImageAsync(int id)
+        public async Task<Stream> GetUserProfileImageAsync(int userId)
         {
             try
             {
@@ -126,7 +126,7 @@ namespace Ksu.Gdc.Api.Core.Services
                 var transferRequest = new TransferUtilityOpenStreamRequest()
                 {
                     BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                    Key = $"{UserConfig.DataStoreDirPath}/{id}/profile.jpg"
+                    Key = $"{UserConfig.DataStoreDirPath}/{userId}/profile.jpg"
                 };
                 var stream = await transferUtility.OpenStreamAsync(transferRequest);
                 return stream;
@@ -135,7 +135,7 @@ namespace Ksu.Gdc.Api.Core.Services
             {
                 if (ex.Message.Contains("key does not exist"))
                 {
-                    throw new NotFoundException($"No profile image for user with id '{id}' was found.");
+                    throw new NotFoundException($"No profile image for user with id '{userId}' was found.");
                 }
                 throw ex;
             }

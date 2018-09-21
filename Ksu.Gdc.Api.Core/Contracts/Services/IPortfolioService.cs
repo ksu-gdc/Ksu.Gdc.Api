@@ -11,59 +11,73 @@ namespace Ksu.Gdc.Api.Core.Contracts
     public interface IPortfolioService
     {
         /// <summary>
-        /// Gets the games.
+        /// Gets all games.
         /// </summary>
-        /// <returns>The games.</returns>
-        List<GameDto> GetGames();
+        /// <returns>The all games.</returns>
+        List<Dto_Game> GetAllGames();
 
         /// <summary>
-        /// Gets the games async.
+        /// Gets all games async.
         /// </summary>
-        /// <returns>The games async.</returns>
-        Task<List<GameDto>> GetGamesAsync();
+        /// <returns>The all games async.</returns>
+        Task<List<Dto_Game>> GetAllGamesAsync();
+
+        /// <summary>
+        /// Gets the games by user identifier.
+        /// </summary>
+        /// <returns>The games by user identifier.</returns>
+        /// <param name="userId">User identifier.</param>
+        List<Dto_Game> GetGamesByUserId(int userId);
+
+        /// <summary>
+        /// Gets the games by user identifier async.
+        /// </summary>
+        /// <returns>The games by user identifier async.</returns>
+        /// <param name="userId">User identifier.</param>
+        Task<List<Dto_Game>> GetGamesByUserIdAsync(int userId);
 
         /// <summary>
         /// Gets the game by identifier.
         /// </summary>
         /// <returns>The game by identifier.</returns>
-        /// <param name="id">Identifier.</param>
-        GameDto GetGameById(int id);
+        /// <param name="gameId">Game identifier.</param>
+        Dto_Game GetGameById(int gameId);
 
         /// <summary>
         /// Gets the game by identifier async.
         /// </summary>
         /// <returns>The game by identifier async.</returns>
-        /// <param name="id">Identifier.</param>
-        Task<GameDto> GetGameByIdAsync(int id);
+        /// <param name="gameId">Game identifier.</param>
+        Task<Dto_Game> GetGameByIdAsync(int gameId);
 
         /// <summary>
         /// Updates the game thumbnail image.
         /// </summary>
         /// <returns><c>true</c>, if game thumbnail image was updated, <c>false</c> otherwise.</returns>
-        /// <param name="id">Identifier.</param>
+        /// <param name="gameId">Game identifier.</param>
         /// <param name="imageStream">Image stream.</param>
-        bool UpdateGameThumbnailImage(int id, Stream imageStream);
+        bool UpdateGameThumbnailImage(int gameId, Stream imageStream);
 
         /// <summary>
         /// Updates the game thumbnail image async.
         /// </summary>
         /// <returns>The game thumbnail image async.</returns>
-        /// <param name="id">Identifier.</param>
+        /// <param name="gameId">Game identifier.</param>
         /// <param name="imageStream">Image stream.</param>
-        Task<bool> UpdateGameThumbnailImageAsync(int id, Stream imageStream);
+        Task<bool> UpdateGameThumbnailImageAsync(int gameId, Stream imageStream);
 
         /// <summary>
         /// Gets the game thumbnail image.
         /// </summary>
         /// <returns>The game thumbnail image.</returns>
-        /// <param name="id">Identifier.</param>
-        Stream GetGameThumbnailImage(int id);
+        /// <param name="gameId">Game identifier.</param>
+        Stream GetGameThumbnailImage(int gameId);
 
         /// <summary>
         /// Gets the game thumbnail image async.
         /// </summary>
         /// <returns>The game thumbnail image async.</returns>
-        /// <param name="id">Identifier.</param>
-        Task<Stream> GetGameThumbnailImageAsync(int id);
+        /// <param name="gameId">Game identifier.</param>
+        Task<Stream> GetGameThumbnailImageAsync(int gameId);
     }
 }

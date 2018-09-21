@@ -29,50 +29,60 @@ namespace Ksu.Gdc.Api.Core.Services
             _s3Client = s3Client;
         }
 
-        public List<GameDto> GetGames()
+        public List<Dto_Game> GetAllGames()
         {
-            return GetGamesAsync().Result;
+            return GetAllGamesAsync().Result;
         }
 
-        public async Task<List<GameDto>> GetGamesAsync()
+        public async Task<List<Dto_Game>> GetAllGamesAsync()
         {
             var dbGames = await _ksuGdcContext.Games.ToListAsync();
             if (dbGames.Count == 0)
             {
                 throw new NotFoundException("No games were found.");
             }
-            var gameDtos = Mapper.Map<List<GameDto>>(dbGames);
+            var gameDtos = Mapper.Map<List<Dto_Game>>(dbGames);
             return gameDtos;
         }
 
-        public GameDto GetGameById(int id)
+        public List<Dto_Game> GetGamesByUserId(int userId)
         {
-            return GetGameByIdAsync(id).Result;
+            return GetGamesByUserIdAsync(userId).Result;
         }
 
-        public async Task<GameDto> GetGameByIdAsync(int id)
+        public async Task<List<Dto_Game>> GetGamesByUserIdAsync(int userId)
         {
-            var dbGame = await _ksuGdcContext.Games.Where(g => g.Id == id).FirstOrDefaultAsync();
+            return new List<Dto_Game>();
+        }
+
+        public Dto_Game GetGameById(int gameId)
+        {
+            return GetGameByIdAsync(gameId).Result;
+        }
+
+        public async Task<Dto_Game> GetGameByIdAsync(int gameId)
+        {
+            var dbGame = await _ksuGdcContext.Games.Where(g => g.GameId == gameId).FirstOrDefaultAsync();
             if (dbGame == null)
             {
-                throw new NotFoundException($"No game with Id '{id}' was found.");
+                throw new NotFoundException($"No game with Id '{gameId}' was found.");
             }
-            var gameDto = Mapper.Map<GameDto>(dbGame);
-            return gameDto;
+            var Dto_Game = Mapper.Map<Dto_Game>(dbGame);
+            return Dto_Game;
         }
 
-        public bool UpdateGameThumbnailImage(int id, Stream imageStream)
+        public bool UpdateGameThumbnailImage(int gameId, Stream imageStream)
         {
-            return UpdateGameThumbnailImageAsync(id, imageStream).Result;
+            return UpdateGameThumbnailImageAsync(gameId, imageStream).Result;
         }
 
-        public async Task<bool> UpdateGameThumbnailImageAsync(int id, Stream imageStream)
+        public async Task<bool> UpdateGameThumbnailImageAsync(int gameId, Stream imageStream)
         {
             var transferUtility = new TransferUtility(_s3Client);
             var transferRequest = new TransferUtilityUploadRequest()
             {
                 BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                Key = $"{GameConfig.DataStoreDirPath}/{id}/thumbnail.jpg",
+                Key = $"{GameConfig.DataStoreDirPath}/{gameId}/thumbnail.jpg",
                 InputStream = imageStream,
                 StorageClass = S3StorageClass.Standard,
                 CannedACL = S3CannedACL.PublicRead
@@ -81,12 +91,12 @@ namespace Ksu.Gdc.Api.Core.Services
             return true;
         }
 
-        public Stream GetGameThumbnailImage(int id)
+        public Stream GetGameThumbnailImage(int gameId)
         {
-            return GetGameThumbnailImageAsync(id).Result;
+            return GetGameThumbnailImageAsync(gameId).Result;
         }
 
-        public async Task<Stream> GetGameThumbnailImageAsync(int id)
+        public async Task<Stream> GetGameThumbnailImageAsync(int gameId)
         {
             try
             {
@@ -94,7 +104,7 @@ namespace Ksu.Gdc.Api.Core.Services
                 var transferRequest = new TransferUtilityOpenStreamRequest()
                 {
                     BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                    Key = $"{GameConfig.DataStoreDirPath}/{id}/thumbnail.jpg"
+                    Key = $"{GameConfig.DataStoreDirPath}/{gameId}/thumbnail.jpg"
                 };
                 var stream = await transferUtility.OpenStreamAsync(transferRequest);
                 return stream;
@@ -103,7 +113,7 @@ namespace Ksu.Gdc.Api.Core.Services
             {
                 if (ex.Message.Contains("key does not exist"))
                 {
-                    throw new NotFoundException($"No thumbnail image for game with id '{id}' was found.");
+                    throw new NotFoundException($"No thumbnail image for game with id '{gameId}' was found.");
                 }
                 throw ex;
             }

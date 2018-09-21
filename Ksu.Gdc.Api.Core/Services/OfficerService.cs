@@ -22,35 +22,35 @@ namespace Ksu.Gdc.Api.Core.Services
             _ksuGdcContext = ksuGdcContext;
         }
 
-        public List<OfficerDto> GetOfficers()
+        public List<Dto_Officer> GetOfficers()
         {
             return GetOfficersAsync().Result;
         }
 
-        public async Task<List<OfficerDto>> GetOfficersAsync()
+        public async Task<List<Dto_Officer>> GetOfficersAsync()
         {
             var dbOfficers = await _ksuGdcContext.Officers.Include(o => o.User).ToListAsync();
             if (dbOfficers.Count == 0)
             {
                 throw new NotFoundException("No officers were found.");
             }
-            var officerDtos = Mapper.Map<List<OfficerDto>>(dbOfficers);
+            var officerDtos = Mapper.Map<List<Dto_Officer>>(dbOfficers);
             return officerDtos;
         }
 
-        public List<OfficerDto> GetOfficersByPosition(string position)
+        public List<Dto_Officer> GetOfficersByPosition(string position)
         {
             return GetOfficersByPositionAsync(position).Result;
         }
 
-        public async Task<List<OfficerDto>> GetOfficersByPositionAsync(string position)
+        public async Task<List<Dto_Officer>> GetOfficersByPositionAsync(string position)
         {
             var dbOfficers = await _ksuGdcContext.Officers.Include(o => o.User).Where(o => o.Position == position).ToListAsync();
             if (dbOfficers.Count == 0)
             {
                 throw new NotFoundException($"No officers for position '{position}' were found.");
             }
-            var officerDtos = Mapper.Map<List<OfficerDto>>(dbOfficers);
+            var officerDtos = Mapper.Map<List<Dto_Officer>>(dbOfficers);
             return officerDtos;
         }
     }
