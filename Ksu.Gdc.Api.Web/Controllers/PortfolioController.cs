@@ -26,14 +26,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("games", Name = "GetAllGames")]
-        public async Task<IActionResult> GetAllGames([FromQuery] int userId)
+        [Route("games", Name = "GetGames")]
+        public async Task<IActionResult> GetGames([FromQuery] int userId)
         {
             try
             {
                 if (userId == 0)
                 {
-                    var games = await _portfolioService.GetAllGamesAsync();
+                    var games = await _portfolioService.GetGamesAsync();
                     return Ok(games);
                 }
                 else

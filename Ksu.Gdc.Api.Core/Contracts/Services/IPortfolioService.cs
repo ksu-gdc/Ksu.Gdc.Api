@@ -11,16 +11,16 @@ namespace Ksu.Gdc.Api.Core.Contracts
     public interface IPortfolioService
     {
         /// <summary>
-        /// Gets all games.
+        /// Gets the games.
         /// </summary>
-        /// <returns>The all games.</returns>
-        List<Dto_Game> GetAllGames();
+        /// <returns>The games.</returns>
+        List<Dto_Game> GetGames();
 
         /// <summary>
-        /// Gets all games async.
+        /// Gets the games async.
         /// </summary>
-        /// <returns>The all games async.</returns>
-        Task<List<Dto_Game>> GetAllGamesAsync();
+        /// <returns>The games async.</returns>
+        Task<List<Dto_Game>> GetGamesAsync();
 
         /// <summary>
         /// Gets the games by user identifier.

@@ -40,10 +40,10 @@ namespace Ksu.Gdc.Api.Core.Services
             var dbUser = await _ksuGdcContext.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
             if (dbUser == null)
             {
-                throw new NotFoundException($"No user with Id '{userId}' was found.");
+                throw new NotFoundException($"No user with id '{userId}' was found.");
             }
-            var Dto_User = Mapper.Map<Dto_User>(dbUser);
-            return Dto_User;
+            var dtoUser = Mapper.Map<Dto_User>(dbUser);
+            return dtoUser;
         }
 
         public Dto_User GetUserByUsername(string username)
@@ -58,8 +58,8 @@ namespace Ksu.Gdc.Api.Core.Services
             {
                 throw new NotFoundException($"No user with username '{username}' was found.");
             }
-            var Dto_User = Mapper.Map<Dto_User>(dbUser);
-            return Dto_User;
+            var dtoUser = Mapper.Map<Dto_User>(dbUser);
+            return dtoUser;
         }
 
         public Dto_User AddUser(CreateDto_User newUser)

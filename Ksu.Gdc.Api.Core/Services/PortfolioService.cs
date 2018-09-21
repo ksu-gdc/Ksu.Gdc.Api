@@ -29,20 +29,20 @@ namespace Ksu.Gdc.Api.Core.Services
             _s3Client = s3Client;
         }
 
-        public List<Dto_Game> GetAllGames()
+        public List<Dto_Game> GetGames()
         {
-            return GetAllGamesAsync().Result;
+            return GetGamesAsync().Result;
         }
 
-        public async Task<List<Dto_Game>> GetAllGamesAsync()
+        public async Task<List<Dto_Game>> GetGamesAsync()
         {
             var dbGames = await _ksuGdcContext.Games.ToListAsync();
             if (dbGames.Count == 0)
             {
                 throw new NotFoundException("No games were found.");
             }
-            var gameDtos = Mapper.Map<List<Dto_Game>>(dbGames);
-            return gameDtos;
+            var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+            return dtoGames;
         }
 
         public List<Dto_Game> GetGamesByUserId(int userId)
@@ -67,8 +67,8 @@ namespace Ksu.Gdc.Api.Core.Services
             {
                 throw new NotFoundException($"No game with Id '{gameId}' was found.");
             }
-            var Dto_Game = Mapper.Map<Dto_Game>(dbGame);
-            return Dto_Game;
+            var dtoGames = Mapper.Map<Dto_Game>(dbGame);
+            return dtoGames;
         }
 
         public bool UpdateGameThumbnailImage(int gameId, Stream imageStream)

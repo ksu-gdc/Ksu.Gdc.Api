@@ -34,8 +34,8 @@ namespace Ksu.Gdc.Api.Core.Services
             {
                 throw new NotFoundException("No officers were found.");
             }
-            var officerDtos = Mapper.Map<List<Dto_Officer>>(dbOfficers);
-            return officerDtos;
+            var dtoOfficers = Mapper.Map<List<Dto_Officer>>(dbOfficers);
+            return dtoOfficers;
         }
 
         public List<Dto_Officer> GetOfficersByPosition(string position)
@@ -50,8 +50,8 @@ namespace Ksu.Gdc.Api.Core.Services
             {
                 throw new NotFoundException($"No officers for position '{position}' were found.");
             }
-            var officerDtos = Mapper.Map<List<Dto_Officer>>(dbOfficers);
-            return officerDtos;
+            var dtoOfficers = Mapper.Map<List<Dto_Officer>>(dbOfficers);
+            return dtoOfficers;
         }
     }
 }
