@@ -33,6 +33,10 @@ namespace Ksu.Gdc.Api.Core.Services
                     + $"&ticket={ticket}"
                     + $"&format=JSON";
                 var response = new CASValidationResponse(JsonConvert.DeserializeObject(await client.GetStringAsync(url)));
+                if (!response.Validated)
+                {
+                    throw new NotAuthorizedException();
+                }
                 return response;
             }
         }

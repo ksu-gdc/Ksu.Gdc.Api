@@ -57,21 +57,17 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     return BadRequest();
                 }
                 var response = await _authService.ValidateCASTicketAsync(service, ticket);
-                if (!response.Validated)
-                {
-                    throw new NotAuthorizedException();
-                }
                 try
                 {
-                    var id = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
-                    var Dto_User = await _userService.GetUserByIdAsync(id);
-                    return Ok(Dto_User);
+                    var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
+                    var dtoUser = await _userService.GetUserByIdAsync(userId);
+                    return Ok(dtoUser);
                 }
                 catch (NotFoundException)
                 {
                     var newUser = new CreateDto_User(response.ServiceResponse.AuthenticationSuccess.Attributes);
-                    var Dto_User = await _userService.AddUserAsync(newUser);
-                    return StatusCode(StatusCodes.Status201Created, Dto_User);
+                    var dtoUser = await _userService.AddUserAsync(newUser);
+                    return StatusCode(StatusCodes.Status201Created, dtoUser);
                 }
 
             }
