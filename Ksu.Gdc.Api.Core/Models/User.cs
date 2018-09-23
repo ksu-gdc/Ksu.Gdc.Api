@@ -21,8 +21,6 @@ namespace Ksu.Gdc.Api.Core.Models
         public string ImageUrl => AppConfiguration.GetConfig("Api_Url") + "/users/" + UserId + "/profile-image";
 
         public string Email => Username + "@ksu.edu";
-
-        public ICollection<Dto_Group> Groups { get; set; } = new List<Dto_Group>();
     }
 
     public class CreateDto_User

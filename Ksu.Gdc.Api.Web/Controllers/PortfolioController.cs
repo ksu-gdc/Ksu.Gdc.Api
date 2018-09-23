@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http;
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -31,20 +32,16 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                List<Dto_Game> games;
                 if (userId == 0)
                 {
-                    var games = await _portfolioService.GetGamesAsync();
-                    return Ok(games);
+                    games = await _portfolioService.GetGamesAsync();
                 }
                 else
                 {
-                    var games = await _portfolioService.GetGamesByUserIdAsync(userId);
-                    return Ok(games);
+                    games = await _portfolioService.GetGamesByUserIdAsync(userId);
                 }
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
+                return Ok(games);
             }
             catch (Exception)
             {
@@ -54,11 +51,11 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("games/{id}", Name = "GetGameById")]
-        public async Task<IActionResult> GetGameById(int id)
+        public async Task<IActionResult> GetGameById(int gameId)
         {
             try
             {
-                var game = await _portfolioService.GetGameByIdAsync(id);
+                var game = await _portfolioService.GetGameByIdAsync(gameId);
                 return Ok(game);
             }
             catch (NotFoundException ex)

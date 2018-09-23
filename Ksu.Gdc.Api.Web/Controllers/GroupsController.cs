@@ -10,6 +10,7 @@ using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Data.Entities;
+using Ksu.Gdc.Api.Core.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -26,20 +27,21 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("", Name = "GetAllGroups")]
-        public async Task<IActionResult> GetAllGroups([FromQuery] int userId)
+        [Route("", Name = "GetGroups")]
+        public async Task<IActionResult> GetGroups([FromQuery] int userId)
         {
             try
             {
+                List<Dto_Group> groups;
                 if (userId == 0)
                 {
-
+                    groups = await _groupService.GetGroupsAsync();
                 }
                 else
                 {
-
+                    groups = await _groupService.GetGroupsByUserIdAsync(userId);
                 }
-                return Ok();
+                return Ok(groups);
             }
             catch (Exception)
             {
@@ -47,13 +49,18 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("{groupId}/users", Name = "AddUserToGroup")]
-        public async Task<IActionResult> AddUserToGroup([FromRoute] int groupId, [FromBody] int userId)
+        [HttpGet]
+        [Route("{groupId}", Name = "GetGroupById")]
+        public async Task<IActionResult> GetGroupById([FromRoute] int groupId)
         {
             try
             {
-                return Ok();
+                var group = await _groupService.GetGroupByIdAsync(groupId);
+                return Ok(group);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception)
             {
@@ -61,17 +68,18 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("{groupId}/users/{userId}", Name = "RemoveUserFromGroup")]
-        public async Task<IActionResult> RemoveUserFromGroup([FromRoute] int groupId, [FromRoute] int userId)
+        [HttpGet]
+        [Route("{groupId}/users", Name = "GetGroupMembers")]
+        public async Task<IActionResult> GetGroupMembers([FromRoute] int groupId)
         {
             try
             {
-                return Ok();
+                var members = await _groupService.GetGroupMembersByGroupIdAsync(groupId);
+                return Ok(members);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex);
             }
         }
     }

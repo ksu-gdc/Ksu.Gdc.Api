@@ -37,7 +37,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<Dto_User> GetUserByIdAsync(int userId)
         {
-            var dbUser = await _ksuGdcContext.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
+            var dbUser = await _ksuGdcContext.Users
+                                             .Where(u => u.UserId == userId)
+                                             .FirstOrDefaultAsync();
             if (dbUser == null)
             {
                 throw new NotFoundException($"No user with id '{userId}' was found.");
@@ -53,7 +55,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<Dto_User> GetUserByUsernameAsync(string username)
         {
-            var dbUser = await _ksuGdcContext.Users.Where(u => u.Username == username).FirstOrDefaultAsync();
+            var dbUser = await _ksuGdcContext.Users
+                                             .Where(u => u.Username == username)
+                                             .FirstOrDefaultAsync();
             if (dbUser == null)
             {
                 throw new NotFoundException($"No user with username '{username}' was found.");
@@ -82,7 +86,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<bool> UpdateUserAsync(int userId, UpdateDto_User user)
         {
-            var dbUser = await _ksuGdcContext.Users.Where(u => u.UserId == userId).FirstOrDefaultAsync();
+            var dbUser = await _ksuGdcContext.Users
+                                             .Where(u => u.UserId == userId)
+                                             .FirstOrDefaultAsync();
             if (dbUser == null)
             {
                 throw new NotFoundException($"No user with id '{userId}' was found.");

@@ -21,15 +21,76 @@ namespace Ksu.Gdc.Api.Core.Services
 {
     public class GroupService : IGroupService
     {
-        private readonly IUserService _userService;
+        private readonly KsuGdcContext _ksuGdcContext;
         private readonly IAmazonS3 _s3Client;
 
-        public GroupService(IUserService userService, IAmazonS3 s3Client)
+        public GroupService(KsuGdcContext ksuGdcContext, IAmazonS3 s3Client)
         {
-            _userService = userService;
+            _ksuGdcContext = ksuGdcContext;
             _s3Client = s3Client;
         }
 
+        public List<Dto_Group> GetGroups()
+        {
+            return GetGroupsAsync().Result;
+        }
 
+        public async Task<List<Dto_Group>> GetGroupsAsync()
+        {
+            var dbGroups = await _ksuGdcContext.Groups
+                                               .ToListAsync();
+            var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
+            return dtoGroups;
+        }
+
+        public List<Dto_Group> GetGroupsByUserId(int userId)
+        {
+            return GetGroupsByUserIdAsync(userId).Result;
+        }
+
+        public async Task<List<Dto_Group>> GetGroupsByUserIdAsync(int userId)
+        {
+            var dbGroups = await _ksuGdcContext.User_Group
+                                               .Include(ug => ug.Group)
+                                               .Where(ug => ug.UserId == userId)
+                                               .Select(ug => ug.Group)
+                                               .ToListAsync();
+            var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
+            return dtoGroups;
+        }
+
+        public Dto_Group GetGroupById(int groupId)
+        {
+            return GetGroupByIdAsync(groupId).Result;
+        }
+
+        public async Task<Dto_Group> GetGroupByIdAsync(int groupId)
+        {
+            var dbGroup = await _ksuGdcContext.Groups
+                                              .Where(g => g.GroupId == groupId)
+                                              .FirstOrDefaultAsync();
+            if (dbGroup == null)
+            {
+                throw new NotFoundException($"No group with id '{groupId}' was found.");
+            }
+            var dtoGroup = Mapper.Map<Dto_Group>(dbGroup);
+            return dtoGroup;
+        }
+
+        public List<Dto_User> GetGroupMembersByGroupId(int groupId)
+        {
+            return GetGroupMembersByGroupIdAsync(groupId).Result;
+        }
+
+        public async Task<List<Dto_User>> GetGroupMembersByGroupIdAsync(int groupId)
+        {
+            var dbMembers = await _ksuGdcContext.User_Group
+                                                .Include(ug => ug.User)
+                                                .Where(ug => ug.GroupId == groupId)
+                                                .Select(ug => ug.User)
+                                                .ToListAsync();
+            var dtoMembers = Mapper.Map<List<Dto_User>>(dbMembers);
+            return dtoMembers;
+        }
     }
 }

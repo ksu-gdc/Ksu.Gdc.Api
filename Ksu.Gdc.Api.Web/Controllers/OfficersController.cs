@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Http;
 
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.Entities;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -29,20 +30,16 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                List<Dto_Officer> officers;
                 if (!string.IsNullOrEmpty(position))
                 {
-                    var officers = await _officerService.GetOfficersByPositionAsync(position);
-                    return Ok(officers);
+                    officers = await _officerService.GetOfficersByPositionAsync(position);
                 }
                 else
                 {
-                    var officers = await _officerService.GetOfficersAsync();
-                    return Ok(officers);
+                    officers = await _officerService.GetOfficersAsync();
                 }
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
+                return Ok(officers);
             }
             catch (Exception)
             {

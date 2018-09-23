@@ -36,11 +36,8 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<Dto_Game>> GetGamesAsync()
         {
-            var dbGames = await _ksuGdcContext.Games.ToListAsync();
-            if (dbGames.Count == 0)
-            {
-                throw new NotFoundException("No games were found.");
-            }
+            var dbGames = await _ksuGdcContext.Games
+                                              .ToListAsync();
             var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
             return dtoGames;
         }
@@ -62,7 +59,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<Dto_Game> GetGameByIdAsync(int gameId)
         {
-            var dbGame = await _ksuGdcContext.Games.Where(g => g.GameId == gameId).FirstOrDefaultAsync();
+            var dbGame = await _ksuGdcContext.Games
+                                             .Where(g => g.GameId == gameId)
+                                             .FirstOrDefaultAsync();
             if (dbGame == null)
             {
                 throw new NotFoundException($"No game with Id '{gameId}' was found.");

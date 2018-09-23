@@ -14,7 +14,9 @@ namespace Ksu.Gdc.Api.Data.Entities
         [Required]
         public string Position { get; set; }
 
-        [ForeignKey("Id")]
+        [ForeignKey("UserId")]
         public ModelEntity_User User { get; set; }
+
+        public int UserId { get; set; }
     }
 }

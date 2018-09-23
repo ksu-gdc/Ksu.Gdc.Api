@@ -17,7 +17,5 @@ namespace Ksu.Gdc.Api.Data.Entities
 
         [MaxLength(1000)]
         public string Description { get; set; }
-
-        public ICollection<JoinEntity_UserGroup> Users { get; set; } = new List<JoinEntity_UserGroup>();
     }
 }

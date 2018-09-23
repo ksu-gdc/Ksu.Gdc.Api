@@ -16,7 +16,7 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public string Url { get; set; }
 
-        public string ImageUrl => AppConfiguration.GetConfig("Api_Url") + "/portfolio/games/" + Id + "/" + "thumbnail-image";
+        public string ImageUrl => AppConfiguration.GetConfig("Api_Url") + "/portfolio/games/" + GameId + "/" + "thumbnail-image";
     }
 
     public class CreateDto_Game
