@@ -12,8 +12,6 @@ using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Data.Entities;
 using Ksu.Gdc.Api.Core.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Ksu.Gdc.Api.Web.Controllers
 {
     [Route("[controller]")]
@@ -28,19 +26,11 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("", Name = "GetGroups")]
-        public async Task<IActionResult> GetGroups([FromQuery] int userId)
+        public async Task<IActionResult> GetGroups()
         {
             try
             {
-                List<Dto_Group> groups;
-                if (userId == 0)
-                {
-                    groups = await _groupService.GetGroupsAsync();
-                }
-                else
-                {
-                    groups = await _groupService.GetGroupsByUserIdAsync(userId);
-                }
+                var groups = await _groupService.GetGroupsAsync();
                 return Ok(groups);
             }
             catch (Exception)
@@ -74,12 +64,27 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
-                var members = await _groupService.GetGroupMembersByGroupIdAsync(groupId);
+                var members = await _groupService.GetGroupMembersAsync(groupId);
                 return Ok(members);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{groupId}/portfolio/games", Name = "GetGamesOfGroup")]
+        public async Task<IActionResult> GetGamesOfGroup([FromRoute] int groupId)
+        {
+            try
+            {
+                var games = await _groupService.GetGamesOfGroupAsync(groupId);
+                return Ok(games);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
     }

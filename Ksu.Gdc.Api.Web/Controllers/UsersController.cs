@@ -11,8 +11,6 @@ using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Ksu.Gdc.Api.Web.Controllers
 {
     [Route("[controller]")]
@@ -38,7 +36,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -64,8 +62,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPut]
-        [Route("{id}", Name = "UpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromRoute] int id, [FromBody] UpdateDto_User user)
+        [Route("{userId}", Name = "UpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromRoute] int userId, [FromBody] UpdateDto_User user)
         {
             try
             {
@@ -73,7 +71,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest();
                 }
-                await _userService.UpdateUserAsync(id, user);
+                await _userService.UpdateUserAsync(userId, user);
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -117,6 +115,36 @@ namespace Ksu.Gdc.Api.Web.Controllers
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{userId}/groups", Name = "GetGroupsOfUser")]
+        public async Task<IActionResult> GetGroupsOfUser([FromRoute] int userId)
+        {
+            try
+            {
+                var groups = await _userService.GetGroupsOfUserAsync(userId);
+                return Ok(groups);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{userId}/portfolio/games", Name = "GetGamesOfUser")]
+        public async Task<IActionResult> GetGamesOfUser([FromRoute] int userId)
+        {
+            try
+            {
+                var games = await _userService.GetGamesOfUserAsync(userId);
+                return Ok(games);
             }
             catch (Exception)
             {

@@ -10,8 +10,6 @@ using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.Entities;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Ksu.Gdc.Api.Web.Controllers
 {
     [Route("[controller]")]

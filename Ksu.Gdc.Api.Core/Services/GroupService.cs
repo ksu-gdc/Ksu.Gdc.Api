@@ -43,22 +43,6 @@ namespace Ksu.Gdc.Api.Core.Services
             return dtoGroups;
         }
 
-        public List<Dto_Group> GetGroupsByUserId(int userId)
-        {
-            return GetGroupsByUserIdAsync(userId).Result;
-        }
-
-        public async Task<List<Dto_Group>> GetGroupsByUserIdAsync(int userId)
-        {
-            var dbGroups = await _ksuGdcContext.User_Group
-                                               .Include(ug => ug.Group)
-                                               .Where(ug => ug.UserId == userId)
-                                               .Select(ug => ug.Group)
-                                               .ToListAsync();
-            var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
-            return dtoGroups;
-        }
-
         public Dto_Group GetGroupById(int groupId)
         {
             return GetGroupByIdAsync(groupId).Result;
@@ -77,12 +61,12 @@ namespace Ksu.Gdc.Api.Core.Services
             return dtoGroup;
         }
 
-        public List<Dto_User> GetGroupMembersByGroupId(int groupId)
+        public List<Dto_User> GetGroupMembers(int groupId)
         {
-            return GetGroupMembersByGroupIdAsync(groupId).Result;
+            return GetGroupMembersAsync(groupId).Result;
         }
 
-        public async Task<List<Dto_User>> GetGroupMembersByGroupIdAsync(int groupId)
+        public async Task<List<Dto_User>> GetGroupMembersAsync(int groupId)
         {
             var dbMembers = await _ksuGdcContext.User_Group
                                                 .Include(ug => ug.User)
@@ -91,6 +75,19 @@ namespace Ksu.Gdc.Api.Core.Services
                                                 .ToListAsync();
             var dtoMembers = Mapper.Map<List<Dto_User>>(dbMembers);
             return dtoMembers;
+        }
+
+        public List<Dto_Game> GetGamesOfGroup(int groupId)
+        {
+            return GetGamesOfGroupAsync(groupId).Result;
+        }
+
+        public async Task<List<Dto_Game>> GetGamesOfGroupAsync(int groupId)
+        {
+            var dbGames = await _ksuGdcContext.Games.Where(g => g.GroupId == groupId)
+                                         .ToListAsync();
+            var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+            return dtoGames;
         }
     }
 }

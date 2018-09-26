@@ -99,5 +99,33 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// <returns>The user profile image async.</returns>
         /// <param name="userId">User identifier.</param>
         Task<Stream> GetUserProfileImageAsync(int userId);
+
+        /// <summary>
+        /// Gets the groups of user.
+        /// </summary>
+        /// <returns>The groups of user.</returns>
+        /// <param name="userId">User identifier.</param>
+        List<Dto_Group> GetGroupsOfUser(int userId);
+
+        /// <summary>
+        /// Gets the groups of user async.
+        /// </summary>
+        /// <returns>The groups of user async.</returns>
+        /// <param name="userId">User identifier.</param>
+        Task<List<Dto_Group>> GetGroupsOfUserAsync(int userId);
+
+        /// <summary>
+        /// Gets the games of user.
+        /// </summary>
+        /// <returns>The games of user.</returns>
+        /// <param name="userId">User identifier.</param>
+        List<Dto_Game> GetGamesOfUser(int userId);
+
+        /// <summary>
+        /// Gets the games of user async.
+        /// </summary>
+        /// <returns>The games of user async.</returns>
+        /// <param name="userId">User identifier.</param>
+        Task<List<Dto_Game>> GetGamesOfUserAsync(int userId);
     }
 }

@@ -12,8 +12,6 @@ using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.Entities;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Ksu.Gdc.Api.Web.Controllers
 {
     [Route("[controller]")]
@@ -28,19 +26,11 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("games", Name = "GetGames")]
-        public async Task<IActionResult> GetGames([FromQuery] int userId)
+        public async Task<IActionResult> GetGames()
         {
             try
             {
-                List<Dto_Game> games;
-                if (userId == 0)
-                {
-                    games = await _portfolioService.GetGamesAsync();
-                }
-                else
-                {
-                    games = await _portfolioService.GetGamesByUserIdAsync(userId);
-                }
+                var games = await _portfolioService.GetGamesAsync();
                 return Ok(games);
             }
             catch (Exception)

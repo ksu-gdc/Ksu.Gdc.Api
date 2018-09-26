@@ -21,20 +21,6 @@ namespace Ksu.Gdc.Api.Core.Contracts
         Task<List<Dto_Group>> GetGroupsAsync();
 
         /// <summary>
-        /// Gets the groups by user identifier.
-        /// </summary>
-        /// <returns>The groups by user identifier.</returns>
-        /// <param name="userId">User identifier.</param>
-        List<Dto_Group> GetGroupsByUserId(int userId);
-
-        /// <summary>
-        /// Gets the groups by user identifier async.
-        /// </summary>
-        /// <returns>The groups by user identifier async.</returns>
-        /// <param name="userId">User identifier.</param>
-        Task<List<Dto_Group>> GetGroupsByUserIdAsync(int userId);
-
-        /// <summary>
         /// Gets the group by identifier.
         /// </summary>
         /// <returns>The group by identifier.</returns>
@@ -53,13 +39,27 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// </summary>
         /// <returns>The members by group identifier.</returns>
         /// <param name="groupId">Group identifier.</param>
-        List<Dto_User> GetGroupMembersByGroupId(int groupId);
+        List<Dto_User> GetGroupMembers(int groupId);
 
         /// <summary>
         /// Gets the members by group identifier async.
         /// </summary>
         /// <returns>The members by group identifier async.</returns>
         /// <param name="groupId">Group identifier.</param>
-        Task<List<Dto_User>> GetGroupMembersByGroupIdAsync(int groupId);
+        Task<List<Dto_User>> GetGroupMembersAsync(int groupId);
+
+        /// <summary>
+        /// Gets the games of group.
+        /// </summary>
+        /// <returns>The games of group.</returns>
+        /// <param name="groupId">Group identifier.</param>
+        List<Dto_Game> GetGamesOfGroup(int groupId);
+
+        /// <summary>
+        /// Gets the games of group async.
+        /// </summary>
+        /// <returns>The games of group async.</returns>
+        /// <param name="groupId">Group identifier.</param>
+        Task<List<Dto_Game>> GetGamesOfGroupAsync(int groupId);
     }
 }

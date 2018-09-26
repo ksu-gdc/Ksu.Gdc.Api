@@ -23,20 +23,6 @@ namespace Ksu.Gdc.Api.Core.Contracts
         Task<List<Dto_Game>> GetGamesAsync();
 
         /// <summary>
-        /// Gets the games by user identifier.
-        /// </summary>
-        /// <returns>The games by user identifier.</returns>
-        /// <param name="userId">User identifier.</param>
-        List<Dto_Game> GetGamesByUserId(int userId);
-
-        /// <summary>
-        /// Gets the games by user identifier async.
-        /// </summary>
-        /// <returns>The games by user identifier async.</returns>
-        /// <param name="userId">User identifier.</param>
-        Task<List<Dto_Game>> GetGamesByUserIdAsync(int userId);
-
-        /// <summary>
         /// Gets the game by identifier.
         /// </summary>
         /// <returns>The game by identifier.</returns>

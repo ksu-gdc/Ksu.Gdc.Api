@@ -42,16 +42,6 @@ namespace Ksu.Gdc.Api.Core.Services
             return dtoGames;
         }
 
-        public List<Dto_Game> GetGamesByUserId(int userId)
-        {
-            return GetGamesByUserIdAsync(userId).Result;
-        }
-
-        public async Task<List<Dto_Game>> GetGamesByUserIdAsync(int userId)
-        {
-            return new List<Dto_Game>();
-        }
-
         public Dto_Game GetGameById(int gameId)
         {
             return GetGameByIdAsync(gameId).Result;
