@@ -15,8 +15,6 @@ namespace Ksu.Gdc.Api.Data.DbContexts
 
         public DbSet<ModelEntity_Group> Groups { get; set; }
 
-        public DbSet<ModelEntity_Role> Roles { get; set; }
-
         public DbSet<ModelEntity_Game> Games { get; set; }
 
         public DbSet<JoinEntity_UserGroup> UserGroups { get; set; }
