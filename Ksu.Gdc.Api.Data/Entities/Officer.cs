@@ -12,11 +12,11 @@ namespace Ksu.Gdc.Api.Data.Entities
         public int OfficerId { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string Position { get; set; }
 
         [ForeignKey("UserId")]
         public ModelEntity_User User { get; set; }
-
         public int UserId { get; set; }
     }
 }

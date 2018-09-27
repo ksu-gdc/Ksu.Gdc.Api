@@ -19,7 +19,7 @@ namespace Ksu.Gdc.Api.Data.DbContexts
 
         public DbSet<ModelEntity_Game> Games { get; set; }
 
-        public DbSet<JoinEntity_UserGroup> User_Group { get; set; }
+        public DbSet<JoinEntity_UserGroup> UserGroups { get; set; }
 
         public KsuGdcContext(DbContextOptions<KsuGdcContext> options) : base(options)
         {
@@ -175,25 +175,40 @@ namespace Ksu.Gdc.Api.Data.DbContexts
                 }
             };
 
+            var groups = new List<ModelEntity_Group>()
+            {
+                new ModelEntity_Group()
+                {
+                    Name = "TestGroup"
+                },
+                new ModelEntity_Group()
+                {
+                    Name = "TestGroup2"
+                }
+            };
+
             var games = new List<ModelEntity_Game>()
             {
                 new ModelEntity_Game()
                 {
                     Title = "Overload",
                     Description = "Overload. A modern take on 80s arcade games, battle a continuous wave of enemies as the game continues to speed up. Use the mouse to controller your character. Left click to shoot clockwise, right click to shoot counter-clockwise, and both buttons at the same time to fire your super.",
-                    Url = "https://jessej37.itch.io/overload"
+                    Url = "https://jessej37.itch.io/overload",
+                    User = officers[5].User
                 },
                 new ModelEntity_Game()
                 {
                     Title = "Operation Inundation",
                     Description = "Operation Inundation is a one to two player puzzle game. Featuring four levels with original art and music, it follows Agent 842 on his mission to retrieve something from the lowest level of a flooded building.",
-                    Url = "https://pi-memorizer.itch.io/operation-inundation"
+                    Url = "https://pi-memorizer.itch.io/operation-inundation",
+                    Group = groups[0]
                 },
                 new ModelEntity_Game()
                 {
                     Title = "FPS Prototype",
                     Description = "Pre-alpha prototype for an upcoming FPS game. The intent of this prototype was to create and refine the movement and shooting mechanics - the bread and butter of FPS gamefeel.",
-                    Url = "https://crimsonseven.itch.io/pre-alpha-game"
+                    Url = "https://crimsonseven.itch.io/pre-alpha-game",
+                    User = officers[5].User
                 },
                 new ModelEntity_Game()
                 {
@@ -215,33 +230,21 @@ namespace Ksu.Gdc.Api.Data.DbContexts
                 }
             };
 
-            var groups = new List<ModelEntity_Group>()
-            {
-                new ModelEntity_Group()
-                {
-                    Name = "TestGroup"
-                },
-                new ModelEntity_Group()
-                {
-                    Name = "TestGroup2"
-                }
-            };
-
             var usersGroups = new List<JoinEntity_UserGroup>()
             {
                 new JoinEntity_UserGroup()
                 {
-                    User = officers[0].User,
+                    User = officers[5].User,
                     Group = groups[0]
                 },
                 new JoinEntity_UserGroup()
                 {
-                    User = officers[0].User,
+                    User = officers[5].User,
                     Group = groups[1]
                 },
                 new JoinEntity_UserGroup()
                 {
-                    User = officers[2].User,
+                    User = officers[1].User,
                     Group = groups[0]
                 }
             };

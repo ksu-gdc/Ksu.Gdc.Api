@@ -8,7 +8,6 @@ namespace Ksu.Gdc.Api.Data.Entities
     public class ModelEntity_User
     {
         [Key]
-        [Required]
         public int UserId { get; set; }
 
         [Required]

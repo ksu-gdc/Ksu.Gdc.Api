@@ -9,12 +9,10 @@ namespace Ksu.Gdc.Api.Data.Entities
     {
         [ForeignKey("UserId")]
         public ModelEntity_User User { get; set; }
-
         public int UserId { get; set; }
 
         [ForeignKey("GroupId")]
         public ModelEntity_Group Group { get; set; }
-
         public int GroupId { get; set; }
     }
 }

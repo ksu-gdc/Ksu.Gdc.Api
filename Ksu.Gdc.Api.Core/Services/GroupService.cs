@@ -68,10 +68,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<Dto_User>> GetGroupMembersAsync(int groupId)
         {
-            var dbMembers = await _ksuGdcContext.User_Group
-                                                .Include(ug => ug.User)
+            var dbMembers = await _ksuGdcContext.UserGroups
                                                 .Where(ug => ug.GroupId == groupId)
-                                                .Select(ug => ug.User)
+                                                .Include(ug => ug.User)
                                                 .ToListAsync();
             var dtoMembers = Mapper.Map<List<Dto_User>>(dbMembers);
             return dtoMembers;
@@ -84,8 +83,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<Dto_Game>> GetGamesOfGroupAsync(int groupId)
         {
-            var dbGames = await _ksuGdcContext.Games.Where(g => g.GroupId == groupId)
-                                         .ToListAsync();
+            var dbGames = await _ksuGdcContext.Games
+                                              .Where(g => g.GroupId == groupId)
+                                              .ToListAsync();
             var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
             return dtoGames;
         }

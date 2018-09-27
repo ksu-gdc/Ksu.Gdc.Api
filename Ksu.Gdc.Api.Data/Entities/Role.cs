@@ -8,10 +8,10 @@ namespace Ksu.Gdc.Api.Data.Entities
     public class ModelEntity_Role
     {
         [Key]
-        [Required]
         public int OfficerId { get; set; }
 
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
     }
 }
