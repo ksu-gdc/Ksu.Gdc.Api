@@ -36,7 +36,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<Dto_Game>> GetGamesAsync()
         {
-            var dbGames = await _ksuGdcContext.Games
+            var dbGames = await _ksuGdcContext.Game
                                               .ToListAsync();
             var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
             return dtoGames;
@@ -49,7 +49,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<Dto_Game> GetGameByIdAsync(int gameId)
         {
-            var dbGame = await _ksuGdcContext.Games
+            var dbGame = await _ksuGdcContext.Game
                                              .Where(g => g.GameId == gameId)
                                              .FirstOrDefaultAsync();
             if (dbGame == null)

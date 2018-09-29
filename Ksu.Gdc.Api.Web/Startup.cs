@@ -24,6 +24,7 @@ using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Services;
 using Ksu.Gdc.Api.Data.DbContexts;
+using Ksu.Gdc.Api.Data.Extensions;
 using Ksu.Gdc.Api.Data.Entities;
 using Ksu.Gdc.Api.Core.Models;
 
@@ -50,7 +51,9 @@ namespace Ksu.Gdc.Api.Web
                     {
                         options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                     });
-            services.AddCors();
+            services.AddCors(options => options.AddPolicy("AllowAppOnly", p => p.WithOrigins(AppConfiguration.GetConfig("App_Url"))
+                                                          .AllowAnyMethod()
+                                                          .AllowAnyHeader()));
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOfficerService, OfficerService>();
@@ -73,31 +76,31 @@ namespace Ksu.Gdc.Api.Web
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var ksuGdcContext = serviceScope.ServiceProvider.GetRequiredService<KsuGdcContext>();
+
+                loggerFactory.AddConsole();
+                loggerFactory.AddDebug();
+
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
                     ksuGdcContext.Database.EnsureDeleted();
+                    ksuGdcContext.Database.EnsureCreated();
+                    ksuGdcContext.EnsureSeedDataForContext();
                 }
                 else
                 {
                     //app.UseExceptionHandler();
                     app.UseHsts();
                 }
-                ksuGdcContext.Database.EnsureCreated();
 
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();
-                app.UseCors(builder =>
-                {
-                    builder.WithOrigins(AppConfiguration.GetConfig("App_Url"));
-                    builder.AllowAnyMethod();
-                    builder.AllowAnyHeader();
-                });
+                app.UseCors("AllowAppOnly");
                 app.UseMvc();
             }
         }

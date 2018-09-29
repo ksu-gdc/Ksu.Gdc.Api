@@ -37,7 +37,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<Dto_User> GetUserByIdAsync(int userId)
         {
-            var dbUser = await _ksuGdcContext.Users
+            var dbUser = await _ksuGdcContext.User
                                              .Where(u => u.UserId == userId)
                                              .FirstOrDefaultAsync();
             if (dbUser == null)
@@ -55,7 +55,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<Dto_User> GetUserByUsernameAsync(string username)
         {
-            var dbUser = await _ksuGdcContext.Users
+            var dbUser = await _ksuGdcContext.User
                                              .Where(u => u.Username == username)
                                              .FirstOrDefaultAsync();
             if (dbUser == null)
@@ -74,7 +74,7 @@ namespace Ksu.Gdc.Api.Core.Services
         public async Task<Dto_User> AddUserAsync(CreateDto_User newUser)
         {
             var newDbUser = Mapper.Map<ModelEntity_User>(newUser);
-            await _ksuGdcContext.Users.AddAsync(newDbUser);
+            await _ksuGdcContext.User.AddAsync(newDbUser);
             await _ksuGdcContext.SaveChangesAsync();
             return Mapper.Map<Dto_User>(newDbUser);
         }
@@ -86,14 +86,14 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<bool> UpdateUserAsync(int userId, UpdateDto_User user)
         {
-            var dbUser = await _ksuGdcContext.Users
+            var dbUser = await _ksuGdcContext.User
                                              .Where(u => u.UserId == userId)
                                              .FirstOrDefaultAsync();
             if (dbUser == null)
             {
                 throw new NotFoundException($"No user with id '{userId}' was found.");
             }
-            _ksuGdcContext.Users.Attach(dbUser);
+            _ksuGdcContext.User.Attach(dbUser);
             _ksuGdcContext.Entry(dbUser).CurrentValues.SetValues(user);
             await _ksuGdcContext.SaveChangesAsync();
             return true;
@@ -154,7 +154,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<Dto_Group>> GetGroupsOfUserAsync(int userId)
         {
-            var dbGroups = await _ksuGdcContext.UserGroups
+            var dbGroups = await _ksuGdcContext.UserGroup
                                                .Where(ug => ug.UserId == userId)
                                                .Include(ug => ug.Group)
                                                .ToListAsync();
@@ -169,7 +169,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<Dto_Game>> GetGamesOfUserAsync(int userId)
         {
-            var dbGames = await _ksuGdcContext.Games
+            var dbGames = await _ksuGdcContext.Game
                                               .Where(g => g.UserId == userId)
                                               .ToListAsync();
             var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);

@@ -29,7 +29,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<Dto_Officer>> GetOfficersAsync()
         {
-            var dbOfficers = await _ksuGdcContext.Officers
+            var dbOfficers = await _ksuGdcContext.Officer
                                                  .ToListAsync();
             var dtoOfficers = Mapper.Map<List<Dto_Officer>>(dbOfficers);
             return dtoOfficers;
@@ -42,7 +42,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<Dto_Officer>> GetOfficersByPositionAsync(string position)
         {
-            var dbOfficers = await _ksuGdcContext.Officers
+            var dbOfficers = await _ksuGdcContext.Officer
                                                  .Where(o => o.Position == position)
                                                  .ToListAsync();
             if (dbOfficers.Count == 0)
