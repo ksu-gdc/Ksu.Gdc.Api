@@ -51,9 +51,15 @@ namespace Ksu.Gdc.Api.Web
                     {
                         options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
                     });
-            services.AddCors(options => options.AddPolicy("AllowAppOnly", p => p.WithOrigins(AppConfiguration.GetConfig("App_Url"))
-                                                          .AllowAnyMethod()
-                                                          .AllowAnyHeader()));
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAny", p => p.AllowAnyOrigin()
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader());
+                options.AddPolicy("AllowAppOnly", p => p.WithOrigins(AppConfiguration.GetConfig("App_Url"))
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader());
+            });
 
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOfficerService, OfficerService>();
