@@ -17,7 +17,7 @@
     <PackageReference Include="AutoMapper" Version="7.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.23.2" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.24.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Contracts\Models\IGame.cs" />

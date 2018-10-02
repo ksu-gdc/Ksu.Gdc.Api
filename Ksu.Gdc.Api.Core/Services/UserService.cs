@@ -157,6 +157,7 @@ namespace Ksu.Gdc.Api.Core.Services
             var dbGroups = await _ksuGdcContext.UserGroup
                                                .Where(ug => ug.UserId == userId)
                                                .Include(ug => ug.Group)
+                                               .Select(ug => ug.Group)
                                                .ToListAsync();
             var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
             return dtoGroups;

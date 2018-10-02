@@ -30,6 +30,7 @@ namespace Ksu.Gdc.Api.Core.Services
         public async Task<List<Dto_Officer>> GetOfficersAsync()
         {
             var dbOfficers = await _ksuGdcContext.Officer
+                                                 .Include(o => o.User)
                                                  .ToListAsync();
             var dtoOfficers = Mapper.Map<List<Dto_Officer>>(dbOfficers);
             return dtoOfficers;
@@ -44,11 +45,8 @@ namespace Ksu.Gdc.Api.Core.Services
         {
             var dbOfficers = await _ksuGdcContext.Officer
                                                  .Where(o => o.Position == position)
+                                                 .Include(o => o.User)
                                                  .ToListAsync();
-            if (dbOfficers.Count == 0)
-            {
-                throw new NotFoundException($"No officers for position '{position}' were found.");
-            }
             var dtoOfficers = Mapper.Map<List<Dto_Officer>>(dbOfficers);
             return dtoOfficers;
         }
