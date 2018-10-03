@@ -99,7 +99,7 @@ namespace Ksu.Gdc.Api.Data.Extensions
                         Username = "timothyprice",
                         FirstName = "Timothy",
                         LastName = "Price",
-                        Description = "Dayton's Description."
+                        Description = "Timothy's Description."
                     }
                 },
                 new ModelEntity_Officer()
