@@ -18,13 +18,13 @@ namespace Ksu.Gdc.Api.Data.Entities
         [MaxLength(1000)]
         public string Description { get; set; }
 
-        [ForeignKey("UserId")]
-        public ModelEntity_User User { get; set; }
+        [ForeignKey("User")]
         public int? UserId { get; set; }
+        public ModelEntity_User User { get; set; }
 
-        [ForeignKey("GroupId")]
-        public ModelEntity_Group Group { get; set; }
+        [ForeignKey("Group")]
         public int? GroupId { get; set; }
+        public ModelEntity_Group Group { get; set; }
 
         [Url]
         public string Url { get; set; }

@@ -21,5 +21,9 @@ namespace Ksu.Gdc.Api.Data.Entities
 
         [MaxLength(1000)]
         public string Description { get; set; }
+
+        [ForeignKey("Officer")]
+        public int? OfficerId { get; set; }
+        public ModelEntity_Officer Officer { get; set; }
     }
 }

@@ -19,10 +19,12 @@ using Amazon.Runtime;
 using Amazon;
 using Amazon.S3;
 using Amazon.Extensions.NETCore.Setup;
+using AutoMapper;
 
-using Ksu.Gdc.Api.Core.Configurations;
+using Ksu.Gdc.Api.Configuration;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Services;
+using Ksu.Gdc.Api.Data;
 using Ksu.Gdc.Api.Data.DbContexts;
 using Ksu.Gdc.Api.Data.Extensions;
 using Ksu.Gdc.Api.Data.Entities;
@@ -32,31 +34,23 @@ namespace Ksu.Gdc.Api.Web
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appSettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appSettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables();
+        IConfiguration Configuration { get; set; }
 
-            AppConfiguration.Initialize(builder.Build());
+        public Startup(IHostingEnvironment env)
+        {
+            Configuration = AppConfiguration.Initialize(env);
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                    .AddMvcOptions(options =>
-                    {
-                        options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                    });
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAny", p => p.AllowAnyOrigin()
+                options.AddPolicy("AllowAny", p => p
+                                  .AllowAnyOrigin()
                                   .AllowAnyMethod()
                                   .AllowAnyHeader());
-                options.AddPolicy("AllowAppOnly", p => p.WithOrigins(AppConfiguration.GetConfig("App_Url"))
+                options.AddPolicy("AllowAppOnly", p => p
+                                  .WithOrigins(AppConfiguration.GetConfig("App_Url"))
                                   .AllowAnyMethod()
                                   .AllowAnyHeader());
             });
@@ -75,10 +69,15 @@ namespace Ksu.Gdc.Api.Web
             };
             services.AddAWSService<IAmazonS3>(awsOptions);
 
-            services.AddDbContext<KsuGdcContext>(options =>
-            {
-                options.UseMySql(AppConfiguration.GetConfig("connectionStrings:MySql_KsuGdc"));
-            });
+            services.AddDbContext<KsuGdcContext>(options => options
+                                                 .UseMySql(AppConfiguration.GetConfig("connectionStrings:MySql_KsuGdc")));
+            services.AddScoped<DisconnectedData>();
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                    .AddMvcOptions(options =>
+                    {
+                        options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -91,11 +90,11 @@ namespace Ksu.Gdc.Api.Web
                 loggerFactory.AddConsole();
                 loggerFactory.AddDebug();
 
+                ksuGdcContext.Database.Migrate();
+
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
-                    ksuGdcContext.Database.EnsureDeleted();
-                    ksuGdcContext.Database.EnsureCreated();
                     ksuGdcContext.EnsureSeedDataForContext();
                 }
                 else
@@ -103,6 +102,16 @@ namespace Ksu.Gdc.Api.Web
                     //app.UseExceptionHandler();
                     app.UseHsts();
                 }
+
+                Mapper.Initialize(cfg =>
+                {
+                    cfg.CreateMap<ModelEntity_Officer, Dto_Officer>();
+                    cfg.CreateMap<ModelEntity_User, Dto_User>();
+                    cfg.CreateMap<CreateDto_User, ModelEntity_User>();
+                    cfg.CreateMap<UpdateDto_User, ModelEntity_User>();
+                    cfg.CreateMap<ModelEntity_Group, Dto_Group>();
+                    cfg.CreateMap<ModelEntity_Game, Dto_Game>();
+                });
 
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();

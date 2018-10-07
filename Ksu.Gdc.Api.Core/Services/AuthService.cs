@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using AutoMapper;
 
-using Ksu.Gdc.Api.Core.Configurations;
+using Ksu.Gdc.Api.Configuration;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
@@ -19,10 +19,21 @@ namespace Ksu.Gdc.Api.Core.Services
 {
     public class AuthService : IAuthService
     {
+        public AuthService()
+        {
+
+        }
+
+        #region Interface Methods (Synchronous)
+
         public CASValidationResponse ValidateCASTicket(string service, string ticket)
         {
             return ValidateCASTicketAsync(service, ticket).Result;
         }
+
+        #endregion Interface Methods (Synchronous)
+
+        #region Interface Methods (Asynchronous)
 
         public async Task<CASValidationResponse> ValidateCASTicketAsync(string service, string ticket)
         {
@@ -40,5 +51,7 @@ namespace Ksu.Gdc.Api.Core.Services
                 return response;
             }
         }
+
+        #endregion Interface Methods (Asynchronous)
     }
 }

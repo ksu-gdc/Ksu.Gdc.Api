@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-using Ksu.Gdc.Api.Core.Configurations;
+using Ksu.Gdc.Api.Configuration;
 
 namespace Ksu.Gdc.Api.Core.Models
 {

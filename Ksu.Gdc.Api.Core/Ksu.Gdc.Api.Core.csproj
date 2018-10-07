@@ -9,7 +9,6 @@
     <Folder Include="Contracts\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Contracts\Services\" />
-    <Folder Include="Configurations\" />
     <Folder Include="Services\" />
   </ItemGroup>
   <ItemGroup>
@@ -28,5 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ksu.Gdc.Api.Data\Ksu.Gdc.Api.Data.csproj" />
+    <ProjectReference Include="..\Ksu.Gdc.Api.Configuration\Ksu.Gdc.Api.Configuration.csproj" />
   </ItemGroup>
 </Project>

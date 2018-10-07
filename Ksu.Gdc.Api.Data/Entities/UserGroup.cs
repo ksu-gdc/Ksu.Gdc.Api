@@ -11,12 +11,12 @@ namespace Ksu.Gdc.Api.Data.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int UserGroupId { get; set; }
 
-        [ForeignKey("UserId")]
-        public ModelEntity_User User { get; set; }
+        [ForeignKey("Users")]
         public int UserId { get; set; }
+        public ModelEntity_User User { get; set; }
 
-        [ForeignKey("GroupId")]
-        public ModelEntity_Group Group { get; set; }
+        [ForeignKey("Group")]
         public int GroupId { get; set; }
+        public ModelEntity_Group Group { get; set; }
     }
 }

@@ -10,7 +10,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Amazon.S3.Model;
 
-using Ksu.Gdc.Api.Core.Configurations;
+using Ksu.Gdc.Api.Configuration;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
@@ -29,17 +29,13 @@ namespace Ksu.Gdc.Api.Core.Services
             _s3Client = s3Client;
         }
 
+        #region Interface Methods (Synchronous)
+
+        #region GET
+
         public List<Dto_Game> GetGames()
         {
             return GetGamesAsync().Result;
-        }
-
-        public async Task<List<Dto_Game>> GetGamesAsync()
-        {
-            var dbGames = await _ksuGdcContext.Game
-                                              .ToListAsync();
-            var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
-            return dtoGames;
         }
 
         public Dto_Game GetGameById(int gameId)
@@ -47,9 +43,39 @@ namespace Ksu.Gdc.Api.Core.Services
             return GetGameByIdAsync(gameId).Result;
         }
 
+        public Stream GetGameThumbnailImage(int gameId)
+        {
+            return GetGameThumbnailImageAsync(gameId).Result;
+        }
+
+        #endregion GET
+
+        #region UPDATE
+
+        public bool UpdateGameThumbnailImage(int gameId, Stream imageStream)
+        {
+            return UpdateGameThumbnailImageAsync(gameId, imageStream).Result;
+        }
+
+        #endregion UPDATE
+
+        #endregion Interface Methods (Synchronous)
+
+        #region Interface Methods (Asynchronous)
+
+        #region GET
+
+        public async Task<List<Dto_Game>> GetGamesAsync()
+        {
+            var dbGames = await _ksuGdcContext.Games
+                                              .ToListAsync();
+            var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+            return dtoGames;
+        }
+
         public async Task<Dto_Game> GetGameByIdAsync(int gameId)
         {
-            var dbGame = await _ksuGdcContext.Game
+            var dbGame = await _ksuGdcContext.Games
                                              .Where(g => g.GameId == gameId)
                                              .FirstOrDefaultAsync();
             if (dbGame == null)
@@ -58,31 +84,6 @@ namespace Ksu.Gdc.Api.Core.Services
             }
             var dtoGames = Mapper.Map<Dto_Game>(dbGame);
             return dtoGames;
-        }
-
-        public bool UpdateGameThumbnailImage(int gameId, Stream imageStream)
-        {
-            return UpdateGameThumbnailImageAsync(gameId, imageStream).Result;
-        }
-
-        public async Task<bool> UpdateGameThumbnailImageAsync(int gameId, Stream imageStream)
-        {
-            var transferUtility = new TransferUtility(_s3Client);
-            var transferRequest = new TransferUtilityUploadRequest()
-            {
-                BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                Key = $"{GameConfig.DataStoreDirPath}/{gameId}/thumbnail.jpg",
-                InputStream = imageStream,
-                StorageClass = S3StorageClass.Standard,
-                CannedACL = S3CannedACL.PublicRead
-            };
-            await transferUtility.UploadAsync(transferRequest);
-            return true;
-        }
-
-        public Stream GetGameThumbnailImage(int gameId)
-        {
-            return GetGameThumbnailImageAsync(gameId).Result;
         }
 
         public async Task<Stream> GetGameThumbnailImageAsync(int gameId)
@@ -107,5 +108,28 @@ namespace Ksu.Gdc.Api.Core.Services
                 throw ex;
             }
         }
+
+        #endregion GET
+
+        #region UPDATE
+
+        public async Task<bool> UpdateGameThumbnailImageAsync(int gameId, Stream imageStream)
+        {
+            var transferUtility = new TransferUtility(_s3Client);
+            var transferRequest = new TransferUtilityUploadRequest()
+            {
+                BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
+                Key = $"{GameConfig.DataStoreDirPath}/{gameId}/thumbnail.jpg",
+                InputStream = imageStream,
+                StorageClass = S3StorageClass.Standard,
+                CannedACL = S3CannedACL.PublicRead
+            };
+            await transferUtility.UploadAsync(transferRequest);
+            return true;
+        }
+
+        #endregion UPDATE
+
+        #endregion Interface Methods (Asynchronous)
     }
 }

@@ -9,6 +9,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
 {
     public interface IAuthService
     {
+        #region Interface Methods (Synchronous)
+
         /// <summary>
         /// Validates the CAST icket.
         /// </summary>
@@ -17,6 +19,10 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// <param name="ticket">Ticket.</param>
         CASValidationResponse ValidateCASTicket(string service, string ticket);
 
+        #endregion Interface Methods (Synchronous)
+
+        #region Interface Methods (Asynchronous)
+
         /// <summary>
         /// Validates the CAST icket async.
         /// </summary>
@@ -24,5 +30,7 @@ namespace Ksu.Gdc.Api.Core.Contracts
         /// <param name="service">Service.</param>
         /// <param name="ticket">Ticket.</param>
         Task<CASValidationResponse> ValidateCASTicketAsync(string service, string ticket);
+
+        #endregion Interface Methods (Asynchronous)
     }
 }

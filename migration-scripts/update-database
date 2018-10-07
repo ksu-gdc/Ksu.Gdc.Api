@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Updating database ..."
+
+dotnet ef database update -p Ksu.Gdc.Api.Data -s Ksu.Gdc.Api.Web
+if [ $? -eq 0 ]; then
+	echo "Database updated"
+fi

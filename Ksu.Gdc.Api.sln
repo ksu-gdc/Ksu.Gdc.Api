@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksu.Gdc.Api.Core", "Ksu.Gdc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksu.Gdc.Api.Data", "Ksu.Gdc.Api.Data\Ksu.Gdc.Api.Data.csproj", "{C52F0BFA-5773-4CC1-9436-2886A42988FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksu.Gdc.Api.Tests", "Ksu.Gdc.Api.Tests\Ksu.Gdc.Api.Tests.csproj", "{03E4D2A2-9A9A-4667-A99F-CBEFAC5334D3}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{956975F3-B02F-4D88-9ED2-27AF2FEB2DF2}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
@@ -16,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 		Ksu.Gdc.Api.sln = Ksu.Gdc.Api.sln
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksu.Gdc.Api.Configuration", "Ksu.Gdc.Api.Configuration\Ksu.Gdc.Api.Configuration.csproj", "{8E3F7835-B6B5-4644-9C83-23D86D2C5F4A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ksu.Gdc.Api.Test", "Ksu.Gdc.Api.Test\Ksu.Gdc.Api.Test.csproj", "{F5E0AD83-27E0-4E44-B906-58B2F46CE4B8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,10 +37,14 @@ Global
 		{C52F0BFA-5773-4CC1-9436-2886A42988FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C52F0BFA-5773-4CC1-9436-2886A42988FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C52F0BFA-5773-4CC1-9436-2886A42988FD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{03E4D2A2-9A9A-4667-A99F-CBEFAC5334D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{03E4D2A2-9A9A-4667-A99F-CBEFAC5334D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{03E4D2A2-9A9A-4667-A99F-CBEFAC5334D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{03E4D2A2-9A9A-4667-A99F-CBEFAC5334D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8E3F7835-B6B5-4644-9C83-23D86D2C5F4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8E3F7835-B6B5-4644-9C83-23D86D2C5F4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8E3F7835-B6B5-4644-9C83-23D86D2C5F4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8E3F7835-B6B5-4644-9C83-23D86D2C5F4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5E0AD83-27E0-4E44-B906-58B2F46CE4B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5E0AD83-27E0-4E44-B906-58B2F46CE4B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5E0AD83-27E0-4E44-B906-58B2F46CE4B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5E0AD83-27E0-4E44-B906-58B2F46CE4B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		Policies = $0

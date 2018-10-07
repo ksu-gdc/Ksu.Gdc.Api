@@ -10,7 +10,7 @@ using Amazon.S3;
 using Amazon.S3.Transfer;
 using Amazon.S3.Model;
 
-using Ksu.Gdc.Api.Core.Configurations;
+using Ksu.Gdc.Api.Configuration;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
@@ -30,17 +30,13 @@ namespace Ksu.Gdc.Api.Core.Services
             _s3Client = s3Client;
         }
 
+        #region Interface Methods (Synchronous)
+
+        #region GET
+
         public List<Dto_Group> GetGroups()
         {
             return GetGroupsAsync().Result;
-        }
-
-        public async Task<List<Dto_Group>> GetGroupsAsync()
-        {
-            var dbGroups = await _ksuGdcContext.Group
-                                               .ToListAsync();
-            var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
-            return dtoGroups;
         }
 
         public Dto_Group GetGroupById(int groupId)
@@ -48,9 +44,35 @@ namespace Ksu.Gdc.Api.Core.Services
             return GetGroupByIdAsync(groupId).Result;
         }
 
+        public List<Dto_User> GetGroupMembers(int groupId)
+        {
+            return GetGroupMembersAsync(groupId).Result;
+        }
+
+        public List<Dto_Game> GetGamesOfGroup(int groupId)
+        {
+            return GetGamesOfGroupAsync(groupId).Result;
+        }
+
+        #endregion GET
+
+        #endregion Interface Methods (Synchronous)
+
+        #region Interface Methods (Asynchronous)
+
+        #region GET
+
+        public async Task<List<Dto_Group>> GetGroupsAsync()
+        {
+            var dbGroups = await _ksuGdcContext.Groups
+                                               .ToListAsync();
+            var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
+            return dtoGroups;
+        }
+
         public async Task<Dto_Group> GetGroupByIdAsync(int groupId)
         {
-            var dbGroup = await _ksuGdcContext.Group
+            var dbGroup = await _ksuGdcContext.Groups
                                               .Where(g => g.GroupId == groupId)
                                               .FirstOrDefaultAsync();
             if (dbGroup == null)
@@ -59,11 +81,6 @@ namespace Ksu.Gdc.Api.Core.Services
             }
             var dtoGroup = Mapper.Map<Dto_Group>(dbGroup);
             return dtoGroup;
-        }
-
-        public List<Dto_User> GetGroupMembers(int groupId)
-        {
-            return GetGroupMembersAsync(groupId).Result;
         }
 
         public async Task<List<Dto_User>> GetGroupMembersAsync(int groupId)
@@ -77,18 +94,17 @@ namespace Ksu.Gdc.Api.Core.Services
             return dtoMembers;
         }
 
-        public List<Dto_Game> GetGamesOfGroup(int groupId)
-        {
-            return GetGamesOfGroupAsync(groupId).Result;
-        }
-
         public async Task<List<Dto_Game>> GetGamesOfGroupAsync(int groupId)
         {
-            var dbGames = await _ksuGdcContext.Game
+            var dbGames = await _ksuGdcContext.Games
                                               .Where(g => g.GroupId == groupId)
                                               .ToListAsync();
             var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
             return dtoGames;
         }
+
+        #endregion GET
+
+        #endregion Interface Methods (Asynchronous)
     }
 }

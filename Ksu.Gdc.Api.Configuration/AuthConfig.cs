@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ksu.Gdc.Api.Core.Configurations
+namespace Ksu.Gdc.Api.Configuration
 {
     public static class AuthConfig
     {
