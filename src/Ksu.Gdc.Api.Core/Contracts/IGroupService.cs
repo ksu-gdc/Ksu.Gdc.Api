@@ -8,6 +8,12 @@ namespace Ksu.Gdc.Api.Core.Contracts
 {
     public interface IGroupService
     {
+        #region CREATE
+
+        Task<ModelEntity_Group> CreateGroupAsync(CreateDto_Group newGroup);
+
+        #endregion CREATE
+
         #region GET
 
         Task<List<ModelEntity_Group>> GetGroupsAsync();
@@ -19,5 +25,17 @@ namespace Ksu.Gdc.Api.Core.Contracts
         Task<List<ModelEntity_Game>> GetGamesOfGroupAsync(int groupId);
 
         #endregion GET
+
+        #region UPDATE
+
+        Task<bool> UpdateGroupAsync(ModelEntity_Group dbGroup, UpdateDto_Group updateGroup);
+
+        #endregion UPDATE
+
+        #region DELETE
+
+        Task<bool> DeleteGroupByIdAsync(int groupId);
+
+        #endregion DELETE
     }
 }

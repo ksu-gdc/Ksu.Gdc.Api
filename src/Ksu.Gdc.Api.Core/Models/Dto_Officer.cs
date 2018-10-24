@@ -24,7 +24,6 @@ namespace Ksu.Gdc.Api.Core.Models
 
     public class UpdateDto_Officer
     {
-        [Required]
         [MaxLength(100)]
         public string Position { get; set; }
 

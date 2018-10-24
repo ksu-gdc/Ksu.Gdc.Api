@@ -25,6 +25,25 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _officerService = officerService;
         }
 
+        [HttpPost]
+        [Route("", Name = "CreateOfficer")]
+        public async Task<IActionResult> CreateOfficer([FromBody] CreateDto_Officer newOfficer)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var dbOfficer = await _officerService.CreateOfficerAsync(newOfficer);
+                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Officer>(dbOfficer));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet]
         [Route("", Name = "GetOfficers")]
         public async Task<IActionResult> GetOfficers([FromQuery] string position)
@@ -67,26 +86,90 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPatch]
+        [HttpPut]
         [Route("{officerId}", Name = "UpdateOfficer")]
-        public async Task<IActionResult> UpdateOfficerUser([FromRoute] int officerId, [FromBody] JsonPatchDocument<UpdateDto_Officer> patchOfficer)
+        public async Task<IActionResult> UpdateOfficer([FromRoute] int officerId, [FromBody] UpdateDto_Officer updateOfficer)
         {
             try
             {
-                var officer = await _officerService.GetOfficerByIdAsync(officerId);
-                var updateOfficer = Mapper.Map<UpdateDto_Officer>(officer);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var dbOfficer = await _officerService.GetOfficerByIdAsync(officerId);
+                await _officerService.UpdateOfficerAsync(dbOfficer, updateOfficer);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPatch]
+        [Route("{officerId}", Name = "PatchOfficer")]
+        public async Task<IActionResult> PatchOfficer([FromRoute] int officerId, [FromBody] JsonPatchDocument<UpdateDto_Officer> patchOfficer)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var dbOfficer = await _officerService.GetOfficerByIdAsync(officerId);
+                var updateOfficer = Mapper.Map<UpdateDto_Officer>(dbOfficer);
                 patchOfficer.ApplyTo(updateOfficer, ModelState);
                 if (!ModelState.IsValid)
                 {
                     return BadRequest();
                 }
-                return Ok(officer);
-                //if (!ModelState.IsValid)
-                //{
-                //    return BadRequest();
-                //}
-                //await _officerService.UpdateOfficerAsync(officerId, officer);
-                //return Ok();
+                await _officerService.UpdateOfficerAsync(dbOfficer, updateOfficer);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("", Name = "DeleteOfficers")]
+        public async Task<IActionResult> DeleteOfficers([FromQuery] string position)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(position))
+                {
+                    await _officerService.DeleteOfficersByPositionAsync(position);
+                }
+                else
+                {
+                    return BadRequest();
+                }
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{officerId}", Name = "DeleteOfficerById")]
+        public async Task<IActionResult> DeleteOfficerById([FromRoute] int officerId)
+        {
+            try
+            {
+                await _officerService.DeleteOfficerByIdAsync(officerId);
+                return Ok();
             }
             catch (NotFoundException ex)
             {

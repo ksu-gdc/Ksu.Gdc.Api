@@ -3,7 +3,7 @@
 
 echo "Adding migration \"$1\" ..."
 
-dotnet ef migrations add -p Ksu.Gdc.Api.Data -s Ksu.Gdc.Api.Web $1
+dotnet ef migrations add -p Ksu.Gdc.Api.Data -s Ksu.Gdc.Api.Web "$1"
 if [ $? -eq 0 ]; then
-	echo "Migration created"
+	echo "Migration \"$1\" created."
 fi

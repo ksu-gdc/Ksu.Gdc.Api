@@ -12,6 +12,12 @@ namespace Ksu.Gdc.Api.Core.Contracts
     /// </summary>
     public interface IUserService
     {
+        #region CREATE
+
+        Task<ModelEntity_User> CreateUserAsync(CreateDto_User newUser);
+
+        #endregion CREATE
+
         #region GET
 
         Task<ModelEntity_User> GetUserByIdAsync(int userId);
@@ -24,18 +30,18 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         #endregion GET
 
-        #region ADD
-
-        Task<bool> AddUserAsync(CreateDto_User newUser);
-
-        #endregion ADD
-
         #region UPDATE
 
-        Task<bool> UpdateUserAsync(int userId, UpdateDto_User user);
+        Task<bool> UpdateUserAsync(ModelEntity_User dbUser, UpdateDto_User updateUser);
 
         Task<bool> UpdateUserProfileImageAsync(int userId, Stream imageStream);
 
         #endregion UPDATE
+
+        #region DELETE
+
+        Task<bool> DeleteUserByIdAsync(int userId);
+
+        #endregion DELETE
     }
 }

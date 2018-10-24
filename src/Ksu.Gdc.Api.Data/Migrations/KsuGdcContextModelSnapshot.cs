@@ -23,12 +23,9 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<int>("GroupId");
 
-                    b.Property<int>("UserGroupId")
-                        .ValueGeneratedOnAdd();
+                    b.Property<DateTimeOffset>("CreatedAt");
 
                     b.HasKey("UserId", "GroupId");
-
-                    b.HasAlternateKey("UserGroupId");
 
                     b.HasIndex("GroupId");
 
@@ -40,6 +37,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("GameId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTimeOffset>("CreatedAt");
+
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
@@ -48,6 +47,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<DateTimeOffset>("UpdatedAt");
 
                     b.Property<string>("Url");
 
@@ -67,12 +68,16 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTimeOffset>("CreatedAt");
+
                     b.Property<string>("Description")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<DateTimeOffset>("UpdatedAt");
 
                     b.HasKey("GroupId");
 
@@ -84,11 +89,15 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("OfficerId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTimeOffset>("CreatedAt");
+
                     b.Property<string>("Position")
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<int>("UserId");
+                    b.Property<DateTimeOffset>("UpdatedAt");
+
+                    b.Property<int?>("UserId");
 
                     b.HasKey("OfficerId");
 
@@ -102,8 +111,10 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTimeOffset>("CreatedAt");
+
                     b.Property<string>("Description")
-                        .HasMaxLength(1000);
+                        .HasMaxLength(500);
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
@@ -111,14 +122,12 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<string>("LastName")
                         .HasMaxLength(50);
 
-                    b.Property<int?>("OfficerId");
+                    b.Property<DateTimeOffset>("UpdatedAt");
 
                     b.Property<string>("Username")
                         .IsRequired();
 
                     b.HasKey("UserId");
-
-                    b.HasIndex("OfficerId");
 
                     b.ToTable("Users");
                 });
@@ -151,15 +160,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 {
                     b.HasOne("Ksu.Gdc.Api.Data.Entities.ModelEntity_User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.ModelEntity_User", b =>
-                {
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.ModelEntity_Officer", "Officer")
-                        .WithMany()
-                        .HasForeignKey("OfficerId");
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

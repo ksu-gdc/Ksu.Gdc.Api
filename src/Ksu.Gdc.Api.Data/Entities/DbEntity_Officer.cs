@@ -18,5 +18,9 @@ namespace Ksu.Gdc.Api.Data.Entities
         [ForeignKey("User")]
         public int? UserId { get; set; }
         public ModelEntity_User User { get; set; }
+
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
+
+        public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
     }
 }

@@ -19,11 +19,11 @@ namespace Ksu.Gdc.Api.Data.Entities
         [MaxLength(50)]
         public string LastName { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(500)]
         public string Description { get; set; }
 
-        [ForeignKey("Officer")]
-        public int? OfficerId { get; set; }
-        public ModelEntity_Officer Officer { get; set; }
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
+
+        public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
     }
 }

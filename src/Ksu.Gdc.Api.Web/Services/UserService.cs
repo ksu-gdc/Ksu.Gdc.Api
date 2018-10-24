@@ -30,6 +30,18 @@ namespace Ksu.Gdc.Api.Core.Services
             _s3Client = s3Client;
         }
 
+        #region CREATE
+
+        public async Task<ModelEntity_User> CreateUserAsync(CreateDto_User newUser)
+        {
+            var newDbUser = Mapper.Map<ModelEntity_User>(newUser);
+            await _ksuGdcContext.Users.AddAsync(newDbUser);
+            await _ksuGdcContext.SaveChangesAsync();
+            return newDbUser;
+        }
+
+        #endregion CREATE
+
         #region GET
 
         public async Task<ModelEntity_User> GetUserByIdAsync(int userId)
@@ -99,31 +111,13 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #endregion GET
 
-        #region ADD
-
-        public async Task<bool> AddUserAsync(CreateDto_User newUser)
-        {
-            var newDbUser = Mapper.Map<ModelEntity_User>(newUser);
-            await _ksuGdcContext.Users.AddAsync(newDbUser);
-            await _ksuGdcContext.SaveChangesAsync();
-            return true;
-        }
-
-        #endregion ADD
-
         #region UPDATE
 
-        public async Task<bool> UpdateUserAsync(int userId, UpdateDto_User user)
+        public async Task<bool> UpdateUserAsync(ModelEntity_User dbUser, UpdateDto_User updateUser)
         {
-            var dbUser = await _ksuGdcContext.Users
-                                             .Where(u => u.UserId == userId)
-                                             .FirstOrDefaultAsync();
-            if (dbUser == null)
-            {
-                throw new NotFoundException($"No user with id '{userId}' was found.");
-            }
-            _ksuGdcContext.Users.Attach(dbUser);
-            _ksuGdcContext.Entry(dbUser).CurrentValues.SetValues(user);
+            Mapper.Map(updateUser, dbUser);
+            dbUser.UpdatedAt = DateTimeOffset.Now;
+            _ksuGdcContext.Update(dbUser);
             await _ksuGdcContext.SaveChangesAsync();
             return true;
         }
@@ -144,5 +138,17 @@ namespace Ksu.Gdc.Api.Core.Services
         }
 
         #endregion UPDATE
+
+        #region DELETE
+
+        public async Task<bool> DeleteUserByIdAsync(int userId)
+        {
+            var dbUser = await GetUserByIdAsync(userId);
+            _ksuGdcContext.Users.Remove(dbUser);
+            await _ksuGdcContext.SaveChangesAsync();
+            return true;
+        }
+
+        #endregion DELETE
     }
 }

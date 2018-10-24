@@ -28,5 +28,9 @@ namespace Ksu.Gdc.Api.Data.Entities
 
         [Url]
         public string Url { get; set; }
+
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
+
+        public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
     }
 }

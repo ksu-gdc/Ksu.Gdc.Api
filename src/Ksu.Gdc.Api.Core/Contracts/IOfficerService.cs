@@ -8,6 +8,12 @@ namespace Ksu.Gdc.Api.Core.Contracts
 {
     public interface IOfficerService
     {
+        #region CREATE
+
+        Task<ModelEntity_Officer> CreateOfficerAsync(CreateDto_Officer newOfficer);
+
+        #endregion CREATE
+
         #region GET
 
         Task<List<ModelEntity_Officer>> GetOfficersAsync();
@@ -20,15 +26,15 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         #region UPDATE
 
-        Task<bool> UpdateOfficerAsync(int officerId, UpdateDto_Officer updateOfficer);
+        Task<bool> UpdateOfficerAsync(ModelEntity_Officer dbOfficer, UpdateDto_Officer updateOfficer);
 
         #endregion UPDATE
 
         #region DELETE
 
-        Task<bool> DeleteOfficerAsync(int officerId);
+        Task<bool> DeleteOfficerByIdAsync(int officerId);
 
-        Task<bool> DeleteOfficersAsync(string position);
+        Task<bool> DeleteOfficersByPositionAsync(string position);
 
         #endregion DELETE
     }

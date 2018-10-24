@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Amazon.S3;
 using Amazon.S3.Transfer;
 using Amazon.S3.Model;
+using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
@@ -28,6 +29,18 @@ namespace Ksu.Gdc.Api.Core.Services
             _ksuGdcContext = ksuGdcContext;
             _s3Client = s3Client;
         }
+
+        #region CREATE
+
+        public async Task<ModelEntity_Group> CreateGroupAsync(CreateDto_Group newGroup)
+        {
+            var newDbGroup = Mapper.Map<ModelEntity_Group>(newGroup);
+            await _ksuGdcContext.Groups.AddAsync(newDbGroup);
+            await _ksuGdcContext.SaveChangesAsync();
+            return newDbGroup;
+        }
+
+        #endregion CREATE
 
         #region GET
 
@@ -69,5 +82,30 @@ namespace Ksu.Gdc.Api.Core.Services
         }
 
         #endregion GET
+
+        #region UPDATE
+
+        public async Task<bool> UpdateGroupAsync(ModelEntity_Group dbGroup, UpdateDto_Group updateGroup)
+        {
+            Mapper.Map(updateGroup, dbGroup);
+            dbGroup.UpdatedAt = DateTimeOffset.Now;
+            _ksuGdcContext.Update(dbGroup);
+            await _ksuGdcContext.SaveChangesAsync();
+            return true;
+        }
+
+        #endregion UPDATE
+
+        #region DELETE
+
+        public async Task<bool> DeleteGroupByIdAsync(int groupId)
+        {
+            var dbGroup = await GetGroupByIdAsync(groupId);
+            _ksuGdcContext.Groups.Remove(dbGroup);
+            await _ksuGdcContext.SaveChangesAsync();
+            return true;
+        }
+
+        #endregion DELETE
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
@@ -58,14 +59,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 try
                 {
                     var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
-                    var dtoUser = await _userService.GetUserByIdAsync(userId);
-                    return Ok(dtoUser);
+                    var dbUser = await _userService.GetUserByIdAsync(userId);
+                    return Ok(Mapper.Map<Dto_User>(dbUser));
                 }
                 catch (NotFoundException)
                 {
                     var newUser = new CreateDto_User(response.ServiceResponse.AuthenticationSuccess.Attributes);
-                    var dtoUser = await _userService.AddUserAsync(newUser);
-                    return StatusCode(StatusCodes.Status201Created, dtoUser);
+                    var dbUser = await _userService.CreateUserAsync(newUser);
+                    return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_User>(dbUser));
                 }
 
             }

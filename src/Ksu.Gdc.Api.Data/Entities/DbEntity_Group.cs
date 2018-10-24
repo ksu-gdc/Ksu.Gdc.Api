@@ -15,7 +15,11 @@ namespace Ksu.Gdc.Api.Data.Entities
         [MaxLength(100)]
         public string Name { get; set; }
 
-        [MaxLength(1000)]
+        [MaxLength(500)]
         public string Description { get; set; }
+
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
+
+        public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
     }
 }

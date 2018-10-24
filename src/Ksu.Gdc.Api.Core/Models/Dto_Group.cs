@@ -15,13 +15,20 @@ namespace Ksu.Gdc.Api.Core.Models
 
     public class CreateDto_Group
     {
+        [Required]
+        [MaxLength(100)]
+        public string Name { get; set; }
 
+        [MaxLength(500)]
+        public string Description { get; set; }
     }
 
     public class UpdateDto_Group
     {
+        [MaxLength(100)]
+        public string Name { get; set; }
 
+        [MaxLength(500)]
+        public string Description { get; set; }
     }
-
-
 }

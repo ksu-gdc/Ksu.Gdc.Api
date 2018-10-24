@@ -32,6 +32,9 @@ namespace Ksu.Gdc.Api.Data.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<JoinEntity_UserGroup>()
+                        .HasKey(ug => new { ug.UserId, ug.GroupId });
+
             base.OnModelCreating(modelBuilder);
         }
     }

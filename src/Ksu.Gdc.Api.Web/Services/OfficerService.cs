@@ -2,8 +2,10 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using Amazon.S3;
+using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
@@ -23,6 +25,18 @@ namespace Ksu.Gdc.Api.Core.Services
             _ksuGdcContext = ksuGdcContext;
             _s3Client = s3Client;
         }
+
+        #region CREATE
+
+        public async Task<ModelEntity_Officer> CreateOfficerAsync(CreateDto_Officer newOfficer)
+        {
+            var newDbOfficer = Mapper.Map<ModelEntity_Officer>(newOfficer);
+            await _ksuGdcContext.Officers.AddAsync(newDbOfficer);
+            await _ksuGdcContext.SaveChangesAsync();
+            return newDbOfficer;
+        }
+
+        #endregion CREATE
 
         #region GET
 
@@ -60,17 +74,11 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region UPDATE
 
-        public async Task<bool> UpdateOfficerAsync(int officerId, UpdateDto_Officer officer)
+        public async Task<bool> UpdateOfficerAsync(ModelEntity_Officer dbOfficer, UpdateDto_Officer updateOfficer)
         {
-            var dbOfficer = await _ksuGdcContext.Officers
-                                             .Where(o => o.OfficerId == officerId)
-                                             .FirstOrDefaultAsync();
-            if (dbOfficer == null)
-            {
-                throw new NotFoundException($"No officer with id '{officerId}' was found.");
-            }
-            _ksuGdcContext.Officers.Attach(dbOfficer);
-            _ksuGdcContext.Entry(dbOfficer).CurrentValues.SetValues(officer);
+            Mapper.Map(updateOfficer, dbOfficer);
+            dbOfficer.UpdatedAt = DateTimeOffset.Now;
+            _ksuGdcContext.Update(dbOfficer);
             await _ksuGdcContext.SaveChangesAsync();
             return true;
         }
@@ -79,25 +87,17 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region DELETE
 
-        public async Task<bool> DeleteOfficerAsync(int officerId)
+        public async Task<bool> DeleteOfficerByIdAsync(int officerId)
         {
-            var dbOfficer = await _ksuGdcContext.Officers
-                                                .Where(o => o.OfficerId == officerId)
-                                                .FirstOrDefaultAsync();
-            if (dbOfficer == null)
-            {
-                throw new NotFoundException($"No officer with id '{officerId}' was found.");
-            }
+            var dbOfficer = await GetOfficerByIdAsync(officerId);
             _ksuGdcContext.Officers.Remove(dbOfficer);
             await _ksuGdcContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> DeleteOfficersAsync(string position)
+        public async Task<bool> DeleteOfficersByPositionAsync(string position)
         {
-            var dbOfficers = await _ksuGdcContext.Officers
-                                                 .Where(o => o.Position == position)
-                                                 .ToListAsync();
+            var dbOfficers = await GetOfficersByPositionAsync(position);
             _ksuGdcContext.Officers.RemoveRange(dbOfficers);
             await _ksuGdcContext.SaveChangesAsync();
             return true;

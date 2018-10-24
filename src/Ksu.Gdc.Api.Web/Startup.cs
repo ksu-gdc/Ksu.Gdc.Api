@@ -59,7 +59,7 @@ namespace Ksu.Gdc.Api.Web
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGroupService, GroupService>();
-            services.AddScoped<IPortfolioService, PortfolioService>();
+            services.AddScoped<IGameService, GameService>();
 
             var awsOptions = new AWSOptions()
             {
@@ -102,23 +102,6 @@ namespace Ksu.Gdc.Api.Web
                     //app.UseExceptionHandler();
                     app.UseHsts();
                 }
-
-                Mapper.Initialize(cfg =>
-                {
-                    // Officer
-                    cfg.CreateMap<ModelEntity_Officer, Dto_Officer>();
-                    cfg.CreateMap<ModelEntity_Officer, CreateDto_Officer>();
-                    cfg.CreateMap<ModelEntity_Officer, UpdateDto_Officer>();
-                    cfg.CreateMap<Dto_Officer, UpdateDto_Officer>();
-                    // User
-                    cfg.CreateMap<ModelEntity_User, Dto_User>();
-                    cfg.CreateMap<ModelEntity_User, CreateDto_User>();
-                    cfg.CreateMap<ModelEntity_User, UpdateDto_User>();
-                    // Group
-                    cfg.CreateMap<ModelEntity_Group, Dto_Group>();
-                    // Game
-                    cfg.CreateMap<ModelEntity_Game, Dto_Game>();
-                });
 
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();

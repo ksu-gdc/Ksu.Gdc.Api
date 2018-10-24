@@ -1,0 +1,8 @@
+#!/bin/bash
+
+echo "Dropping database ..."
+
+dotnet ef database drop -p Ksu.Gdc.Api.Data -s Ksu.Gdc.Api.Web
+if [ $? -eq 0 ]; then
+	echo "Database dropped."
+fi

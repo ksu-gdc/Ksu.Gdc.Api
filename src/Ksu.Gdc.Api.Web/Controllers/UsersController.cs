@@ -44,48 +44,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("{userId}", Name = "UpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromRoute] int userId, [FromBody] UpdateDto_User user)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-                await _userService.UpdateUserAsync(userId, user);
-                return Ok();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpPost, DisableRequestSizeLimit]
-        [Route("{id}/profile-image", Name = "UpdateUserProfileImage")]
-        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int id, [FromForm] IFormFile image)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-                await _userService.UpdateUserProfileImageAsync(id, image.OpenReadStream());
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         [HttpGet]
         [Route("{id}/profile-image", Name = "GetUserProfileImage")]
         public async Task<IActionResult> GetUserProfileImage([FromRoute] int id)
@@ -128,6 +86,79 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 var games = await _userService.GetGamesOfUserAsync(userId);
                 return Ok(Mapper.Map<List<Dto_Game>>(games));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("{id}/profile-image", Name = "UpdateUserProfileImage")]
+        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int id, [FromForm] IFormFile image)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                await _userService.UpdateUserProfileImageAsync(id, image.OpenReadStream());
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("{userId}", Name = "UpdateUser")]
+        public async Task<IActionResult> UpdateUser([FromRoute] int userId, [FromBody] UpdateDto_User updateUser)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var dbUser = await _userService.GetUserByIdAsync(userId);
+                await _userService.UpdateUserAsync(dbUser, updateUser);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPatch]
+        [Route("{userId}", Name = "PatchUser")]
+        public async Task<IActionResult> PatchUser([FromRoute] int userId, [FromBody] JsonPatchDocument<UpdateDto_User> patchUser)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                var dbUser = await _userService.GetUserByIdAsync(userId);
+                var updateUser = Mapper.Map<UpdateDto_User>(dbUser);
+                patchUser.ApplyTo(updateUser, ModelState);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                await _userService.UpdateUserAsync(dbUser, updateUser);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception)
             {

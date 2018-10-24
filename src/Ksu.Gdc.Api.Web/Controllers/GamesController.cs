@@ -11,24 +11,24 @@ using AutoMapper;
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
-using Ksu.Gdc.Api.Data.Entities;
 using Ksu.Gdc.Api.Core.Models;
+using Ksu.Gdc.Api.Data.Entities;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("[controller]")]
-    public class GroupsController : ControllerBase
+    [Route("portfolio/[controller]")]
+    public class GamesController : ControllerBase
     {
-        private readonly IGroupService _groupService;
+        private readonly IGameService _gameService;
 
-        public GroupsController(IGroupService groupService)
+        public GamesController(IGameService gameService)
         {
-            _groupService = groupService;
+            _gameService = gameService;
         }
 
         [HttpPost]
-        [Route("", Name = "CreateGroup")]
-        public async Task<IActionResult> CreateGroup([FromBody] CreateDto_Group newGroup)
+        [Route("", Name = "CreateGame")]
+        public async Task<IActionResult> CreateGame([FromBody] CreateDto_Game newGame)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest();
                 }
-                var dbGroup = await _groupService.CreateGroupAsync(newGroup);
+                var dbGroup = await _gameService.CreateGameAsync(newGame);
                 return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Group>(dbGroup));
             }
             catch (Exception)
@@ -46,13 +46,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("", Name = "GetGroups")]
-        public async Task<IActionResult> GetGroups()
+        [Route("", Name = "GetGames")]
+        public async Task<IActionResult> GetGames()
         {
             try
             {
-                var groups = await _groupService.GetGroupsAsync();
-                return Ok(Mapper.Map<List<Dto_Group>>(groups));
+                var games = await _gameService.GetGamesAsync();
+                return Ok(Mapper.Map<List<Dto_Game>>(games));
             }
             catch (Exception)
             {
@@ -61,13 +61,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{groupId}", Name = "GetGroupById")]
-        public async Task<IActionResult> GetGroupById([FromRoute] int groupId)
+        [Route("{id}", Name = "GetGameById")]
+        public async Task<IActionResult> GetGameById(int gameId)
         {
             try
             {
-                var group = await _groupService.GetGroupByIdAsync(groupId);
-                return Ok(Mapper.Map<Dto_Group>(group));
+                var game = await _gameService.GetGameByIdAsync(gameId);
+                return Ok(Mapper.Map<Dto_Game>(game));
             }
             catch (NotFoundException ex)
             {
@@ -80,13 +80,17 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{groupId}/users", Name = "GetGroupMembers")]
-        public async Task<IActionResult> GetGroupMembers([FromRoute] int groupId)
+        [Route("{id}/thumbnail-image", Name = "GetGameThumbnailImage")]
+        public async Task<IActionResult> GetGameThumbnailImage([FromRoute] int id)
         {
             try
             {
-                var members = await _groupService.GetGroupMembersAsync(groupId);
-                return Ok(Mapper.Map<List<Dto_User>>(members));
+                var stream = await _gameService.GetGameThumbnailImageAsync(id);
+                return File(stream, "image/jpg");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception)
             {
@@ -94,14 +98,18 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{groupId}/portfolio/games", Name = "GetGamesOfGroup")]
-        public async Task<IActionResult> GetGamesOfGroup([FromRoute] int groupId)
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("{id}/thumbnail-image", Name = "UpdateGameThumbnailImage")]
+        public async Task<IActionResult> UpdateGameThumbnailImage([FromRoute] int id, [FromForm] IFormFile image)
         {
             try
             {
-                var games = await _groupService.GetGamesOfGroupAsync(groupId);
-                return Ok(Mapper.Map<List<Dto_Game>>(games));
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                await _gameService.UpdateGameThumbnailImageAsync(id, image.OpenReadStream());
+                return Ok();
             }
             catch (Exception)
             {
@@ -110,8 +118,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPut]
-        [Route("{groupId}", Name = "UpdateGroup")]
-        public async Task<IActionResult> UpdateGroup([FromRoute] int groupId, [FromBody] UpdateDto_Group updateGroup)
+        [Route("{gameId}", Name = "UpdateGame")]
+        public async Task<IActionResult> UpdateGame([FromRoute] int gameId, [FromBody] UpdateDto_Game updateGame)
         {
             try
             {
@@ -119,8 +127,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest();
                 }
-                var dbGroup = await _groupService.GetGroupByIdAsync(groupId);
-                await _groupService.UpdateGroupAsync(dbGroup, updateGroup);
+                var dbGame = await _gameService.GetGameByIdAsync(gameId);
+                await _gameService.UpdateGameAsync(dbGame, updateGame);
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -134,8 +142,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPatch]
-        [Route("{groupId}", Name = "PatchGroup")]
-        public async Task<IActionResult> PatchGroup([FromRoute] int groupId, [FromBody] JsonPatchDocument<UpdateDto_Group> patchGroup)
+        [Route("{gameId}", Name = "PatchGame")]
+        public async Task<IActionResult> PatchGame([FromRoute] int gameId, [FromBody] JsonPatchDocument<UpdateDto_Game> patchGame)
         {
             try
             {
@@ -143,14 +151,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest();
                 }
-                var dbGroup = await _groupService.GetGroupByIdAsync(groupId);
-                var updateGroup = Mapper.Map<UpdateDto_Group>(dbGroup);
-                patchGroup.ApplyTo(updateGroup, ModelState);
+                var dbGame = await _gameService.GetGameByIdAsync(gameId);
+                var updateGame = Mapper.Map<UpdateDto_Game>(dbGame);
+                patchGame.ApplyTo(updateGame, ModelState);
                 if (!ModelState.IsValid)
                 {
                     return BadRequest();
                 }
-                await _groupService.UpdateGroupAsync(dbGroup, updateGroup);
+                await _gameService.UpdateGameAsync(dbGame, updateGame);
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -164,12 +172,12 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpDelete]
-        [Route("{groupId}", Name = "DeleteGroupById")]
-        public async Task<IActionResult> DeleteGroupById([FromRoute] int groupId)
+        [Route("{gameId}", Name = "DeleteGameById")]
+        public async Task<IActionResult> DeleteGameById([FromRoute] int gameId)
         {
             try
             {
-                await _groupService.DeleteGroupByIdAsync(groupId);
+                await _gameService.DeleteGameByIdAsync(gameId);
                 return Ok();
             }
             catch (NotFoundException ex)

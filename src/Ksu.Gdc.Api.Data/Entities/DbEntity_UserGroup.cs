@@ -7,10 +7,6 @@ namespace Ksu.Gdc.Api.Data.Entities
 {
     public class JoinEntity_UserGroup
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int UserGroupId { get; set; }
-
         [ForeignKey("Users")]
         public int UserId { get; set; }
         public ModelEntity_User User { get; set; }
@@ -18,5 +14,7 @@ namespace Ksu.Gdc.Api.Data.Entities
         [ForeignKey("Group")]
         public int GroupId { get; set; }
         public ModelEntity_Group Group { get; set; }
+
+        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
     }
 }
