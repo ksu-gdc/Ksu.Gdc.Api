@@ -23,7 +23,7 @@ namespace Ksu.Gdc.Api.Data.Entities
         public string Description { get; set; }
 
         [Url]
-        public int ImageUrl { get; set; }
+        public string ImageUrl { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
 
