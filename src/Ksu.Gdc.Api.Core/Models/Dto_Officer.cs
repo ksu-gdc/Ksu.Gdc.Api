@@ -20,6 +20,8 @@ namespace Ksu.Gdc.Api.Core.Models
         [Required]
         [MaxLength(100)]
         public string Position { get; set; }
+
+        public int UserId { get; set; }
     }
 
     public class UpdateDto_Officer
@@ -27,6 +29,6 @@ namespace Ksu.Gdc.Api.Core.Models
         [MaxLength(100)]
         public string Position { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
     }
 }

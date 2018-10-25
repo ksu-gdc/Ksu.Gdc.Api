@@ -11,6 +11,8 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 
     public class CreateDto_Group
@@ -21,6 +23,9 @@ namespace Ksu.Gdc.Api.Core.Models
 
         [MaxLength(500)]
         public string Description { get; set; }
+
+        [Url]
+        public string ImageUrl { get; set; }
     }
 
     public class UpdateDto_Group
@@ -30,5 +35,8 @@ namespace Ksu.Gdc.Api.Core.Models
 
         [MaxLength(500)]
         public string Description { get; set; }
+
+        [Url]
+        public string ImageUrl { get; set; }
     }
 }

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-using Ksu.Gdc.Api.Core.Configurations;
-
 namespace Ksu.Gdc.Api.Core.Models
 {
     public class Dto_User
@@ -18,7 +16,7 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public string Description { get; set; }
 
-        public string ImageUrl => AppConfiguration.GetConfig("Api_Url") + "/users/" + UserId + "/profile-image";
+        public string ImageUrl { get; set; }
 
         public string Email => Username + "@ksu.edu";
     }
@@ -30,6 +28,18 @@ namespace Ksu.Gdc.Api.Core.Models
 
         [Required]
         public string Username { get; set; }
+
+        [MaxLength(50)]
+        public string FirstName { get; set; }
+
+        [MaxLength(50)]
+        public string LastName { get; set; }
+
+        [MaxLength(1000)]
+        public string Description { get; set; }
+
+        [Url]
+        public string ImageUrl { get; set; }
 
         public CreateDto_User(CASAttributes attributes)
         {
@@ -48,5 +58,8 @@ namespace Ksu.Gdc.Api.Core.Models
 
         [MaxLength(1000)]
         public string Description { get; set; }
+
+        [Url]
+        public string ImageUrl { get; set; }
     }
 }

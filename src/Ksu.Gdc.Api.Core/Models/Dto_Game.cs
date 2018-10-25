@@ -14,9 +14,9 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public string Description { get; set; }
 
-        public string Url { get; set; }
+        public string ImageUrl { get; set; }
 
-        public string ImageUrl => AppConfiguration.GetConfig("Api_Url") + "/portfolio/games/" + GameId + "/" + "thumbnail-image";
+        public string ItemUrl { get; set; }
     }
 
     public class CreateDto_Game
@@ -29,7 +29,10 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Description { get; set; }
 
         [Url]
-        public string Url { get; set; }
+        public string ImageUrl { get; set; }
+
+        [Url]
+        public string ItemUrl { get; set; }
     }
 
     public class UpdateDto_Game
@@ -41,6 +44,9 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Description { get; set; }
 
         [Url]
-        public string Url { get; set; }
+        public string ImageUrl { get; set; }
+
+        [Url]
+        public string ItemUrl { get; set; }
     }
 }
