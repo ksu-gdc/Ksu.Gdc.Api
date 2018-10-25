@@ -61,7 +61,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{id}", Name = "GetGameById")]
+        [Route("{gameId}", Name = "GetGameById")]
         public async Task<IActionResult> GetGameById(int gameId)
         {
             try
@@ -80,12 +80,12 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/thumbnail-image", Name = "GetGameThumbnailImage")]
-        public async Task<IActionResult> GetGameThumbnailImage([FromRoute] int id)
+        [Route("{gameId}/thumbnail-image", Name = "GetGameThumbnailImage")]
+        public async Task<IActionResult> GetGameThumbnailImage([FromRoute] int gameId)
         {
             try
             {
-                var stream = await _gameService.GetGameThumbnailImageAsync(id);
+                var stream = await _gameService.GetGameThumbnailImageAsync(gameId);
                 return File(stream, "image/jpg");
             }
             catch (NotFoundException ex)
@@ -99,8 +99,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        [Route("{id}/thumbnail-image", Name = "UpdateGameThumbnailImage")]
-        public async Task<IActionResult> UpdateGameThumbnailImage([FromRoute] int id, [FromForm] IFormFile image)
+        [Route("{gameId}/thumbnail-image", Name = "UpdateGameThumbnailImage")]
+        public async Task<IActionResult> UpdateGameThumbnailImage([FromRoute] int gameId, [FromForm] IFormFile image)
         {
             try
             {
@@ -108,7 +108,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest();
                 }
-                await _gameService.UpdateGameThumbnailImageAsync(id, image.OpenReadStream());
+                await _gameService.UpdateGameThumbnailImageAsync(gameId, image.OpenReadStream());
                 return Ok();
             }
             catch (Exception)

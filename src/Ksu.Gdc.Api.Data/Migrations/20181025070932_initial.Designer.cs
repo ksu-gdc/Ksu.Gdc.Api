@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksu.Gdc.Api.Data.Migrations
 {
     [DbContext(typeof(KsuGdcContext))]
-    [Migration("20181025044945_initial2")]
-    partial class initial2
+    [Migration("20181025070932_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -130,7 +130,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
 
-                    b.Property<int>("ImageUrl");
+                    b.Property<string>("ImageUrl");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50);
