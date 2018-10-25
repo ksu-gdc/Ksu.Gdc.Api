@@ -22,6 +22,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<List<ModelEntity_Officer>> GetOfficersByPositionAsync(string position);
 
+        Task<List<ModelEntity_Officer>> GetOfficersByUserIdAsync(int userId);
+
         #endregion GET
 
         #region UPDATE

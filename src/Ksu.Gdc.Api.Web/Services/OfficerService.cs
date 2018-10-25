@@ -70,6 +70,14 @@ namespace Ksu.Gdc.Api.Core.Services
             return dbOfficers;
         }
 
+        public async Task<List<ModelEntity_Officer>> GetOfficersByUserIdAsync(int userId)
+        {
+            var dbOfficers = await _ksuGdcContext.Officers
+                                                 .Where(o => o.UserId == userId)
+                                                 .ToListAsync();
+            return dbOfficers;
+        }
+
         #endregion GET
 
         #region UPDATE

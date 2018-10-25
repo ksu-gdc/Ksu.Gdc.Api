@@ -19,20 +19,25 @@ namespace Ksu.Gdc.Api.Web.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IOfficerService _officerService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IOfficerService officerService)
         {
             _userService = userService;
+            _officerService = officerService;
         }
 
         [HttpGet]
-        [Route("{id}", Name = "GetUserById")]
-        public async Task<IActionResult> GetUserById([FromRoute] int id)
+        [Route("{userId}", Name = "GetUserById")]
+        public async Task<IActionResult> GetUserById([FromRoute] int userId)
         {
             try
             {
-                var user = await _userService.GetUserByIdAsync(id);
-                return Ok(Mapper.Map<Dto_User>(user));
+                var user = await _userService.GetUserByIdAsync(userId);
+                var dtoUser = Mapper.Map<Dto_User>(user);
+                var userOfficers = await _officerService.GetOfficersByUserIdAsync(userId);
+                dtoUser.IsOfficer = userOfficers.Count > 0;
+                return Ok(dtoUser);
             }
             catch (NotFoundException ex)
             {
@@ -45,12 +50,12 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{id}/profile-image", Name = "GetUserProfileImage")]
-        public async Task<IActionResult> GetUserProfileImage([FromRoute] int id)
+        [Route("{userId}/profile-image", Name = "GetUserProfileImage")]
+        public async Task<IActionResult> GetUserProfileImage([FromRoute] int userId)
         {
             try
             {
-                var stream = await _userService.GetUserProfileImageAsync(id);
+                var stream = await _userService.GetUserProfileImageAsync(userId);
                 return File(stream, "image/jpg");
             }
             catch (NotFoundException ex)
@@ -94,8 +99,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        [Route("{id}/profile-image", Name = "UpdateUserProfileImage")]
-        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int id, [FromForm] IFormFile image)
+        [Route("{userId}/profile-image", Name = "UpdateUserProfileImage")]
+        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int userId, [FromForm] IFormFile image)
         {
             try
             {
@@ -103,7 +108,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest();
                 }
-                await _userService.UpdateUserProfileImageAsync(id, image.OpenReadStream());
+                await _userService.UpdateUserProfileImageAsync(userId, image.OpenReadStream());
                 return Ok();
             }
             catch (Exception)
