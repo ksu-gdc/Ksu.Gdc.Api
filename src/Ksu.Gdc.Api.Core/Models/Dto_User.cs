@@ -19,8 +19,6 @@ namespace Ksu.Gdc.Api.Core.Models
         public string ImageUrl { get; set; }
 
         public string Email => Username + "@ksu.edu";
-
-        public bool IsOfficer { get; set; }
     }
 
     public class CreateDto_User

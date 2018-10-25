@@ -34,10 +34,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             try
             {
                 var user = await _userService.GetUserByIdAsync(userId);
-                var dtoUser = Mapper.Map<Dto_User>(user);
-                var userOfficers = await _officerService.GetOfficersByUserIdAsync(userId);
-                dtoUser.IsOfficer = userOfficers.Count > 0;
-                return Ok(dtoUser);
+                return Ok(Mapper.Map<Dto_User>(user));
             }
             catch (NotFoundException ex)
             {
