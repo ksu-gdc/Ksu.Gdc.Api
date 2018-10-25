@@ -27,7 +27,10 @@ namespace Ksu.Gdc.Api.Data.Entities
         public ModelEntity_Group Group { get; set; }
 
         [Url]
-        public string Url { get; set; }
+        public string ImageUrl { get; set; }
+
+        [Url]
+        public string ItemUrl { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
 

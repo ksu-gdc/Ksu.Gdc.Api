@@ -18,6 +18,9 @@ namespace Ksu.Gdc.Api.Data.Entities
         [MaxLength(500)]
         public string Description { get; set; }
 
+        [Url]
+        public string ImageUrl { get; set; }
+
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
 
         public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
