@@ -16,6 +16,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
+                    ImageUrl = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
                 },
@@ -34,6 +35,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     FirstName = table.Column<string>(maxLength: 50, nullable: true),
                     LastName = table.Column<string>(maxLength: 50, nullable: true),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
+                    ImageUrl = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
                 },
@@ -52,7 +54,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     UserId = table.Column<int>(nullable: true),
                     GroupId = table.Column<int>(nullable: true),
-                    Url = table.Column<string>(nullable: true),
+                    ImageUrl = table.Column<string>(nullable: true),
+                    ItemUrl = table.Column<string>(nullable: true),
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false),
                     UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
                 },
@@ -99,13 +102,15 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 name: "UserGroup",
                 columns: table => new
                 {
+                    UserGroupId = table.Column<int>(nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(nullable: false),
                     GroupId = table.Column<int>(nullable: false),
                     CreatedAt = table.Column<DateTimeOffset>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserGroup", x => new { x.UserId, x.GroupId });
+                    table.PrimaryKey("PK_UserGroup", x => x.UserGroupId);
                     table.ForeignKey(
                         name: "FK_UserGroup_Groups_GroupId",
                         column: x => x.GroupId,
@@ -139,6 +144,11 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 name: "IX_UserGroup_GroupId",
                 table: "UserGroup",
                 column: "GroupId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGroup_UserId",
+                table: "UserGroup",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

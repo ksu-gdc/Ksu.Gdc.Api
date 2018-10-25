@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksu.Gdc.Api.Data.Migrations
 {
     [DbContext(typeof(KsuGdcContext))]
-    [Migration("20181017224357_initial")]
-    partial class initial
+    [Migration("20181025044945_initial2")]
+    partial class initial2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,15 +21,20 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
             modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.JoinEntity_UserGroup", b =>
                 {
-                    b.Property<int>("UserId");
-
-                    b.Property<int>("GroupId");
+                    b.Property<int>("UserGroupId")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<DateTimeOffset>("CreatedAt");
 
-                    b.HasKey("UserId", "GroupId");
+                    b.Property<int>("GroupId");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("UserGroupId");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserGroup");
                 });
@@ -46,13 +51,15 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<int?>("GroupId");
 
+                    b.Property<string>("ImageUrl");
+
+                    b.Property<string>("ItemUrl");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100);
 
                     b.Property<DateTimeOffset>("UpdatedAt");
-
-                    b.Property<string>("Url");
 
                     b.Property<int?>("UserId");
 
@@ -74,6 +81,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
+
+                    b.Property<string>("ImageUrl");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -120,6 +129,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
+
+                    b.Property<int>("ImageUrl");
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50);
