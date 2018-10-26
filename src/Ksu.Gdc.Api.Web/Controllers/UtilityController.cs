@@ -5,11 +5,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
+using Ksu.Gdc.Api.Core.Contracts;
+
 namespace Ksu.Gdc.Api.Web.Controllers
 {
     [Route("")]
     public class UtilityController : ControllerBase
     {
+        private readonly IUtilityService _utilityService;
+
+        public UtilityController(IUtilityService utilityService)
+        {
+            _utilityService = utilityService;
+        }
+
         [HttpGet]
         [Route("")]
         public IActionResult KeepAwake()

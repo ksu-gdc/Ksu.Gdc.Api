@@ -55,6 +55,7 @@ namespace Ksu.Gdc.Api.Web
                                   .AllowAnyHeader());
             });
 
+            services.AddScoped<IUtilityService, UtilityService>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
