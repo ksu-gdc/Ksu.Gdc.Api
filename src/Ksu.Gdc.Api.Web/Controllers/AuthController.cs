@@ -22,11 +22,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
     {
         private readonly IAuthService _authService;
         private readonly IUserService _userService;
+        private readonly IOfficerService _officerService;
 
-        public AuthController(IAuthService authService, IUserService userService)
+        public AuthController(IAuthService authService, IUserService userService, IOfficerService officerService)
         {
             _authService = authService;
             _userService = userService;
+            _officerService = officerService;
         }
 
         [AllowAnonymous]
@@ -60,7 +62,9 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
                     var dbUser = await _userService.GetUserByIdAsync(userId);
-                    return Ok(Mapper.Map<Dto_User>(dbUser));
+                    var dtoUser = Mapper.Map<AuthDto_User>(dbUser);
+                    dtoUser.IsOfficer = (await _officerService.GetOfficersByUserIdAsync(userId)).Count > 0;
+                    return Ok(dtoUser);
                 }
                 catch (NotFoundException)
                 {

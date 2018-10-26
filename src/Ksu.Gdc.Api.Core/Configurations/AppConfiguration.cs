@@ -49,6 +49,7 @@ namespace Ksu.Gdc.Api.Core.Configurations
                 cfg.CreateMap<ModelEntity_User, Dto_User>();
                 cfg.CreateMap<ModelEntity_User, CreateDto_User>();
                 cfg.CreateMap<ModelEntity_User, UpdateDto_User>();
+                cfg.CreateMap<ModelEntity_User, AuthDto_User>();
 
                 cfg.CreateMap<Dto_User, ModelEntity_User>();
                 cfg.CreateMap<CreateDto_User, ModelEntity_User>();

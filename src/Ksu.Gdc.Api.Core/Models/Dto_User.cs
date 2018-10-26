@@ -21,6 +21,11 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Email => Username + "@ksu.edu";
     }
 
+    public class AuthDto_User : Dto_User
+    {
+        public bool IsOfficer { get; set; }
+    }
+
     public class CreateDto_User
     {
         [Required]
