@@ -127,20 +127,20 @@
 							"listen": "prerequest",
 							"script": {
 								"id": "e2f01fe0-0ca7-415f-a729-8dfb933f1607",
-								"type": "text/javascript",
 								"exec": [
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						},
 						{
 							"listen": "test",
 							"script": {
 								"id": "6371141f-e848-45a1-a2fe-2956cc135296",
-								"type": "text/javascript",
 								"exec": [
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -154,7 +154,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"Name\": \"{{groupName}}\",\n\t\"Description\": \"{{groupDescription}}\"\n}"
+							"raw": "{\n\t\"name\": \"{{groupName}}\",\n\t\"description\": \"{{groupDescription}}\",\n\t\"imageUrl\": \"{{groupImageUrl}}\"\n}"
 						},
 						"url": {
 							"raw": "{{hostUrl}}/groups",
@@ -181,6 +181,37 @@
 							],
 							"path": [
 								"groups"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pagination Of Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostUrl}}/groups?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"groups"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
 							]
 						}
 					},
@@ -226,6 +257,39 @@
 					"response": []
 				},
 				{
+					"name": "Get Pagination Of Group Members",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostUrl}}/groups/{{groupId}}/users?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"groups",
+								"{{groupId}}",
+								"users"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Games Of Group",
 					"request": {
 						"method": "GET",
@@ -241,6 +305,40 @@
 								"{{groupId}}",
 								"portfolio",
 								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pagination Of Group Games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostUrl}}/groups/{{groupId}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"groups",
+								"{{groupId}}",
+								"portfolio",
+								"games"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
 							]
 						}
 					},
@@ -313,6 +411,33 @@
 						"body": {
 							"mode": "raw",
 							"raw": "[\n\t{\n    \t\"op\": \"replace\",\n    \t\"path\": \"/description\",\n    \t\"value\": {{groupDescription}}\n    }\n]"
+						},
+						"url": {
+							"raw": "{{hostUrl}}/groups/{{groupId}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"groups",
+								"{{groupId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Group Image Url",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n\t{\n    \t\"op\": \"replace\",\n    \t\"path\": \"/imageUrl\",\n    \t\"value\": {{groupImageUrl}}\n    }\n]"
 						},
 						"url": {
 							"raw": "{{hostUrl}}/groups/{{groupId}}",
@@ -451,7 +576,29 @@
 					"response": []
 				},
 				{
-					"name": "Update Officer User",
+					"name": "Update Officer",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"position\": \"{{officerPosition}}\",\n\t\"userId\": {{officerUserId}}\n}"
+						},
+						"url": {
+							"raw": ""
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Officer Position",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -462,7 +609,34 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/userId\",\n    \t\"value\": {{userId}}\n    }\n]"
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/position\",\n    \t\"value\": {{officerPosition}}\n    }\n]"
+						},
+						"url": {
+							"raw": "{{hostUrl}}/officers/{{officerId}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"officers",
+								"{{officerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Officer User Id",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/userId\",\n    \t\"value\": {{officerUserId}}\n    }\n]"
 						},
 						"url": {
 							"raw": "{{hostUrl}}/officers/{{officerId}}",
@@ -540,7 +714,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"title\": \"{{gameTitle}}\",\n\t\"description\": \"{{gameDescription}}\",\n\t\"url\": \"{{url}}\"\n}"
+									"raw": "{\n\t\"title\": \"{{gameTitle}}\",\n\t\"description\": \"{{gameDescription}}\",\n\t\"imageUrl\": \"{{imageUrl}}\",\n\t\"itemUrl\": \"{{gameItemUrl}}\"\n}"
 								},
 								"url": {
 									"raw": "{{hostUrl}}/portfolio/games",
@@ -569,6 +743,38 @@
 									"path": [
 										"portfolio",
 										"games"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Pagination Of Games",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{hostUrl}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+									"host": [
+										"{{hostUrl}}"
+									],
+									"path": [
+										"portfolio",
+										"games"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumber}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSize}}"
+										}
 									]
 								}
 							},
@@ -627,7 +833,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n\t\"title\": \"{{gameTitle}}\",\n\t\"description\": \"{{gameDescription}}\",\n\t\"url\": \"{{gameUrl}}\"\n}"
+									"raw": "{\n\t\"title\": \"{{gameTitle}}\",\n\t\"description\": \"{{gameDescription}}\",\n\t\"imageUrl\": \"{{gameImageUrl}}\",\n\t\"itemUrl\": \"{{gameItemUrl}}\"\n}"
 								},
 								"url": {
 									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
@@ -700,7 +906,7 @@
 							"response": []
 						},
 						{
-							"name": "Update Game Url",
+							"name": "Update Game Image Url",
 							"request": {
 								"method": "PATCH",
 								"header": [
@@ -711,7 +917,35 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/url\",\n    \t\"value\": {{gameUrl}}\n    }\n]"
+									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/imageUrl\",\n    \t\"value\": {{gameImageUrl}}\n    }\n]"
+								},
+								"url": {
+									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
+									"host": [
+										"{{hostUrl}}"
+									],
+									"path": [
+										"portfolio",
+										"games",
+										"{{gameId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Game Item Url",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/itemUrl\",\n    \t\"value\": {{gameItemUrl}}\n    }\n]"
 								},
 								"url": {
 									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
@@ -755,6 +989,58 @@
 		{
 			"name": "Users",
 			"item": [
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostUrl}}/users",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pagination Of Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostUrl}}/users?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
 				{
 					"name": "Get User By Id",
 					"request": {
@@ -839,6 +1125,39 @@
 					"response": []
 				},
 				{
+					"name": "Get Pagination Of User Groups",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostUrl}}/users/{{userId}}/groups?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}",
+								"groups"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Games Of User",
 					"request": {
 						"method": "GET",
@@ -860,6 +1179,40 @@
 					"response": []
 				},
 				{
+					"name": "Get Pagination Of User Games",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{hostUrl}}/users/{{userId}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}",
+								"portfolio",
+								"games"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Update User",
 					"request": {
 						"method": "PUT",
@@ -871,7 +1224,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"firstName\": \"{{userFirstName}}\",\n\t\"lastName\": \"{{userLastName}}\",\n\t\"description\": \"{{userDescription}}\"\n}"
+							"raw": "{\n\t\"firstName\": \"{{userFirstName}}\",\n\t\"lastName\": \"{{userLastName}}\",\n\t\"description\": \"{{userDescription}}\",\n\t\"imageUrl\": \"{{imageUrl}}\"\n}"
 						},
 						"url": {
 							"raw": "{{hostUrl}}/users/{{userId}}",
@@ -898,7 +1251,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/firstName\",\n    \t\"value\": {{firstName}}\n    },\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/lastName\",\n    \t\"value\": {{lastName}}\n    }\n]"
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/firstName\",\n    \t\"value\": {{userFirstName}}\n    },\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/lastName\",\n    \t\"value\": {{userLastName}}\n    }\n]"
 						},
 						"url": {
 							"raw": "{{hostUrl}}/users/{{userId}}",
@@ -925,7 +1278,34 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/description\",\n    \t\"value\": {{description}}\n    }\n]"
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/description\",\n    \t\"value\": {{userDescription}}\n    }\n]"
+						},
+						"url": {
+							"raw": "{{hostUrl}}/users/{{userId}}",
+							"host": [
+								"{{hostUrl}}"
+							],
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Image Url",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/imageUrl\",\n    \t\"value\": {{userImageUrl}}\n    }\n]"
 						},
 						"url": {
 							"raw": "{{hostUrl}}/users/{{userId}}",
