@@ -20,6 +20,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         #region GET
 
+        Task<List<ModelEntity_User>> GetUsersAsync();
+
         Task<ModelEntity_User> GetUserByIdAsync(int userId);
 
         Task<Stream> GetUserProfileImageAsync(int userId);

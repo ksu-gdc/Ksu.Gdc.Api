@@ -44,6 +44,13 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region GET
 
+        public async Task<List<ModelEntity_User>> GetUsersAsync()
+        {
+            var dbUsers = await _ksuGdcContext.Users
+                                            .ToListAsync();
+            return dbUsers;
+        }
+
         public async Task<ModelEntity_User> GetUserByIdAsync(int userId)
         {
             var user = await _ksuGdcContext.Users

@@ -47,12 +47,22 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("", Name = "GetGroups")]
-        public async Task<IActionResult> GetGroups()
+        public async Task<IActionResult> GetGroups([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
-                var groups = await _groupService.GetGroupsAsync();
-                return Ok(Mapper.Map<List<Dto_Group>>(groups));
+                var dbGroups = await _groupService.GetGroupsAsync();
+                var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
+                {
+                    PaginatedList paginatedGroups = new PaginatedList<Dto_Group>(dtoGroups, pageNumber, pageSize);
+                    return Ok(paginatedGroups);
+                }
+                return Ok(dtoGroups);
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest();
             }
             catch (Exception)
             {
@@ -81,12 +91,22 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("{groupId}/users", Name = "GetGroupMembers")]
-        public async Task<IActionResult> GetGroupMembers([FromRoute] int groupId)
+        public async Task<IActionResult> GetGroupMembers([FromRoute] int groupId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
-                var members = await _groupService.GetGroupMembersAsync(groupId);
-                return Ok(Mapper.Map<List<Dto_User>>(members));
+                var dbUsers = await _groupService.GetGroupMembersAsync(groupId);
+                var dtoUsers = Mapper.Map<List<Dto_User>>(dbUsers);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
+                {
+                    PaginatedList paginatedUsers = new PaginatedList<Dto_User>(dtoUsers, pageNumber, pageSize);
+                    return Ok(paginatedUsers);
+                }
+                return Ok(dtoUsers);
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest();
             }
             catch (Exception)
             {
@@ -96,12 +116,22 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("{groupId}/portfolio/games", Name = "GetGamesOfGroup")]
-        public async Task<IActionResult> GetGamesOfGroup([FromRoute] int groupId)
+        public async Task<IActionResult> GetGamesOfGroup([FromRoute] int groupId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
-                var games = await _groupService.GetGamesOfGroupAsync(groupId);
-                return Ok(Mapper.Map<List<Dto_Game>>(games));
+                var dbGames = await _groupService.GetGamesOfGroupAsync(groupId);
+                var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
+                {
+                    PaginatedList paginatedGames = new PaginatedList<Dto_Game>(dtoGames, pageNumber, pageSize);
+                    return Ok(paginatedGames);
+                }
+                return Ok(dtoGames);
+            }
+            catch (ArgumentException)
+            {
+                return BadRequest();
             }
             catch (Exception)
             {

@@ -23,31 +23,5 @@ namespace Ksu.Gdc.Api.Core.Services
         {
 
         }
-
-        public bool IsPaginationRequest(int pageNumber, int pageSize)
-        {
-            if (pageNumber == 0)
-            {
-                if (pageSize != 0)
-                {
-                    throw new ArgumentException();
-                }
-                return false;
-            }
-            else
-            {
-                if (pageNumber < 0 || pageSize < 0)
-                {
-                    throw new ArgumentException();
-                }
-                return true;
-            }
-        }
-
-        public List<T> Paginate<T>(List<T> collection, int pageNumber, int pageSize)
-        {
-            return collection
-                .GetRange((pageNumber - 1) * pageSize, pageSize);
-        }
     }
 }

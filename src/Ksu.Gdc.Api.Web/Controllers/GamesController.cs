@@ -19,12 +19,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
     [Route("portfolio/[controller]")]
     public class GamesController : ControllerBase
     {
-        private readonly IUtilityService _utilityService;
         private readonly IGameService _gameService;
 
-        public GamesController(IUtilityService utilityService, IGameService gameService)
+        public GamesController(IGameService gameService)
         {
-            _utilityService = utilityService;
             _gameService = gameService;
         }
 
@@ -53,12 +51,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
-                var games = await _gameService.GetGamesAsync();
-                if (_utilityService.IsPaginationRequest(pageNumber, pageSize))
+                var dbGames = await _gameService.GetGamesAsync();
+                var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
                 {
-                    games = _utilityService.Paginate<ModelEntity_Game>(games, pageNumber, pageSize);
+                    PaginatedList paginatedGames = new PaginatedList<Dto_Game>(dtoGames, pageNumber, pageSize);
+                    return Ok(paginatedGames);
                 }
-                return Ok(Mapper.Map<List<Dto_Game>>(games));
+                return Ok(dtoGames);
             }
             catch (ArgumentException)
             {
