@@ -22,24 +22,13 @@
 									}
 								],
 								"body": {
-									"mode": "urlencoded",
-									"urlencoded": [
-										{
-											"key": "username",
-											"value": "daytonltaylor",
-											"type": "text"
-										},
-										{
-											"key": "password",
-											"value": "{{password}}",
-											"type": "text"
-										}
-									]
+									"mode": "raw",
+									"raw": ""
 								},
 								"url": {
-									"raw": "{{hostUrl}}/auth/cas/login?service={{service}}",
+									"raw": "{{apiUrl}}/auth/cas/login?service={{service}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"auth",
@@ -61,11 +50,14 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
-									"raw": "{{hostUrl}}/auth/cas/validate?service={{service}}&ticket={{ticket}}",
+									"raw": "{{apiUrl}}/auth/cas/validate?service={{service}}&ticket={{ticket}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"auth",
@@ -91,11 +83,14 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
-									"raw": "{{hostUrl}}/auth/cas/logout?service={{service}}",
+									"raw": "{{apiUrl}}/auth/cas/logout?service={{service}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"auth",
@@ -157,9 +152,9 @@
 							"raw": "{\n\t\"name\": \"{{groupName}}\",\n\t\"description\": \"{{groupDescription}}\",\n\t\"imageUrl\": \"{{groupImageUrl}}\"\n}"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/groups",
+							"raw": "{{apiUrl}}/groups",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups"
@@ -173,11 +168,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/groups",
+							"raw": "{{apiUrl}}/groups",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups"
@@ -196,9 +194,9 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{hostUrl}}/groups?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"raw": "{{apiUrl}}/groups?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups"
@@ -222,11 +220,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}",
+							"raw": "{{apiUrl}}/groups/{{groupId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -241,11 +242,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}/users",
+							"raw": "{{apiUrl}}/groups/{{groupId}}/users",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -266,9 +270,9 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}/users?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"raw": "{{apiUrl}}/groups/{{groupId}}/users?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -294,11 +298,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}/portfolio/games",
+							"raw": "{{apiUrl}}/groups/{{groupId}}/portfolio/games",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -320,9 +327,9 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"raw": "{{apiUrl}}/groups/{{groupId}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -359,9 +366,9 @@
 							"raw": "{\n\t\"Name\": \"{{groupName}}\",\n\t\"Description\": \"{{groupDescription}}\"\n}"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}",
+							"raw": "{{apiUrl}}/groups/{{groupId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -386,9 +393,9 @@
 							"raw": "[\n\t{\n    \t\"op\": \"replace\",\n    \t\"path\": \"/name\",\n    \t\"value\": {{groupName}}\n    }\n]"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}",
+							"raw": "{{apiUrl}}/groups/{{groupId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -413,9 +420,9 @@
 							"raw": "[\n\t{\n    \t\"op\": \"replace\",\n    \t\"path\": \"/description\",\n    \t\"value\": {{groupDescription}}\n    }\n]"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}",
+							"raw": "{{apiUrl}}/groups/{{groupId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -440,9 +447,9 @@
 							"raw": "[\n\t{\n    \t\"op\": \"replace\",\n    \t\"path\": \"/imageUrl\",\n    \t\"value\": {{groupImageUrl}}\n    }\n]"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}",
+							"raw": "{{apiUrl}}/groups/{{groupId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -459,9 +466,9 @@
 						"header": [],
 						"body": {},
 						"url": {
-							"raw": "{{hostUrl}}/groups/{{groupId}}",
+							"raw": "{{apiUrl}}/groups/{{groupId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"groups",
@@ -491,9 +498,9 @@
 							"raw": "{\n\t\"position\": \"{{position}}\"\n}"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/officers",
+							"raw": "{{apiUrl}}/officers",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"officers"
@@ -509,21 +516,24 @@
 							"listen": "test",
 							"script": {
 								"id": "6f653db6-24da-4f3a-8f38-a894ff6eb054",
-								"type": "text/javascript",
 								"exec": [
 									""
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/officers",
+							"raw": "{{apiUrl}}/officers",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"officers"
@@ -537,11 +547,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/officers/{{officerId}}",
+							"raw": "{{apiUrl}}/officers/{{officerId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"officers",
@@ -556,11 +569,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/officers?position={{position}}",
+							"raw": "{{apiUrl}}/officers?position={{position}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"officers"
@@ -592,7 +608,14 @@
 							"raw": "{\n\t\"position\": \"{{officerPosition}}\",\n\t\"userId\": {{officerUserId}}\n}"
 						},
 						"url": {
-							"raw": ""
+							"raw": "{{apiUrl}}/officers/{{officerId}}",
+							"host": [
+								"{{apiUrl}}"
+							],
+							"path": [
+								"officers",
+								"{{officerId}}"
+							]
 						}
 					},
 					"response": []
@@ -612,9 +635,9 @@
 							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/position\",\n    \t\"value\": {{officerPosition}}\n    }\n]"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/officers/{{officerId}}",
+							"raw": "{{apiUrl}}/officers/{{officerId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"officers",
@@ -639,9 +662,9 @@
 							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/userId\",\n    \t\"value\": {{officerUserId}}\n    }\n]"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/officers/{{officerId}}",
+							"raw": "{{apiUrl}}/officers/{{officerId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"officers",
@@ -658,9 +681,9 @@
 						"header": [],
 						"body": {},
 						"url": {
-							"raw": "{{hostUrl}}/officers/{{officerId}}",
+							"raw": "{{apiUrl}}/officers/{{officerId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"officers",
@@ -677,9 +700,9 @@
 						"header": [],
 						"body": {},
 						"url": {
-							"raw": "{{hostUrl}}/officers?position={{position}}",
+							"raw": "{{apiUrl}}/officers?position={{position}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"officers"
@@ -717,9 +740,9 @@
 									"raw": "{\n\t\"title\": \"{{gameTitle}}\",\n\t\"description\": \"{{gameDescription}}\",\n\t\"imageUrl\": \"{{imageUrl}}\",\n\t\"itemUrl\": \"{{gameItemUrl}}\"\n}"
 								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games",
+									"raw": "{{apiUrl}}/portfolio/games",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -734,11 +757,14 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games",
+									"raw": "{{apiUrl}}/portfolio/games",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -758,9 +784,9 @@
 									"raw": ""
 								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+									"raw": "{{apiUrl}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -785,11 +811,14 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
+									"raw": "{{apiUrl}}/portfolio/games/{{gameId}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -805,11 +834,14 @@
 							"request": {
 								"method": "GET",
 								"header": [],
-								"body": {},
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}/thumbnail-image",
+									"raw": "{{apiUrl}}/portfolio/games/{{gameId}}/thumbnail-image",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -836,9 +868,9 @@
 									"raw": "{\n\t\"title\": \"{{gameTitle}}\",\n\t\"description\": \"{{gameDescription}}\",\n\t\"imageUrl\": \"{{gameImageUrl}}\",\n\t\"itemUrl\": \"{{gameItemUrl}}\"\n}"
 								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
+									"raw": "{{apiUrl}}/portfolio/games/{{gameId}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -864,9 +896,9 @@
 									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/title\",\n    \t\"value\": {{gameTitle}}\n    }\n]"
 								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
+									"raw": "{{apiUrl}}/portfolio/games/{{gameId}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -892,9 +924,9 @@
 									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/description\",\n    \t\"value\": {{gameDescription}}\n    }\n]"
 								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
+									"raw": "{{apiUrl}}/portfolio/games/{{gameId}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -920,9 +952,9 @@
 									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/imageUrl\",\n    \t\"value\": {{gameImageUrl}}\n    }\n]"
 								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
+									"raw": "{{apiUrl}}/portfolio/games/{{gameId}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -948,9 +980,9 @@
 									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/itemUrl\",\n    \t\"value\": {{gameItemUrl}}\n    }\n]"
 								},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
+									"raw": "{{apiUrl}}/portfolio/games/{{gameId}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -968,9 +1000,9 @@
 								"header": [],
 								"body": {},
 								"url": {
-									"raw": "{{hostUrl}}/portfolio/games/{{gameId}}",
+									"raw": "{{apiUrl}}/portfolio/games/{{gameId}}",
 									"host": [
-										"{{hostUrl}}"
+										"{{apiUrl}}"
 									],
 									"path": [
 										"portfolio",
@@ -999,9 +1031,9 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{hostUrl}}/users",
+							"raw": "{{apiUrl}}/users",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users"
@@ -1020,9 +1052,9 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{hostUrl}}/users?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"raw": "{{apiUrl}}/users?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users"
@@ -1046,11 +1078,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}",
+							"raw": "{{apiUrl}}/users/{{userId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1065,11 +1100,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/users?username={{username}}",
+							"raw": "{{apiUrl}}/users?username={{username}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users"
@@ -1089,11 +1127,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}/profile-image",
+							"raw": "{{apiUrl}}/users/{{userId}}/profile-image",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1109,11 +1150,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}/groups",
+							"raw": "{{apiUrl}}/users/{{userId}}/groups",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1134,9 +1178,9 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}/groups?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"raw": "{{apiUrl}}/users/{{userId}}/groups?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1162,11 +1206,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}/portfolio/games",
+							"raw": "{{apiUrl}}/users/{{userId}}/portfolio/games",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1188,9 +1235,9 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"raw": "{{apiUrl}}/users/{{userId}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1227,9 +1274,9 @@
 							"raw": "{\n\t\"firstName\": \"{{userFirstName}}\",\n\t\"lastName\": \"{{userLastName}}\",\n\t\"description\": \"{{userDescription}}\",\n\t\"imageUrl\": \"{{imageUrl}}\"\n}"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}",
+							"raw": "{{apiUrl}}/users/{{userId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1254,9 +1301,9 @@
 							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/firstName\",\n    \t\"value\": {{userFirstName}}\n    },\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/lastName\",\n    \t\"value\": {{userLastName}}\n    }\n]"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}",
+							"raw": "{{apiUrl}}/users/{{userId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1281,9 +1328,9 @@
 							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/description\",\n    \t\"value\": {{userDescription}}\n    }\n]"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}",
+							"raw": "{{apiUrl}}/users/{{userId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1308,9 +1355,9 @@
 							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/imageUrl\",\n    \t\"value\": {{userImageUrl}}\n    }\n]"
 						},
 						"url": {
-							"raw": "{{hostUrl}}/users/{{userId}}",
+							"raw": "{{apiUrl}}/users/{{userId}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							],
 							"path": [
 								"users",
@@ -1330,11 +1377,14 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{hostUrl}}",
+							"raw": "{{apiUrl}}",
 							"host": [
-								"{{hostUrl}}"
+								"{{apiUrl}}"
 							]
 						}
 					},
