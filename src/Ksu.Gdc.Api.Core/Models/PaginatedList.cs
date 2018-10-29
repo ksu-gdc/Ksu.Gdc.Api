@@ -29,7 +29,14 @@ namespace Ksu.Gdc.Api.Core.Models
 
         protected List<T> Paginate<T>(List<T> list, int pageNumber, int pageSize)
         {
-            return list.GetRange((pageNumber - 1) * pageSize, pageSize);
+            if (list.Count == 0)
+            {
+                return new List<T>();
+            }
+            var index = (pageNumber - 1) * pageSize;
+            index = Math.Min(index, list.Count);
+            var count = Math.Min(pageSize, list.Count - index);
+            return list.GetRange(index, count);
         }
     }
 
