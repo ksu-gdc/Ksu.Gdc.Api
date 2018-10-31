@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class ModelEntity_User
+    public class DbEntity_User
     {
         [Key]
         public int UserId { get; set; }

@@ -20,10 +20,12 @@ namespace Ksu.Gdc.Api.Web.Controllers
     public class GroupsController : ControllerBase
     {
         private readonly IGroupService _groupService;
+        private readonly IUserService _userService;
 
-        public GroupsController(IGroupService groupService)
+        public GroupsController(IGroupService groupService, IUserService userService)
         {
             _groupService = groupService;
+            _userService = userService;
         }
 
         [HttpPost]
@@ -95,7 +97,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
-                var dbUsers = await _groupService.GetGroupMembersAsync(groupId);
+                var dbUsers = await _groupService.GetMembersOfGroupAsync(groupId);
                 var dtoUsers = Mapper.Map<List<Dto_User>>(dbUsers);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
                 {
@@ -163,6 +165,27 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("{groupId}/users/{userId}", Name = "AddMemberToGroup")]
+        public async Task<IActionResult> AddMemberToGroup([FromRoute] int groupId, [FromRoute] int userId)
+        {
+            try
+            {
+                var group = await _groupService.GetGroupByIdAsync(groupId);
+                var user = await _userService.GetUserByIdAsync(userId);
+                await _groupService.AddMemberToGroupAsync(group.GroupId, user.UserId);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpPatch]
         [Route("{groupId}", Name = "PatchGroup")]
         public async Task<IActionResult> PatchGroup([FromRoute] int groupId, [FromBody] JsonPatchDocument<UpdateDto_Group> patchGroup)
@@ -200,6 +223,27 @@ namespace Ksu.Gdc.Api.Web.Controllers
             try
             {
                 await _groupService.DeleteGroupByIdAsync(groupId);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{groupId}/users/{userId}")]
+        public async Task<IActionResult> RemoveMemberFromGroup([FromRoute] int groupId, [FromRoute] int userId)
+        {
+            try
+            {
+                var group = await _groupService.GetGroupByIdAsync(groupId);
+                var user = await _userService.GetUserByIdAsync(userId);
+                await _groupService.RemoveMemberFromGroupAsync(group.GroupId, user.UserId);
                 return Ok();
             }
             catch (NotFoundException ex)

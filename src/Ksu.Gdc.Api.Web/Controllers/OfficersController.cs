@@ -50,7 +50,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
-                List<ModelEntity_Officer> officers;
+                List<DbEntity_Officer> officers;
                 if (!string.IsNullOrEmpty(position))
                 {
                     officers = await _officerService.GetOfficersByPositionAsync(position);

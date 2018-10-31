@@ -32,9 +32,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region CREATE
 
-        public async Task<ModelEntity_User> CreateUserAsync(CreateDto_User newUser)
+        public async Task<DbEntity_User> CreateUserAsync(CreateDto_User newUser)
         {
-            var newDbUser = Mapper.Map<ModelEntity_User>(newUser);
+            var newDbUser = Mapper.Map<DbEntity_User>(newUser);
             await _ksuGdcContext.Users.AddAsync(newDbUser);
             await _ksuGdcContext.SaveChangesAsync();
             return newDbUser;
@@ -44,14 +44,14 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region GET
 
-        public async Task<List<ModelEntity_User>> GetUsersAsync()
+        public async Task<List<DbEntity_User>> GetUsersAsync()
         {
             var dbUsers = await _ksuGdcContext.Users
                                             .ToListAsync();
             return dbUsers;
         }
 
-        public async Task<ModelEntity_User> GetUserByIdAsync(int userId)
+        public async Task<DbEntity_User> GetUserByIdAsync(int userId)
         {
             var user = await _ksuGdcContext.Users
                                              .Where(u => u.UserId == userId)
@@ -63,7 +63,7 @@ namespace Ksu.Gdc.Api.Core.Services
             return user;
         }
 
-        public async Task<ModelEntity_User> GetUserByUsernameAsync(string username)
+        public async Task<DbEntity_User> GetUserByUsernameAsync(string username)
         {
             var user = await _ksuGdcContext.Users
                                              .Where(u => u.Username == username)
@@ -98,9 +98,9 @@ namespace Ksu.Gdc.Api.Core.Services
             }
         }
 
-        public async Task<List<ModelEntity_Group>> GetGroupsOfUserAsync(int userId)
+        public async Task<List<DbEntity_Group>> GetGroupsOfUserAsync(int userId)
         {
-            var groups = await _ksuGdcContext.UserGroup
+            var groups = await _ksuGdcContext.GroupUsers
                                                .Where(ug => ug.UserId == userId)
                                                .Include(ug => ug.Group)
                                                .Select(ug => ug.Group)
@@ -108,7 +108,7 @@ namespace Ksu.Gdc.Api.Core.Services
             return groups;
         }
 
-        public async Task<List<ModelEntity_Game>> GetGamesOfUserAsync(int userId)
+        public async Task<List<DbEntity_Game>> GetGamesOfUserAsync(int userId)
         {
             var games = await _ksuGdcContext.Games
                                               .Where(g => g.UserId == userId)
@@ -120,7 +120,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region UPDATE
 
-        public async Task<bool> UpdateUserAsync(ModelEntity_User dbUser, UpdateDto_User updateUser)
+        public async Task<bool> UpdateUserAsync(DbEntity_User dbUser, UpdateDto_User updateUser)
         {
             Mapper.Map(updateUser, dbUser);
             dbUser.UpdatedAt = DateTimeOffset.Now;

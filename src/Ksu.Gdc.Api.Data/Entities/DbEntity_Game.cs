@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class ModelEntity_Game
+    public class DbEntity_Game
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -20,11 +20,11 @@ namespace Ksu.Gdc.Api.Data.Entities
 
         [ForeignKey("User")]
         public int? UserId { get; set; }
-        public ModelEntity_User User { get; set; }
+        public DbEntity_User User { get; set; }
 
         [ForeignKey("Group")]
         public int? GroupId { get; set; }
-        public ModelEntity_Group Group { get; set; }
+        public DbEntity_Group Group { get; set; }
 
         [Url]
         public string ImageUrl { get; set; }

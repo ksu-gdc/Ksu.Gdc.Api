@@ -31,9 +31,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region CREATE
 
-        public async Task<ModelEntity_Game> CreateGameAsync(CreateDto_Game newGame)
+        public async Task<DbEntity_Game> CreateGameAsync(CreateDto_Game newGame)
         {
-            var newDbGame = Mapper.Map<ModelEntity_Game>(newGame);
+            var newDbGame = Mapper.Map<DbEntity_Game>(newGame);
             await _ksuGdcContext.Games.AddAsync(newDbGame);
             await _ksuGdcContext.SaveChangesAsync();
             return newDbGame;
@@ -43,14 +43,14 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region GET
 
-        public async Task<List<ModelEntity_Game>> GetGamesAsync()
+        public async Task<List<DbEntity_Game>> GetGamesAsync()
         {
             var games = await _ksuGdcContext.Games
                                               .ToListAsync();
             return games;
         }
 
-        public async Task<ModelEntity_Game> GetGameByIdAsync(int gameId)
+        public async Task<DbEntity_Game> GetGameByIdAsync(int gameId)
         {
             var game = await _ksuGdcContext.Games
                                              .Where(g => g.GameId == gameId)
@@ -104,7 +104,7 @@ namespace Ksu.Gdc.Api.Core.Services
             return true;
         }
 
-        public async Task<bool> UpdateGameAsync(ModelEntity_Game dbGame, UpdateDto_Game updateGame)
+        public async Task<bool> UpdateGameAsync(DbEntity_Game dbGame, UpdateDto_Game updateGame)
         {
             Mapper.Map(updateGame, dbGame);
             dbGame.UpdatedAt = DateTimeOffset.Now;

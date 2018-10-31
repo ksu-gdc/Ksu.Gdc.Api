@@ -14,27 +14,27 @@ namespace Ksu.Gdc.Api.Core.Contracts
     {
         #region CREATE
 
-        Task<ModelEntity_User> CreateUserAsync(CreateDto_User newUser);
+        Task<DbEntity_User> CreateUserAsync(CreateDto_User newUser);
 
         #endregion CREATE
 
         #region GET
 
-        Task<List<ModelEntity_User>> GetUsersAsync();
+        Task<List<DbEntity_User>> GetUsersAsync();
 
-        Task<ModelEntity_User> GetUserByIdAsync(int userId);
+        Task<DbEntity_User> GetUserByIdAsync(int userId);
 
         Task<Stream> GetUserProfileImageAsync(int userId);
 
-        Task<List<ModelEntity_Group>> GetGroupsOfUserAsync(int userId);
+        Task<List<DbEntity_Group>> GetGroupsOfUserAsync(int userId);
 
-        Task<List<ModelEntity_Game>> GetGamesOfUserAsync(int userId);
+        Task<List<DbEntity_Game>> GetGamesOfUserAsync(int userId);
 
         #endregion GET
 
         #region UPDATE
 
-        Task<bool> UpdateUserAsync(ModelEntity_User dbUser, UpdateDto_User updateUser);
+        Task<bool> UpdateUserAsync(DbEntity_User dbUser, UpdateDto_User updateUser);
 
         Task<bool> UpdateUserProfileImageAsync(int userId, Stream imageStream);
 

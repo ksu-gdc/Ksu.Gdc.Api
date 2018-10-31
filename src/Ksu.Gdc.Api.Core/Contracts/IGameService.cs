@@ -11,15 +11,15 @@ namespace Ksu.Gdc.Api.Core.Contracts
     {
         #region CREATE
 
-        Task<ModelEntity_Game> CreateGameAsync(CreateDto_Game newGame);
+        Task<DbEntity_Game> CreateGameAsync(CreateDto_Game newGame);
 
         #endregion CREATE
 
         #region GET
 
-        Task<List<ModelEntity_Game>> GetGamesAsync();
+        Task<List<DbEntity_Game>> GetGamesAsync();
 
-        Task<ModelEntity_Game> GetGameByIdAsync(int gameId);
+        Task<DbEntity_Game> GetGameByIdAsync(int gameId);
 
         Task<Stream> GetGameThumbnailImageAsync(int gameId);
 
@@ -29,7 +29,7 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<bool> UpdateGameThumbnailImageAsync(int gameId, Stream imageStream);
 
-        Task<bool> UpdateGameAsync(ModelEntity_Game dbGame, UpdateDto_Game updateGame);
+        Task<bool> UpdateGameAsync(DbEntity_Game dbGame, UpdateDto_Game updateGame);
 
         #endregion UPDATE
 

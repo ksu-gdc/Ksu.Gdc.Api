@@ -77,6 +77,32 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "GroupUsers",
+                columns: table => new
+                {
+                    GroupId = table.Column<int>(nullable: false),
+                    UserId = table.Column<int>(nullable: false),
+                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
+                    UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_GroupUsers", x => new { x.GroupId, x.UserId });
+                    table.ForeignKey(
+                        name: "FK_GroupUsers_Groups_GroupId",
+                        column: x => x.GroupId,
+                        principalTable: "Groups",
+                        principalColumn: "GroupId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_GroupUsers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Officers",
                 columns: table => new
                 {
@@ -98,33 +124,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "UserGroup",
-                columns: table => new
-                {
-                    UserGroupId = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    UserId = table.Column<int>(nullable: false),
-                    GroupId = table.Column<int>(nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserGroup", x => x.UserGroupId);
-                    table.ForeignKey(
-                        name: "FK_UserGroup_Groups_GroupId",
-                        column: x => x.GroupId,
-                        principalTable: "Groups",
-                        principalColumn: "GroupId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_UserGroup_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "UserId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.CreateIndex(
                 name: "IX_Games_GroupId",
                 table: "Games",
@@ -136,18 +135,13 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Officers_UserId",
-                table: "Officers",
+                name: "IX_GroupUsers_UserId",
+                table: "GroupUsers",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserGroup_GroupId",
-                table: "UserGroup",
-                column: "GroupId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserGroup_UserId",
-                table: "UserGroup",
+                name: "IX_Officers_UserId",
+                table: "Officers",
                 column: "UserId");
         }
 
@@ -157,10 +151,10 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 name: "Games");
 
             migrationBuilder.DropTable(
-                name: "Officers");
+                name: "GroupUsers");
 
             migrationBuilder.DropTable(
-                name: "UserGroup");
+                name: "Officers");
 
             migrationBuilder.DropTable(
                 name: "Groups");

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class ModelEntity_Group
+    public class DbEntity_Group
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]

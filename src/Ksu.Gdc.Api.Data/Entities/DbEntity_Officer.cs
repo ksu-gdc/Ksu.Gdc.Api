@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class ModelEntity_Officer
+    public class DbEntity_Officer
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -17,7 +17,7 @@ namespace Ksu.Gdc.Api.Data.Entities
 
         [ForeignKey("User")]
         public int? UserId { get; set; }
-        public ModelEntity_User User { get; set; }
+        public DbEntity_User User { get; set; }
 
         public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
 

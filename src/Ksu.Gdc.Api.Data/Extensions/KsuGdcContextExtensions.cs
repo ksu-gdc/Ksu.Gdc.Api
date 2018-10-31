@@ -11,15 +11,15 @@ namespace Ksu.Gdc.Api.Data.Extensions
     {
         public static void EnsureSeedDataForContext(this KsuGdcContext context)
         {
-            var officers = new List<ModelEntity_Officer>();
+            var officers = new List<DbEntity_Officer>();
             if (!context.Officers.Any())
             {
-                officers.AddRange(new List<ModelEntity_Officer>()
+                officers.AddRange(new List<DbEntity_Officer>()
                 {
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Advisor",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 1,
                             Username = "nathanbean",
@@ -28,10 +28,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Nathan's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "President",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 2,
                             Username = "kyletoom",
@@ -40,10 +40,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Kyle's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Vice President",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 3,
                             Username = "bripriddle",
@@ -52,10 +52,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Bri's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Treasurer",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 4,
                             Username = "stevenzwahl",
@@ -64,10 +64,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Steven's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Secretary",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 5,
                             Username = "carsonholt",
@@ -76,10 +76,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Carson's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Website Manager",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 6,
                             Username = "daytontaylor",
@@ -88,10 +88,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Dayton's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Social Media Manager",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 7,
                             Username = "timothyprice",
@@ -100,10 +100,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Timothy's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Industry Liaison",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 8,
                             Username = "jessemolenda",
@@ -112,10 +112,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Jesse's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Industry Liaison",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 9,
                             Username = "johnchapple",
@@ -124,10 +124,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "John's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Event Coordinator",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 10,
                             Username = "nathanmcclain",
@@ -136,10 +136,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                             Description = "Nathan's Description."
                         }
                     },
-                    new ModelEntity_Officer()
+                    new DbEntity_Officer()
                     {
                         Position = "Recruitment and Retention Officer",
-                        User = new ModelEntity_User()
+                        User = new DbEntity_User()
                         {
                             UserId = 11,
                             Username = "lilyfulton",
@@ -152,16 +152,16 @@ namespace Ksu.Gdc.Api.Data.Extensions
                 context.Officers.AddRange(officers);
             }
 
-            var groups = new List<ModelEntity_Group>();
+            var groups = new List<DbEntity_Group>();
             if (!context.Groups.Any())
             {
-                groups.AddRange(new List<ModelEntity_Group>()
+                groups.AddRange(new List<DbEntity_Group>()
                 {
-                    new ModelEntity_Group()
+                    new DbEntity_Group()
                     {
                         Name = "TestGroup"
                     },
-                    new ModelEntity_Group()
+                    new DbEntity_Group()
                     {
                         Name = "TestGroup2"
                     }
@@ -169,45 +169,45 @@ namespace Ksu.Gdc.Api.Data.Extensions
                 context.Groups.AddRange(groups);
             }
 
-            var games = new List<ModelEntity_Game>();
+            var games = new List<DbEntity_Game>();
             if (!context.Games.Any())
             {
-                games.AddRange(new List<ModelEntity_Game>()
+                games.AddRange(new List<DbEntity_Game>()
                 {
-                    new ModelEntity_Game()
+                    new DbEntity_Game()
                     {
                         Title = "Overload",
                         Description = "Overload. A modern take on 80s arcade games, battle a continuous wave of enemies as the game continues to speed up. Use the mouse to controller your character. Left click to shoot clockwise, right click to shoot counter-clockwise, and both buttons at the same time to fire your super.",
                         ItemUrl = "https://jessej37.itch.io/overload",
                         User = officers[5].User
                     },
-                    new ModelEntity_Game()
+                    new DbEntity_Game()
                     {
                         Title = "Operation Inundation",
                         Description = "Operation Inundation is a one to two player puzzle game. Featuring four levels with original art and music, it follows Agent 842 on his mission to retrieve something from the lowest level of a flooded building.",
                         ItemUrl = "https://pi-memorizer.itch.io/operation-inundation",
                         Group = groups[0]
                     },
-                    new ModelEntity_Game()
+                    new DbEntity_Game()
                     {
                         Title = "FPS Prototype",
                         Description = "Pre-alpha prototype for an upcoming FPS game. The intent of this prototype was to create and refine the movement and shooting mechanics - the bread and butter of FPS gamefeel.",
                         ItemUrl = "https://crimsonseven.itch.io/pre-alpha-game",
                         User = officers[5].User
                     },
-                    new ModelEntity_Game()
+                    new DbEntity_Game()
                     {
                         Title = "Incursion",
                         Description = "Move with arrow keys. Shoot with Space. Avoid, destroy, and collect health to survive.",
                         ItemUrl = "https://crimsonseven.itch.io/incursion"
                     },
-                    new ModelEntity_Game()
+                    new DbEntity_Game()
                     {
                         Title = "Furmoji Frenzy",
                         Description = "Furmoji are the hot new toy this Christmas, and unfortunately, Santa's running low on supplies. It's your job to help him assemble them, wrap them up, then send them on their way. Due to the labour laws set forth by the elf union, Elves must not be required to do a task for more than 20 seconds at a time. However, Santa, being the shrewd old old man he is, he found a loophole: you and your partner must switch tasks every 20 seconds. So grab a friend and venture into the minds of four people who haven't slept well in over 60 hours. ***Two Xbox 360 Controllers are required to play this game***",
                         ItemUrl = "https://studiodingwing.itch.io/furmoji-frenzy"
                     },
-                    new ModelEntity_Game()
+                    new DbEntity_Game()
                     {
                         Title = "Brave New World",
                         Description = "Kidnapped and imprisoned on the Eagle's Planet, you play as a young worm trying to escape and make your way home. Dig your way through multiple levels, all the while solving puzzles and avoiding eagles.",
@@ -217,28 +217,28 @@ namespace Ksu.Gdc.Api.Data.Extensions
                 context.Games.AddRange(games);
             }
 
-            var userGroups = new List<JoinEntity_UserGroup>();
-            if (!context.UserGroup.Any())
+            var userGroups = new List<DbEntity_GroupUser>();
+            if (!context.GroupUsers.Any())
             {
-                userGroups.AddRange(new List<JoinEntity_UserGroup>()
+                userGroups.AddRange(new List<DbEntity_GroupUser>()
                 {
-                    new JoinEntity_UserGroup()
+                    new DbEntity_GroupUser()
                     {
                         User = officers[5].User,
                         Group = groups[0]
                     },
-                    new JoinEntity_UserGroup()
+                    new DbEntity_GroupUser()
                     {
                         User = officers[5].User,
                         Group = groups[1]
                     },
-                    new JoinEntity_UserGroup()
+                    new DbEntity_GroupUser()
                     {
                         User = officers[1].User,
                         Group = groups[0]
                     }
                 });
-                context.UserGroup.AddRange(userGroups);
+                context.GroupUsers.AddRange(userGroups);
             }
 
             context.SaveChanges();

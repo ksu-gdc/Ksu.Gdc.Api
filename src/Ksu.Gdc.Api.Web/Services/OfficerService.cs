@@ -28,9 +28,9 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region CREATE
 
-        public async Task<ModelEntity_Officer> CreateOfficerAsync(CreateDto_Officer newOfficer)
+        public async Task<DbEntity_Officer> CreateOfficerAsync(CreateDto_Officer newOfficer)
         {
-            var newDbOfficer = Mapper.Map<ModelEntity_Officer>(newOfficer);
+            var newDbOfficer = Mapper.Map<DbEntity_Officer>(newOfficer);
             await _ksuGdcContext.Officers.AddAsync(newDbOfficer);
             await _ksuGdcContext.SaveChangesAsync();
             return newDbOfficer;
@@ -40,7 +40,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region GET
 
-        public async Task<List<ModelEntity_Officer>> GetOfficersAsync()
+        public async Task<List<DbEntity_Officer>> GetOfficersAsync()
         {
             var dbOfficers = await _ksuGdcContext.Officers
                                                  .Include(o => o.User)
@@ -48,7 +48,7 @@ namespace Ksu.Gdc.Api.Core.Services
             return dbOfficers;
         }
 
-        public async Task<ModelEntity_Officer> GetOfficerByIdAsync(int officerId)
+        public async Task<DbEntity_Officer> GetOfficerByIdAsync(int officerId)
         {
             var dbOfficer = await _ksuGdcContext.Officers
                                                 .Where(o => o.OfficerId == officerId)
@@ -61,7 +61,7 @@ namespace Ksu.Gdc.Api.Core.Services
             return dbOfficer;
         }
 
-        public async Task<List<ModelEntity_Officer>> GetOfficersByPositionAsync(string position)
+        public async Task<List<DbEntity_Officer>> GetOfficersByPositionAsync(string position)
         {
             var dbOfficers = await _ksuGdcContext.Officers
                                                  .Where(o => o.Position == position)
@@ -70,7 +70,7 @@ namespace Ksu.Gdc.Api.Core.Services
             return dbOfficers;
         }
 
-        public async Task<List<ModelEntity_Officer>> GetOfficersByUserIdAsync(int userId)
+        public async Task<List<DbEntity_Officer>> GetOfficersByUserIdAsync(int userId)
         {
             var dbOfficers = await _ksuGdcContext.Officers
                                                  .Where(o => o.UserId == userId)
@@ -82,7 +82,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region UPDATE
 
-        public async Task<bool> UpdateOfficerAsync(ModelEntity_Officer dbOfficer, UpdateDto_Officer updateOfficer)
+        public async Task<bool> UpdateOfficerAsync(DbEntity_Officer dbOfficer, UpdateDto_Officer updateOfficer)
         {
             Mapper.Map(updateOfficer, dbOfficer);
             dbOfficer.UpdatedAt = DateTimeOffset.Now;

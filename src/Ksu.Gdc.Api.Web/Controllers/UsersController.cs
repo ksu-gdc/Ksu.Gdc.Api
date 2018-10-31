@@ -101,7 +101,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 if (PaginatedList.IsValid(pageNumber, pageSize))
                 {
                     PaginatedList paginatedGroups = new PaginatedList<Dto_Group>(dtoGroups, pageNumber, pageSize);
-                    return Ok(dtoGroups);
+                    return Ok(paginatedGroups);
                 }
                 return Ok(dtoGroups);
             }

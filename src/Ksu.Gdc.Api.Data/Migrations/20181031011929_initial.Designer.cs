@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksu.Gdc.Api.Data.Migrations
 {
     [DbContext(typeof(KsuGdcContext))]
-    [Migration("20181025070932_initial")]
+    [Migration("20181031011929_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,27 +19,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.JoinEntity_UserGroup", b =>
-                {
-                    b.Property<int>("UserGroupId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTimeOffset>("CreatedAt");
-
-                    b.Property<int>("GroupId");
-
-                    b.Property<int>("UserId");
-
-                    b.HasKey("UserGroupId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserGroup");
-                });
-
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.ModelEntity_Game", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Game", b =>
                 {
                     b.Property<int>("GameId")
                         .ValueGeneratedOnAdd();
@@ -72,7 +52,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.ModelEntity_Group", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Group", b =>
                 {
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd();
@@ -95,7 +75,24 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.ToTable("Groups");
                 });
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.ModelEntity_Officer", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_GroupUser", b =>
+                {
+                    b.Property<int>("GroupId");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<DateTimeOffset>("CreatedAt");
+
+                    b.Property<DateTimeOffset>("UpdatedAt");
+
+                    b.HasKey("GroupId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("GroupUsers");
+                });
+
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Officer", b =>
                 {
                     b.Property<int>("OfficerId")
                         .ValueGeneratedOnAdd();
@@ -117,7 +114,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.ToTable("Officers");
                 });
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.ModelEntity_User", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd();
@@ -145,33 +142,33 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.JoinEntity_UserGroup", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Game", b =>
                 {
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.ModelEntity_Group", "Group")
+                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_Group", "Group")
+                        .WithMany()
+                        .HasForeignKey("GroupId");
+
+                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_GroupUser", b =>
+                {
+                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_Group", "Group")
                         .WithMany()
                         .HasForeignKey("GroupId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.ModelEntity_User", "User")
+                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.ModelEntity_Game", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Officer", b =>
                 {
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.ModelEntity_Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId");
-
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.ModelEntity_User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.ModelEntity_Officer", b =>
-                {
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.ModelEntity_User", "User")
+                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
                 });
