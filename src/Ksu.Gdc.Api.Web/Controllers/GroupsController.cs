@@ -92,6 +92,25 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{groupId}/profile-image", Name = "GetGroupProfileImage")]
+        public async Task<IActionResult> GetGroupProfileImage([FromRoute] int groupId)
+        {
+            try
+            {
+                var stream = await _groupService.GetGroupProfileImageAsync(groupId);
+                return File(stream, "image/jpg");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
         [Route("{groupId}/users", Name = "GetGroupMembers")]
         public async Task<IActionResult> GetGroupMembers([FromRoute] int groupId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
@@ -134,6 +153,25 @@ namespace Ksu.Gdc.Api.Web.Controllers
             catch (ArgumentException)
             {
                 return BadRequest();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("{groupId}/profile-image", Name = "UpdateGroupProfileImage")]
+        public async Task<IActionResult> UpdateGroupProfileImage([FromRoute] int groupId, [FromForm] IFormFile image)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest();
+                }
+                await _groupService.UpdateGroupProfileImageAsync(groupId, image.OpenReadStream());
+                return Ok();
             }
             catch (Exception)
             {

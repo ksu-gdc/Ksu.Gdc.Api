@@ -5,7 +5,7 @@ namespace Ksu.Gdc.Api.Core.Models
 {
     public class PaginatedList
     {
-        public int OriginalCount { get; protected set; }
+        public int Total { get; protected set; }
 
         public static bool IsValid(int pageNumber, int pageSize)
         {
@@ -46,7 +46,7 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public PaginatedList(List<T> list, int pageNumber, int pageSize)
         {
-            OriginalCount = list.Count;
+            Total = list.Count;
             List<T> newList = Paginate(list, pageNumber, pageSize);
             Value = newList;
         }

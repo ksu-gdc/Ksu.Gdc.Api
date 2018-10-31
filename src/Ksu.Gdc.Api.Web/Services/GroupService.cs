@@ -63,6 +63,29 @@ namespace Ksu.Gdc.Api.Core.Services
             return dbGroup;
         }
 
+        public async Task<Stream> GetGroupProfileImageAsync(int groupId)
+        {
+            try
+            {
+                var transferUtility = new TransferUtility(_s3Client);
+                var transferRequest = new TransferUtilityOpenStreamRequest()
+                {
+                    BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
+                    Key = $"{GroupConfig.DataStoreDirPath}/{groupId}/profile.jpg"
+                };
+                var stream = await transferUtility.OpenStreamAsync(transferRequest);
+                return stream;
+            }
+            catch (AmazonS3Exception ex)
+            {
+                if (ex.Message.Contains("key does not exist"))
+                {
+                    throw new NotFoundException($"No profile image for group with id '{groupId}' was found.");
+                }
+                throw ex;
+            }
+        }
+
         public async Task<List<DbEntity_User>> GetMembersOfGroupAsync(int groupId)
         {
             var dbMembers = await _ksuGdcContext.GroupUsers
@@ -91,6 +114,21 @@ namespace Ksu.Gdc.Api.Core.Services
             dbGroup.UpdatedOn = DateTimeOffset.Now;
             _ksuGdcContext.Update(dbGroup);
             await _ksuGdcContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> UpdateGroupProfileImageAsync(int groupId, Stream imageStream)
+        {
+            var transferUtility = new TransferUtility(_s3Client);
+            var transferRequest = new TransferUtilityUploadRequest()
+            {
+                BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
+                Key = $"{GroupConfig.DataStoreDirPath}/{groupId}/profile.jpg",
+                InputStream = imageStream,
+                StorageClass = S3StorageClass.Standard,
+                CannedACL = S3CannedACL.PublicRead
+            };
+            await transferUtility.UploadAsync(transferRequest);
             return true;
         }
 

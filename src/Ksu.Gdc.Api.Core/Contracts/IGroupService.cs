@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
 using System.Collections.Generic;
 
 using Ksu.Gdc.Api.Core.Models;
@@ -20,6 +22,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<DbEntity_Group> GetGroupByIdAsync(int groupId);
 
+        Task<Stream> GetGroupProfileImageAsync(int groupId);
+
         Task<List<DbEntity_User>> GetMembersOfGroupAsync(int groupId);
 
         Task<List<DbEntity_Game>> GetGamesOfGroupAsync(int groupId);
@@ -29,6 +33,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
         #region UPDATE
 
         Task<bool> UpdateGroupAsync(DbEntity_Group dbGroup, UpdateDto_Group updateGroup);
+
+        Task<bool> UpdateGroupProfileImageAsync(int groupId, Stream imageStream);
 
         Task<bool> AddMemberToGroupAsync(int groupId, int userId);
 
