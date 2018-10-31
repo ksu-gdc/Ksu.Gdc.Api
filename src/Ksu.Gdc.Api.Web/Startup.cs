@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Amazon.Runtime;
@@ -109,6 +110,22 @@ namespace Ksu.Gdc.Api.Web
                 app.UseCors("AllowAppOnly");
                 app.UseMvc();
             }
+        }
+    }
+
+    public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<KsuGdcContext>
+    {
+        public KsuGdcContext CreateDbContext(string[] args)
+        {
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .AddEnvironmentVariables()
+                .Build();
+            var builder = new DbContextOptionsBuilder<KsuGdcContext>();
+            var connectionString = configuration.GetConnectionString("MySql_KsuGdc");
+            builder.UseMySql(connectionString);
+            return new KsuGdcContext(builder.Options);
         }
     }
 }

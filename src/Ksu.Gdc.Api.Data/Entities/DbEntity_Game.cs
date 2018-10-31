@@ -18,6 +18,10 @@ namespace Ksu.Gdc.Api.Data.Entities
         [MaxLength(1000)]
         public string Description { get; set; }
 
+        [Required]
+        [Url]
+        public string Url { get; set; }
+
         [ForeignKey("User")]
         public int? UserId { get; set; }
         public DbEntity_User User { get; set; }
@@ -26,14 +30,10 @@ namespace Ksu.Gdc.Api.Data.Entities
         public int? GroupId { get; set; }
         public DbEntity_Group Group { get; set; }
 
-        [Url]
-        public string ImageUrl { get; set; }
+        [Required]
+        public DateTimeOffset CreatedOn { get; set; }
 
-        [Url]
-        public string ItemUrl { get; set; }
-
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
-
-        public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
+        [Required]
+        public DateTimeOffset UpdatedOn { get; set; }
     }
 }

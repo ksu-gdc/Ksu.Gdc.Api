@@ -107,7 +107,7 @@ namespace Ksu.Gdc.Api.Core.Services
         public async Task<bool> UpdateGameAsync(DbEntity_Game dbGame, UpdateDto_Game updateGame)
         {
             Mapper.Map(updateGame, dbGame);
-            dbGame.UpdatedAt = DateTimeOffset.Now;
+            dbGame.UpdatedOn = DateTimeOffset.Now;
             _ksuGdcContext.Update(dbGame);
             await _ksuGdcContext.SaveChangesAsync();
             return true;

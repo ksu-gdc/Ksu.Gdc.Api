@@ -15,7 +15,6 @@
   <ItemGroup>
     <Compile Remove="DbContexts\PortfolioContext.cs" />
     <Compile Remove="Entities\Role.cs" />
-    <Compile Remove="DesignTimeDbContextFactory.cs" />
     <Compile Remove="Scaffolding\EfmigrationsHistory.cs" />
     <Compile Remove="Scaffolding\KsuGdcContext.cs" />
     <Compile Remove="Scaffolding\Officers.cs" />
@@ -46,6 +45,9 @@
     <Compile Remove="Migrations\20181031001708_initial.Designer.cs" />
     <Compile Remove="Migrations\20181031001708_initial.cs" />
     <Compile Remove="Migrations\KsuGdcContextModelSnapshot.cs" />
+    <Compile Remove="Migrations\20181031011929_initial.cs" />
+    <Compile Remove="Migrations\20181031011929_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181031062702_init.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />

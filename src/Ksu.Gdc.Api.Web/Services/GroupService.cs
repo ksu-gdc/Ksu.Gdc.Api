@@ -88,7 +88,7 @@ namespace Ksu.Gdc.Api.Core.Services
         public async Task<bool> UpdateGroupAsync(DbEntity_Group dbGroup, UpdateDto_Group updateGroup)
         {
             Mapper.Map(updateGroup, dbGroup);
-            dbGroup.UpdatedAt = DateTimeOffset.Now;
+            dbGroup.UpdatedOn = DateTimeOffset.Now;
             _ksuGdcContext.Update(dbGroup);
             await _ksuGdcContext.SaveChangesAsync();
             return true;

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksu.Gdc.Api.Data.Migrations
 {
     [DbContext(typeof(KsuGdcContext))]
-    [Migration("20181031011929_initial")]
+    [Migration("20181031062825_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,22 +24,25 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("GameId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("CreatedAt");
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
                     b.Property<int?>("GroupId");
 
-                    b.Property<string>("ImageUrl");
-
-                    b.Property<string>("ItemUrl");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<DateTimeOffset>("UpdatedAt");
+                    b.Property<DateTimeOffset>("UpdatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
+
+                    b.Property<string>("Url")
+                        .IsRequired();
 
                     b.Property<int?>("UserId");
 
@@ -57,18 +60,20 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("GroupId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("CreatedAt");
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
-
-                    b.Property<string>("ImageUrl");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<DateTimeOffset>("UpdatedAt");
+                    b.Property<DateTimeOffset>("UpdatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
                     b.HasKey("GroupId");
 
@@ -81,9 +86,13 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<int>("UserId");
 
-                    b.Property<DateTimeOffset>("CreatedAt");
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
-                    b.Property<DateTimeOffset>("UpdatedAt");
+                    b.Property<DateTimeOffset>("UpdatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
                     b.HasKey("GroupId", "UserId");
 
@@ -97,13 +106,17 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("OfficerId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("CreatedAt");
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 535, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
                     b.Property<string>("Position")
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<DateTimeOffset>("UpdatedAt");
+                    b.Property<DateTimeOffset>("UpdatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 550, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
                     b.Property<int?>("UserId");
 
@@ -119,7 +132,9 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("CreatedAt");
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 550, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
@@ -127,12 +142,12 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<string>("FirstName")
                         .HasMaxLength(50);
 
-                    b.Property<string>("ImageUrl");
-
                     b.Property<string>("LastName")
                         .HasMaxLength(50);
 
-                    b.Property<DateTimeOffset>("UpdatedAt");
+                    b.Property<DateTimeOffset>("UpdatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
 
                     b.Property<string>("Username")
                         .IsRequired();

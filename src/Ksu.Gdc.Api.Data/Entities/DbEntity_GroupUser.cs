@@ -18,8 +18,8 @@ namespace Ksu.Gdc.Api.Data.Entities
         public int UserId { get; set; }
         public DbEntity_User User { get; set; }
 
-        public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset CreatedOn { get; set; }
 
-        public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.Now;
+        public DateTimeOffset UpdatedOn { get; set; }
     }
 }

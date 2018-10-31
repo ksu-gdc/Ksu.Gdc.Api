@@ -123,7 +123,7 @@ namespace Ksu.Gdc.Api.Core.Services
         public async Task<bool> UpdateUserAsync(DbEntity_User dbUser, UpdateDto_User updateUser)
         {
             Mapper.Map(updateUser, dbUser);
-            dbUser.UpdatedAt = DateTimeOffset.Now;
+            dbUser.UpdatedOn = DateTimeOffset.Now;
             _ksuGdcContext.Update(dbUser);
             await _ksuGdcContext.SaveChangesAsync();
             return true;

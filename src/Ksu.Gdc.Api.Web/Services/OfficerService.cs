@@ -85,7 +85,7 @@ namespace Ksu.Gdc.Api.Core.Services
         public async Task<bool> UpdateOfficerAsync(DbEntity_Officer dbOfficer, UpdateDto_Officer updateOfficer)
         {
             Mapper.Map(updateOfficer, dbOfficer);
-            dbOfficer.UpdatedAt = DateTimeOffset.Now;
+            dbOfficer.UpdatedOn = DateTimeOffset.Now;
             _ksuGdcContext.Update(dbOfficer);
             await _ksuGdcContext.SaveChangesAsync();
             return true;

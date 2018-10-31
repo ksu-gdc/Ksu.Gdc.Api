@@ -16,9 +16,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
-                    ImageUrl = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
+                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0))),
+                    UpdatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)))
                 },
                 constraints: table =>
                 {
@@ -35,9 +34,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     FirstName = table.Column<string>(maxLength: 50, nullable: true),
                     LastName = table.Column<string>(maxLength: 50, nullable: true),
                     Description = table.Column<string>(maxLength: 500, nullable: true),
-                    ImageUrl = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
+                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 550, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0))),
+                    UpdatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)))
                 },
                 constraints: table =>
                 {
@@ -52,12 +50,11 @@ namespace Ksu.Gdc.Api.Data.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Title = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
+                    Url = table.Column<string>(nullable: false),
                     UserId = table.Column<int>(nullable: true),
                     GroupId = table.Column<int>(nullable: true),
-                    ImageUrl = table.Column<string>(nullable: true),
-                    ItemUrl = table.Column<string>(nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
+                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0))),
+                    UpdatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)))
                 },
                 constraints: table =>
                 {
@@ -82,8 +79,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 {
                     GroupId = table.Column<int>(nullable: false),
                     UserId = table.Column<int>(nullable: false),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
+                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0))),
+                    UpdatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)))
                 },
                 constraints: table =>
                 {
@@ -110,8 +107,8 @@ namespace Ksu.Gdc.Api.Data.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Position = table.Column<string>(maxLength: 100, nullable: false),
                     UserId = table.Column<int>(nullable: true),
-                    CreatedAt = table.Column<DateTimeOffset>(nullable: false),
-                    UpdatedAt = table.Column<DateTimeOffset>(nullable: false)
+                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 535, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0))),
+                    UpdatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 550, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)))
                 },
                 constraints: table =>
                 {
