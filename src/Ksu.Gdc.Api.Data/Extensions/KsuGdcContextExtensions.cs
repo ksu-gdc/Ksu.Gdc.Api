@@ -217,10 +217,10 @@ namespace Ksu.Gdc.Api.Data.Extensions
                 context.Games.AddRange(games);
             }
 
-            var userGroups = new List<DbEntity_GroupUser>();
+            var groupUsers = new List<DbEntity_GroupUser>();
             if (!context.GroupUsers.Any())
             {
-                userGroups.AddRange(new List<DbEntity_GroupUser>()
+                groupUsers.AddRange(new List<DbEntity_GroupUser>()
                 {
                     new DbEntity_GroupUser()
                     {
@@ -238,7 +238,7 @@ namespace Ksu.Gdc.Api.Data.Extensions
                         Group = groups[0]
                     }
                 });
-                context.GroupUsers.AddRange(userGroups);
+                context.GroupUsers.AddRange(groupUsers);
             }
 
             context.SaveChanges();
