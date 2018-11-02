@@ -1,0 +1,58 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="DbContexts\" />
+    <Folder Include="Entities\" />
+    <Folder Include="Extensions\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Ksu.Gdc.Api.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="DbContexts\PortfolioContext.cs" />
+    <Compile Remove="Entities\Role.cs" />
+    <Compile Remove="Scaffolding\EfmigrationsHistory.cs" />
+    <Compile Remove="Scaffolding\KsuGdcContext.cs" />
+    <Compile Remove="Scaffolding\Officers.cs" />
+    <Compile Remove="Scaffolding\Users.cs" />
+    <Compile Remove="Scaffolding\UserGroup.cs" />
+    <Compile Remove="Migrations\20181007100451_init.cs" />
+    <Compile Remove="Migrations\20181007100451_init.Designer.cs" />
+    <Compile Remove="Migrations\20181007110723_user_officerId.cs" />
+    <Compile Remove="Scaffolding\EfmigrationsHistory.cs" />
+    <Compile Remove="Scaffolding\Games.cs" />
+    <Compile Remove="Migrations\20181007114959_initial.cs" />
+    <Compile Remove="Migrations\20181007114959_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181007191104_initial.cs" />
+    <Compile Remove="Migrations\20181007192624_initial.cs" />
+    <Compile Remove="Migrations\20181007192624_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181007195148_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181007195148_initial.cs" />
+    <Compile Remove="Migrations\20181007200220_table name update.cs" />
+    <Compile Remove="Migrations\20181007201542_initial.cs" />
+    <Compile Remove="Migrations\20181007215100_initial.cs" />
+    <Compile Remove="Migrations\20181007215100_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181007215919_initial.cs" />
+    <Compile Remove="Migrations\20181007215919_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181007221252_initial.cs" />
+    <Compile Remove="Migrations\20181007221252_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181025070932_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181025070932_initial.cs" />
+    <Compile Remove="Migrations\20181031001708_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181031001708_initial.cs" />
+    <Compile Remove="Migrations\KsuGdcContextModelSnapshot.cs" />
+    <Compile Remove="Migrations\20181031011929_initial.cs" />
+    <Compile Remove="Migrations\20181031011929_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181031062702_init.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.4" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.4" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
+  </ItemGroup>
+</Project>
