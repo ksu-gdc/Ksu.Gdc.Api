@@ -53,9 +53,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(ticket) || string.IsNullOrWhiteSpace(service))
+                if (string.IsNullOrWhiteSpace(service))
                 {
                     return BadRequest();
+                }
+                if (string.IsNullOrWhiteSpace(ticket))
+                {
+                    throw new NotAuthorizedException();
                 }
                 var response = await _authService.ValidateCASTicketAsync(service, ticket);
                 try
@@ -63,7 +67,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
                     var dbUser = await _userService.GetUserByIdAsync(userId);
                     var dtoUser = Mapper.Map<AuthDto_User>(dbUser);
-                    dtoUser.IsOfficer = (await _officerService.GetOfficersByUserIdAsync(userId)).Count > 0;
+                    if ((await _officerService.GetOfficersByUserIdAsync(userId)).Count > 0)
+                    {
+                        dtoUser.Roles.Add("officer");
+                    }
                     return Ok(dtoUser);
                 }
                 catch (NotFoundException)

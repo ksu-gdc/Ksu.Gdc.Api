@@ -28,6 +28,14 @@ namespace Ksu.Gdc.Api.Core.Models
         }
     }
 
+    public class AuthDto_User
+    {
+        public int UserId { get; set; }
+
+        public string Username { get; set; }
+
+        public List<string> Roles { get; set; } = new List<string>();
+    }
     public class Dto_User
     {
         public int UserId { get; set; }
@@ -41,10 +49,6 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Description { get; set; }
 
         public string Email => Username + "@ksu.edu";
-    }
-    public class AuthDto_User : Dto_User
-    {
-        public bool IsOfficer { get; set; }
     }
 
     public class UpdateDto_User
