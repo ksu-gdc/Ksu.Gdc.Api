@@ -28,6 +28,7 @@
     <Compile Remove="..\src\Exceptions\NotAuthorizedException.cs" />
     <Compile Remove="..\src\Exceptions\NotFoundException.cs" />
     <Compile Remove="Models\Dto_User %28copy%29.cs" />
+    <Compile Remove="Configurations\GameConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ksu.Gdc.Api.Core.csproj" />
