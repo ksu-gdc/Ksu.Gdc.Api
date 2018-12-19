@@ -24,13 +24,18 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 831, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
                     b.Property<string>("HostUrl")
-                        .IsRequired();
+                        .IsRequired()
+                        .HasMaxLength(2000);
+
+                    b.Property<bool>("IsFeatured")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(false);
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -38,7 +43,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 831, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("GameId");
 
@@ -53,7 +58,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 848, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("GameId", "UserId");
 
@@ -69,7 +74,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 827, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 818, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -77,7 +82,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 839, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 830, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<int?>("UserId");
 
@@ -95,7 +100,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 831, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
@@ -108,7 +113,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 831, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Username")
                         .IsRequired();

@@ -28,17 +28,17 @@ namespace Ksu.Gdc.Api.Data.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<DbEntity_Officer>()
-                .Property(g => g.CreatedOn)
+                .Property(o => o.CreatedOn)
                 .HasDefaultValue(DateTimeOffset.Now);
             modelBuilder.Entity<DbEntity_Officer>()
-                .Property(g => g.UpdatedOn)
+                .Property(o => o.UpdatedOn)
                 .HasDefaultValue(DateTimeOffset.Now);
 
             modelBuilder.Entity<DbEntity_User>()
-                .Property(g => g.CreatedOn)
+                .Property(u => u.CreatedOn)
                 .HasDefaultValue(DateTimeOffset.Now);
             modelBuilder.Entity<DbEntity_User>()
-                .Property(g => g.UpdatedOn)
+                .Property(u => u.UpdatedOn)
                 .HasDefaultValue(DateTimeOffset.Now);
 
             modelBuilder.Entity<DbEntity_Game>()
@@ -47,6 +47,9 @@ namespace Ksu.Gdc.Api.Data.DbContexts
             modelBuilder.Entity<DbEntity_Game>()
                 .Property(g => g.UpdatedOn)
                 .HasDefaultValue(DateTimeOffset.Now);
+            modelBuilder.Entity<DbEntity_Game>()
+                .Property(g => g.IsFeatured)
+                .HasDefaultValue(false);
 
             modelBuilder.Entity<DbEntity_GameUser>()
                 .HasKey(gu => new { gu.GameId, gu.UserId });

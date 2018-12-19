@@ -18,8 +18,11 @@ namespace Ksu.Gdc.Api.Data.Entities
         public string Description { get; set; }
 
         [Required]
-        [Url]
+        [MaxLength(2000)]
         public string HostUrl { get; set; }
+
+        [Required]
+        public bool IsFeatured { get; set; }
 
         [Required]
         public DateTimeOffset CreatedOn { get; set; }

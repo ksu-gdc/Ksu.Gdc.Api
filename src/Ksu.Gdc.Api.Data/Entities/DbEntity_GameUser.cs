@@ -16,6 +16,7 @@ namespace Ksu.Gdc.Api.Data.Entities
         public int UserId { get; set; }
         public DbEntity_User User { get; set; }
 
+        [Required]
         public DateTimeOffset CreatedOn { get; set; }
     }
 }
