@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksu.Gdc.Api.Data.Migrations
 {
     [DbContext(typeof(KsuGdcContext))]
-    [Migration("20181219180918_initial")]
+    [Migration("20181219213614_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,7 +26,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 831, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 15, 36, 14, 427, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
@@ -45,28 +45,11 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 831, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 15, 36, 14, 427, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("GameId");
 
                     b.ToTable("Games");
-                });
-
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_GameUser", b =>
-                {
-                    b.Property<int>("GameId");
-
-                    b.Property<int>("UserId");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
-
-                    b.HasKey("GameId", "UserId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("GameUsers");
                 });
 
             modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Officer", b =>
@@ -76,7 +59,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 818, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 15, 36, 14, 414, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -84,7 +67,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 830, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 15, 36, 14, 426, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<int?>("UserId");
 
@@ -102,7 +85,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 831, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 15, 36, 14, 427, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
@@ -115,7 +98,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 12, 9, 17, 831, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 15, 36, 14, 427, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Username")
                         .IsRequired();
@@ -125,7 +108,31 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_GameUser", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_UserGame", b =>
+                {
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("GameId");
+
+                    b.Property<DateTimeOffset>("CreatedOn")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 19, 15, 36, 14, 436, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
+
+                    b.HasKey("UserId", "GameId");
+
+                    b.HasIndex("GameId");
+
+                    b.ToTable("UserGames");
+                });
+
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Officer", b =>
+                {
+                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_UserGame", b =>
                 {
                     b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_Game", "Game")
                         .WithMany()
@@ -136,13 +143,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Officer", b =>
-                {
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }
