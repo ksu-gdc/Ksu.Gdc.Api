@@ -50,6 +50,9 @@
     <Compile Remove="Migrations\20181031062702_init.cs" />
     <Compile Remove="Migrations\20181031062825_initial.Designer.cs" />
     <Compile Remove="Migrations\20181031062825_initial.cs" />
+    <Compile Remove="Migrations\20181219180918_initial.cs" />
+    <Compile Remove="Migrations\20181219180918_initial.Designer.cs" />
+    <Compile Remove="Migrations\KsuGdcContextModelSnapshot.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />

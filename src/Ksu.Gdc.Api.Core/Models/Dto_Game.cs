@@ -18,8 +18,6 @@ namespace Ksu.Gdc.Api.Core.Models
         [Required]
         [Url]
         public string HostUrl { get; set; }
-
-        public int UserId { get; set; }
     }
 
     public class Dto_Game

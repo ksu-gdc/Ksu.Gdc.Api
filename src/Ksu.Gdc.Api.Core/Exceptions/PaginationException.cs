@@ -2,18 +2,18 @@
 
 namespace Ksu.Gdc.Api.Core.Exceptions
 {
-    public class NotFoundException : Exception
+    public class PaginationException : Exception
     {
-        public NotFoundException()
+        public PaginationException()
         {
         }
 
-        public NotFoundException(string message)
+        public PaginationException(string message)
             : base(message)
         {
         }
 
-        public NotFoundException(string message, Exception inner)
+        public PaginationException(string message, Exception inner)
             : base(message, inner)
         {
         }

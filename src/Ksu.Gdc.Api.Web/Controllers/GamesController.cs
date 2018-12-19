@@ -26,25 +26,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _gameService = gameService;
         }
 
-        [HttpPost]
-        [Route("", Name = "CreateGame")]
-        public async Task<IActionResult> CreateGame([FromBody] CreateDto_Game newGame)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest();
-                }
-                var dbGame = await _gameService.CreateGameAsync(newGame);
-                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Game>(dbGame));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
         [HttpGet]
         [Route("", Name = "GetGames")]
         public async Task<IActionResult> GetGames([FromQuery] int pageNumber, [FromQuery] int pageSize)
@@ -60,9 +41,31 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 }
                 return Ok(dtoGames);
             }
-            catch (ArgumentException)
+            catch (PaginationException ex)
             {
-                return BadRequest();
+                ModelState.AddModelError("Pagination", ex.Message);
+                return BadRequest(ModelState);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("featured", Name = "GetFeaturedGames")]
+        public async Task<IActionResult> GetFeaturedGames([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            try
+            {
+                var dbGames = await _gameService.GetFeaturedGamesAsync();
+                var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
+                {
+                    PaginatedList paginatedGames = new PaginatedList<Dto_Game>(dtoGames, pageNumber, pageSize);
+                    return Ok(paginatedGames);
+                }
+                return Ok(dtoGames);
             }
             catch (Exception)
             {
@@ -116,7 +119,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 await _gameService.UpdateGameThumbnailImageAsync(gameId, image.OpenReadStream());
                 return Ok();
@@ -135,7 +138,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var dbGame = await _gameService.GetGameByIdAsync(gameId);
                 await _gameService.UpdateGameAsync(dbGame, updateGame);
@@ -159,14 +162,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var dbGame = await _gameService.GetGameByIdAsync(gameId);
                 var updateGame = Mapper.Map<UpdateDto_Game>(dbGame);
                 patchGame.ApplyTo(updateGame, ModelState);
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 await _gameService.UpdateGameAsync(dbGame, updateGame);
                 return Ok();

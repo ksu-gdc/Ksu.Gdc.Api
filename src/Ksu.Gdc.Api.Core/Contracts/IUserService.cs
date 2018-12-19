@@ -36,11 +36,13 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<bool> UpdateUserProfileImageAsync(int userId, Stream imageStream);
 
+        Task<bool> AddGameToUser(int userId, int gameId);
+
         #endregion UPDATE
 
         #region DELETE
 
-        Task<bool> DeleteUserByIdAsync(int userId);
+        Task<bool> RemoveGameFromUser(int userId, int gameId);
 
         #endregion DELETE
     }

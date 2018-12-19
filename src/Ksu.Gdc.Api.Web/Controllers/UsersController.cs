@@ -20,11 +20,33 @@ namespace Ksu.Gdc.Api.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IOfficerService _officerService;
+        private readonly IGameService _gameService;
 
-        public UsersController(IUserService userService, IOfficerService officerService)
+        public UsersController(IUserService userService, IOfficerService officerService, IGameService gameService)
         {
             _userService = userService;
             _officerService = officerService;
+            _gameService = gameService;
+        }
+
+        [HttpPost]
+        [Route("{userId}/portfolio/games", Name = "CreateUserGame")]
+        public async Task<IActionResult> CreateUserGame([FromRoute] int userId, [FromBody] CreateDto_Game newGame)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var dbGame = await _gameService.CreateGameAsync(newGame);
+                await _userService.AddGameToUser(userId, dbGame.GameId);
+                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Game>(dbGame));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet]
@@ -42,9 +64,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 }
                 return Ok(dtoUsers);
             }
-            catch (ArgumentException)
+            catch (PaginationException ex)
             {
-                return BadRequest();
+                ModelState.AddModelError("Pagination", ex.Message);
+                return BadRequest(ModelState);
             }
             catch (Exception)
             {
@@ -105,9 +128,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 }
                 return Ok(dtoGames);
             }
-            catch (ArgumentException)
+            catch (PaginationException ex)
             {
-                return BadRequest();
+                ModelState.AddModelError("Pagination", ex.Message);
+                return BadRequest(ModelState);
             }
             catch (Exception)
             {
@@ -123,7 +147,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 await _userService.UpdateUserProfileImageAsync(userId, image.OpenReadStream());
                 return Ok();
@@ -142,7 +166,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var dbUser = await _userService.GetUserByIdAsync(userId);
                 await _userService.UpdateUserAsync(dbUser, updateUser);
@@ -158,6 +182,23 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("{userId}/games/{gameId}", Name = "AddGameToUser")]
+        public async Task<IActionResult> AddGameToUser([FromRoute] int userId, [FromRoute] int gameId)
+        {
+            try
+            {
+                var game = await _gameService.GetGameByIdAsync(gameId);
+                var user = await _userService.GetUserByIdAsync(userId);
+                await _userService.AddGameToUser(user.UserId, game.GameId);
+                return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpPatch]
         [Route("{userId}", Name = "PatchUser")]
         public async Task<IActionResult> PatchUser([FromRoute] int userId, [FromBody] JsonPatchDocument<UpdateDto_User> patchUser)
@@ -166,16 +207,37 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var dbUser = await _userService.GetUserByIdAsync(userId);
                 var updateUser = Mapper.Map<UpdateDto_User>(dbUser);
                 patchUser.ApplyTo(updateUser, ModelState);
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 await _userService.UpdateUserAsync(dbUser, updateUser);
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{userId}/games/{gameId}", Name = "RemoveGameFromUser")]
+        public async Task<IActionResult> RemoveGameFromUser([FromRoute] int userId, [FromRoute] int gameId)
+        {
+            try
+            {
+                var game = await _gameService.GetGameByIdAsync(gameId);
+                var user = await _userService.GetUserByIdAsync(userId);
+                await _userService.RemoveGameFromUser(gameId, userId);
                 return Ok();
             }
             catch (NotFoundException ex)

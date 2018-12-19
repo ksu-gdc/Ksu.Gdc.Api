@@ -100,7 +100,7 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<List<DbEntity_Game>> GetGamesOfUserAsync(int userId)
         {
-            var games = await _ksuGdcContext.GameUsers
+            var games = await _ksuGdcContext.UserGames
                 .Where(gu => gu.UserId == userId)
                 .Include(gu => gu.Game)
                 .Select(gu => gu.Game)
@@ -136,15 +136,28 @@ namespace Ksu.Gdc.Api.Core.Services
             return true;
         }
 
+        public async Task<bool> AddGameToUser(int userId, int gameId)
+        {
+            var userGame = new DbEntity_UserGame()
+            {
+                UserId = userId,
+                GameId = gameId
+            };
+            await _ksuGdcContext.UserGames.AddAsync(userGame);
+            await _ksuGdcContext.SaveChangesAsync();
+            return true;
+        }
+
         #endregion UPDATE
 
         #region DELETE
 
-        public async Task<bool> DeleteUserByIdAsync(int userId)
+        public async Task<bool> RemoveGameFromUser(int userId, int gameId)
         {
-            var dbUser = await GetUserByIdAsync(userId);
-            _ksuGdcContext.Users.Remove(dbUser);
-            await _ksuGdcContext.SaveChangesAsync();
+            var dbUserGame = await _ksuGdcContext.UserGames
+                .Where(ug => ug.UserId == userId && ug.GameId == gameId)
+                .FirstOrDefaultAsync();
+            _ksuGdcContext.UserGames.Remove(dbUserGame);
             return true;
         }
 

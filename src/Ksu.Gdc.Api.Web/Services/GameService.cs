@@ -50,6 +50,14 @@ namespace Ksu.Gdc.Api.Core.Services
             return games;
         }
 
+        public async Task<List<DbEntity_Game>> GetFeaturedGamesAsync()
+        {
+            var games = await _ksuGdcContext.Games
+                .Where(g => g.IsFeatured == true)
+                .ToListAsync();
+            return games;
+        }
+
         public async Task<DbEntity_Game> GetGameByIdAsync(int gameId)
         {
             var game = await _ksuGdcContext.Games

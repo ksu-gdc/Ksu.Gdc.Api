@@ -19,6 +19,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<List<DbEntity_Game>> GetGamesAsync();
 
+        Task<List<DbEntity_Game>> GetFeaturedGamesAsync();
+
         Task<DbEntity_Game> GetGameByIdAsync(int gameId);
 
         Task<Stream> GetGameThumbnailImageAsync(int gameId);

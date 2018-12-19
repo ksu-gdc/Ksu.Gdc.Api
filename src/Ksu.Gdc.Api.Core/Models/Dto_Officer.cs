@@ -12,7 +12,7 @@ namespace Ksu.Gdc.Api.Core.Models
         [MaxLength(100)]
         public string Position { get; set; }
 
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
     }
 
     public class Dto_Officer

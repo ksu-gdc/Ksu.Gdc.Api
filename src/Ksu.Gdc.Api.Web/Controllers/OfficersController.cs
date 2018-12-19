@@ -33,7 +33,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var dbOfficer = await _officerService.CreateOfficerAsync(newOfficer);
                 return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Officer>(dbOfficer));
@@ -94,7 +94,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var dbOfficer = await _officerService.GetOfficerByIdAsync(officerId);
                 await _officerService.UpdateOfficerAsync(dbOfficer, updateOfficer);
@@ -118,14 +118,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 var dbOfficer = await _officerService.GetOfficerByIdAsync(officerId);
                 var updateOfficer = Mapper.Map<UpdateDto_Officer>(dbOfficer);
                 patchOfficer.ApplyTo(updateOfficer, ModelState);
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 await _officerService.UpdateOfficerAsync(dbOfficer, updateOfficer);
                 return Ok();
@@ -152,7 +152,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 }
                 else
                 {
-                    return BadRequest();
+                    return BadRequest(ModelState);
                 }
                 return Ok();
             }
