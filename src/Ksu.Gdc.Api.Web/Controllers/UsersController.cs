@@ -91,31 +91,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{userId}/groups", Name = "GetGroupsOfUser")]
-        public async Task<IActionResult> GetGroupsOfUser([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
-        {
-            try
-            {
-                var dbGroups = await _userService.GetGroupsOfUserAsync(userId);
-                var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
-                if (PaginatedList.IsValid(pageNumber, pageSize))
-                {
-                    PaginatedList paginatedGroups = new PaginatedList<Dto_Group>(dtoGroups, pageNumber, pageSize);
-                    return Ok(paginatedGroups);
-                }
-                return Ok(dtoGroups);
-            }
-            catch (ArgumentException)
-            {
-                return BadRequest();
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
         [Route("{userId}/portfolio/games", Name = "GetGamesOfUser")]
         public async Task<IActionResult> GetGamesOfUser([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {

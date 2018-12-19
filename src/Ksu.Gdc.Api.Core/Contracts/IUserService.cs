@@ -26,8 +26,6 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<Stream> GetUserProfileImageAsync(int userId);
 
-        Task<List<DbEntity_Group>> GetGroupsOfUserAsync(int userId);
-
         Task<List<DbEntity_Game>> GetGamesOfUserAsync(int userId);
 
         #endregion GET

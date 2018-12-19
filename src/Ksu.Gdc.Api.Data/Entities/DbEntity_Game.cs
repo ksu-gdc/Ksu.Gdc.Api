@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -20,15 +19,7 @@ namespace Ksu.Gdc.Api.Data.Entities
 
         [Required]
         [Url]
-        public string Url { get; set; }
-
-        [ForeignKey("User")]
-        public int? UserId { get; set; }
-        public DbEntity_User User { get; set; }
-
-        [ForeignKey("Group")]
-        public int? GroupId { get; set; }
-        public DbEntity_Group Group { get; set; }
+        public string HostUrl { get; set; }
 
         [Required]
         public DateTimeOffset CreatedOn { get; set; }

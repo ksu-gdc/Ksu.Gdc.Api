@@ -36,8 +36,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest();
                 }
-                var dbGroup = await _gameService.CreateGameAsync(newGame);
-                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Group>(dbGroup));
+                var dbGame = await _gameService.CreateGameAsync(newGame);
+                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Game>(dbGame));
             }
             catch (Exception)
             {

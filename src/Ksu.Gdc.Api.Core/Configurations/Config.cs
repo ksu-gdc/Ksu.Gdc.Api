@@ -12,12 +12,6 @@
         public static string DataStoreUrl => PortfolioConfig.DataStoreUrl + "/" + DataStoreDirPath;
     }
 
-    public static class GroupConfig
-    {
-        public static string DataStoreDirPath => "groups";
-        public static string DataStoreUrl => AppConfiguration.GetConfig("DataStoreUrl") + "/" + DataStoreDirPath;
-    }
-
     public static class PortfolioConfig
     {
         public static string DataStoreDirPath => "portfolio";

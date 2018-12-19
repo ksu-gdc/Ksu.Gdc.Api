@@ -60,7 +60,6 @@ namespace Ksu.Gdc.Api.Web
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IGroupService, GroupService>();
             services.AddScoped<IGameService, GameService>();
 
             var awsOptions = new AWSOptions()

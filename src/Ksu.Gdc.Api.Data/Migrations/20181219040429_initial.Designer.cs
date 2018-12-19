@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksu.Gdc.Api.Data.Migrations
 {
     [DbContext(typeof(KsuGdcContext))]
-    [Migration("20181031062825_initial")]
+    [Migration("20181219040429_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,12 +26,13 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
-                    b.Property<int?>("GroupId");
+                    b.Property<string>("HostUrl")
+                        .IsRequired();
 
                     b.Property<string>("Title")
                         .IsRequired()
@@ -39,66 +40,28 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
-
-                    b.Property<string>("Url")
-                        .IsRequired();
-
-                    b.Property<int?>("UserId");
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("GameId");
-
-                    b.HasIndex("GroupId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Games");
                 });
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Group", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_GameUser", b =>
                 {
-                    b.Property<int>("GroupId")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100);
-
-                    b.Property<DateTimeOffset>("UpdatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
-
-                    b.HasKey("GroupId");
-
-                    b.ToTable("Groups");
-                });
-
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_GroupUser", b =>
-                {
-                    b.Property<int>("GroupId");
+                    b.Property<int>("GameId");
 
                     b.Property<int>("UserId");
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 848, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
-                    b.Property<DateTimeOffset>("UpdatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 560, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
-
-                    b.HasKey("GroupId", "UserId");
+                    b.HasKey("GameId", "UserId");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("GroupUsers");
+                    b.ToTable("GameUsers");
                 });
 
             modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Officer", b =>
@@ -108,7 +71,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 535, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 827, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -116,7 +79,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 550, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 839, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<int?>("UserId");
 
@@ -134,7 +97,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 550, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
@@ -147,7 +110,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 10, 31, 1, 28, 25, 551, DateTimeKind.Unspecified), new TimeSpan(0, -5, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 18, 22, 4, 28, 840, DateTimeKind.Unspecified), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Username")
                         .IsRequired();
@@ -157,22 +120,11 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_Game", b =>
+            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_GameUser", b =>
                 {
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_Group", "Group")
+                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_Game", "Game")
                         .WithMany()
-                        .HasForeignKey("GroupId");
-
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-                });
-
-            modelBuilder.Entity("Ksu.Gdc.Api.Data.Entities.DbEntity_GroupUser", b =>
-                {
-                    b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_Group", "Group")
-                        .WithMany()
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("GameId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Ksu.Gdc.Api.Data.Entities.DbEntity_User", "User")

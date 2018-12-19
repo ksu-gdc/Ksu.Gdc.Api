@@ -54,14 +54,6 @@ namespace Ksu.Gdc.Api.Core.Configurations
                 cfg.CreateMap<Dto_User, DbEntity_User>();
                 cfg.CreateMap<CreateDto_User, DbEntity_User>();
                 cfg.CreateMap<UpdateDto_User, DbEntity_User>();
-                // Group
-                cfg.CreateMap<DbEntity_Group, Dto_Group>();
-                cfg.CreateMap<DbEntity_Group, CreateDto_Group>();
-                cfg.CreateMap<DbEntity_Group, UpdateDto_Group>();
-
-                cfg.CreateMap<Dto_Group, DbEntity_Group>();
-                cfg.CreateMap<CreateDto_Group, DbEntity_Group>();
-                cfg.CreateMap<UpdateDto_Group, DbEntity_Group>();
                 // Game
                 cfg.CreateMap<DbEntity_Game, Dto_Game>();
                 cfg.CreateMap<DbEntity_Game, CreateDto_Game>();

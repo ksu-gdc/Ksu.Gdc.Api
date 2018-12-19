@@ -1,25 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    // Key: { GroupId, UserId }
-    public class DbEntity_GroupUser
+    public class DbEntity_GameUser
     {
         [Required]
-        [ForeignKey("Group")]
-        public int GroupId { get; set; }
-        public DbEntity_Group Group { get; set; }
+        [ForeignKey("Game")]
+        public int GameId { get; set; }
+        public DbEntity_Game Game { get; set; }
 
         [Required]
-        [ForeignKey("Users")]
+        [ForeignKey("User")]
         public int UserId { get; set; }
         public DbEntity_User User { get; set; }
 
         public DateTimeOffset CreatedOn { get; set; }
-
-        public DateTimeOffset UpdatedOn { get; set; }
     }
 }

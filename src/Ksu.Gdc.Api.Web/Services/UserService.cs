@@ -98,21 +98,13 @@ namespace Ksu.Gdc.Api.Core.Services
             }
         }
 
-        public async Task<List<DbEntity_Group>> GetGroupsOfUserAsync(int userId)
-        {
-            var groups = await _ksuGdcContext.GroupUsers
-                                               .Where(ug => ug.UserId == userId)
-                                               .Include(ug => ug.Group)
-                                               .Select(ug => ug.Group)
-                                               .ToListAsync();
-            return groups;
-        }
-
         public async Task<List<DbEntity_Game>> GetGamesOfUserAsync(int userId)
         {
-            var games = await _ksuGdcContext.Games
-                                              .Where(g => g.UserId == userId)
-                                              .ToListAsync();
+            var games = await _ksuGdcContext.GameUsers
+                .Where(gu => gu.UserId == userId)
+                .Include(gu => gu.Game)
+                .Select(gu => gu.Game)
+                .ToListAsync();
             return games;
         }
 
