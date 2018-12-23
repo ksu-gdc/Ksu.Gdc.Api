@@ -93,6 +93,16 @@ namespace Ksu.Gdc.Api.Core.Services
             }
         }
 
+        public async Task<List<DbEntity_User>> GetUsersOfGame(int gameId)
+        {
+            var users = await _ksuGdcContext.GameUsers
+                .Where(gu => gu.GameId == gameId)
+                .Include(gu => gu.User)
+                .Select(gu => gu.User)
+                .ToListAsync();
+            return users;
+        }
+
         #endregion GET
 
         #region UPDATE
@@ -134,11 +144,5 @@ namespace Ksu.Gdc.Api.Core.Services
         }
 
         #endregion DELETE
-
-        #region Utility Functions
-
-
-
-        #endregion Utility Functions
     }
 }

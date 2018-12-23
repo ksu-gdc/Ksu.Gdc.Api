@@ -43,8 +43,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (PaginationException ex)
             {
-                ModelState.AddModelError("Pagination", ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
@@ -123,6 +122,31 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 }
                 await _gameService.UpdateGameThumbnailImageAsync(gameId, image.OpenReadStream());
                 return Ok();
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{gameId}/users", Name = "GetUsersOfGame")]
+        public async Task<IActionResult> GetUsersOfGame([FromRoute] int gameId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            try
+            {
+                var dbUsers = await _gameService.GetUsersOfGame(gameId);
+                var dtoUsers = Mapper.Map<List<Dto_User>>(dbUsers);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
+                {
+                    PaginatedList paginatedUsers = new PaginatedList<Dto_User>(dtoUsers, pageNumber, pageSize);
+                    return Ok(paginatedUsers);
+                }
+                return Ok(dtoUsers);
+            }
+            catch (PaginationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {

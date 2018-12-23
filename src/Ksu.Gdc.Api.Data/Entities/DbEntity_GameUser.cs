@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Ksu.Gdc.Api.Data.Entities
 {
-    public class DbEntity_UserGame
+    public class DbEntity_GameUser
     {
         [Required]
         [ForeignKey("User")]

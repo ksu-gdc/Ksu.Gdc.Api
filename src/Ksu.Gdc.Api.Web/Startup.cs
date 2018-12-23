@@ -27,7 +27,6 @@ using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Services;
 using Ksu.Gdc.Api.Data;
 using Ksu.Gdc.Api.Data.DbContexts;
-using Ksu.Gdc.Api.Data.Extensions;
 using Ksu.Gdc.Api.Data.Entities;
 using Ksu.Gdc.Api.Core.Models;
 
@@ -88,15 +87,11 @@ namespace Ksu.Gdc.Api.Web
             {
                 var ksuGdcContext = serviceScope.ServiceProvider.GetRequiredService<KsuGdcContext>();
 
-                loggerFactory.AddConsole();
-                loggerFactory.AddDebug();
-
                 ksuGdcContext.Database.Migrate();
 
                 if (env.IsDevelopment())
                 {
                     app.UseDeveloperExceptionPage();
-                    ksuGdcContext.EnsureSeedDataForContext();
                 }
                 else
                 {

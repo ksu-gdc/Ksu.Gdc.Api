@@ -38,8 +38,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             if (string.IsNullOrWhiteSpace(service))
             {
-                ModelState.AddModelError("Service", "The 'service' query parameter is required.");
-                return BadRequest(ModelState);
+                return BadRequest("The 'service' query parameter is required.");
             }
             var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/login?"
                 + $"service={service}"
@@ -56,8 +55,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (string.IsNullOrWhiteSpace(service))
                 {
-                    ModelState.AddModelError("Service", "The 'service' query parameter is required.");
-                    return BadRequest(ModelState);
+                    return BadRequest("The 'service' query parameter is required.");
                 }
                 if (string.IsNullOrWhiteSpace(ticket))
                 {

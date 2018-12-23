@@ -66,8 +66,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (PaginationException ex)
             {
-                ModelState.AddModelError("Pagination", ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
@@ -130,8 +129,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (PaginationException ex)
             {
-                ModelState.AddModelError("Pagination", ex.Message);
-                return BadRequest(ModelState);
+                return BadRequest(ex.Message);
             }
             catch (Exception)
             {
@@ -230,14 +228,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpDelete]
-        [Route("{userId}/games/{gameId}", Name = "RemoveGameFromUser")]
+        [Route("{userId}/portfolio/games/{gameId}", Name = "RemoveGameFromUser")]
         public async Task<IActionResult> RemoveGameFromUser([FromRoute] int userId, [FromRoute] int gameId)
         {
             try
             {
                 var game = await _gameService.GetGameByIdAsync(gameId);
                 var user = await _userService.GetUserByIdAsync(userId);
-                await _userService.RemoveGameFromUser(gameId, userId);
+                await _userService.RemoveGameFromUser(userId, gameId);
                 return Ok();
             }
             catch (NotFoundException ex)

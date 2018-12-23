@@ -25,6 +25,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<Stream> GetGameThumbnailImageAsync(int gameId);
 
+        Task<List<DbEntity_User>> GetUsersOfGame(int gameId);
+
         #endregion GET
 
         #region UPDATE

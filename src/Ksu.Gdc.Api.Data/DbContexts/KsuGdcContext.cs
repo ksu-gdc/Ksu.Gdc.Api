@@ -13,7 +13,7 @@ namespace Ksu.Gdc.Api.Data.DbContexts
 
         public DbSet<DbEntity_Game> Games { get; set; }
 
-        public DbSet<DbEntity_UserGame> UserGames { get; set; }
+        public DbSet<DbEntity_GameUser> GameUsers { get; set; }
 
         public KsuGdcContext(DbContextOptions<KsuGdcContext> options) : base(options)
         {
@@ -51,9 +51,9 @@ namespace Ksu.Gdc.Api.Data.DbContexts
                 .Property(g => g.IsFeatured)
                 .HasDefaultValue(false);
 
-            modelBuilder.Entity<DbEntity_UserGame>()
+            modelBuilder.Entity<DbEntity_GameUser>()
                 .HasKey(gu => new { gu.UserId, gu.GameId });
-            modelBuilder.Entity<DbEntity_UserGame>()
+            modelBuilder.Entity<DbEntity_GameUser>()
                 .Property(gu => gu.CreatedOn)
                 .HasDefaultValue(DateTimeOffset.Now);
 
