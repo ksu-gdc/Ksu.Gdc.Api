@@ -125,7 +125,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("{userId}/portfolio/games")]
-        public async Task<IActionResult> GetGamesOfUser([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<IActionResult> GetGames([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
