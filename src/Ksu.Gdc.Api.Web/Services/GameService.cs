@@ -121,6 +121,23 @@ namespace Ksu.Gdc.Api.Core.Services
             return collaborators;
         }
 
+        public async Task<List<DbEntity_User>> GetNonCollaboratorsAsync(DbEntity_Game game)
+        {
+            var collaborators = _ksuGdcContext.GameUsers
+                .Where(gu => gu.GameId == game.GameId)
+                .Select(gu => gu.UserId);
+            var nonCollaborators = await _ksuGdcContext.Users
+                .Where(u => !(collaborators.Contains(u.UserId)))
+                .ToListAsync();
+            return nonCollaborators;
+        }
+        public async Task<List<DbEntity_User>> GetNonCollaboratorsAsync(int gameId)
+        {
+            var game = await GetByIdAsync(gameId);
+            var nonCollaborators = await GetNonCollaboratorsAsync(game);
+            return nonCollaborators;
+        }
+
         public async Task<DbEntity_GameUser> GetCollaboratorAsync(int gameId, int userId)
         {
             var user = await _ksuGdcContext.GameUsers

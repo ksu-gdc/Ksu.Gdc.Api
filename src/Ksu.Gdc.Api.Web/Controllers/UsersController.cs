@@ -259,7 +259,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
-                await _gameService.RemoveCollaboratorAsync(gameId, userId);
+                var game = await _gameService.GetByIdAsync(gameId);
+                var collaborators = await _gameService.GetCollaboratorsAsync(game);
+                if (collaborators.Count <= 1)
+                {
+                    return Conflict($"Games must have a minimum of 1 collaborator.");
+                }
+                await _gameService.RemoveCollaboratorAsync(game, userId);
                 await _gameService.SaveChangesAsync();
                 return Ok();
             }

@@ -30,6 +30,9 @@ namespace Ksu.Gdc.Api.Core.Contracts
         Task<List<DbEntity_User>> GetCollaboratorsAsync(DbEntity_Game game);
         Task<List<DbEntity_User>> GetCollaboratorsAsync(int gameId);
 
+        Task<List<DbEntity_User>> GetNonCollaboratorsAsync(DbEntity_Game game);
+        Task<List<DbEntity_User>> GetNonCollaboratorsAsync(int gameId);
+
         Task<DbEntity_GameUser> GetCollaboratorAsync(int gameId, int userId);
 
         #endregion GET

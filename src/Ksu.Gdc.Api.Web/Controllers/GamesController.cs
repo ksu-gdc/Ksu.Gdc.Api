@@ -121,11 +121,19 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("{gameId}/users")]
-        public async Task<IActionResult> GetCollaborators([FromRoute] int gameId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<IActionResult> GetCollaborators([FromRoute] int gameId, [FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] bool non)
         {
             try
             {
-                var collaborators = await _gameService.GetCollaboratorsAsync(gameId);
+                List<DbEntity_User> collaborators;
+                if (non)
+                {
+                    collaborators = await _gameService.GetNonCollaboratorsAsync(gameId);
+                }
+                else
+                {
+                    collaborators = await _gameService.GetCollaboratorsAsync(gameId);
+                }
                 var dtoCollaborators = Mapper.Map<List<Dto_User>>(collaborators);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
                 {
