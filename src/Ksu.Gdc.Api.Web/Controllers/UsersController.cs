@@ -57,7 +57,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAll([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<IActionResult> Get([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {

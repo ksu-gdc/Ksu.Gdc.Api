@@ -28,7 +28,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAll([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<IActionResult> Get([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
@@ -56,8 +56,28 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
+        [Route("{gameId}")]
+        public async Task<IActionResult> GetById(int gameId)
+        {
+            try
+            {
+                var game = await _gameService.GetByIdAsync(gameId);
+                var dtoGame = Mapper.Map<Dto_Game>(game);
+                return Ok(dtoGame);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
         [Route("featured")]
-        public async Task<IActionResult> GetFeatured([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        public async Task<IActionResult> GetByFeatured([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
@@ -75,26 +95,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 return NotFound(ex.Message);
             }
             catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("{gameId}")]
-        public async Task<IActionResult> GetById(int gameId)
-        {
-            try
-            {
-                var game = await _gameService.GetByIdAsync(gameId);
-                var dtoGame = Mapper.Map<Dto_Game>(game);
-                return Ok(dtoGame);
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }

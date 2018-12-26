@@ -51,7 +51,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [HttpGet]
         [Route("")]
-        public async Task<IActionResult> GetAll([FromQuery] string position)
+        public async Task<IActionResult> Get([FromQuery] string position)
         {
             try
             {
