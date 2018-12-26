@@ -63,17 +63,17 @@ namespace Ksu.Gdc.Api.Core.Models
 
     public class CASAttributes
     {
-        public List<string> Uid { get; set; }
+        public string Uid { get; set; }
 
-        public List<int> KsuPersonWildcatId { get; set; }
+        public int KsuPersonWildcatId { get; set; }
 
-        public List<string> AuthenticationDate { get; set; }
+        public string AuthenticationDate { get; set; }
 
         public CASAttributes(dynamic response)
         {
-            Uid = response["uid"].ToObject<List<string>>();
-            KsuPersonWildcatId = response["ksuPersonWildcatId"].ToObject<List<int>>();
-            AuthenticationDate = response["authenticationDate"].ToObject<List<string>>();
+            Uid = response["uid"].ToObject<List<string>>()[0];
+            KsuPersonWildcatId = response["ksuPersonWildcatId"].ToObject<List<int>>()[0];
+            AuthenticationDate = response["authenticationDate"].ToObject<List<string>>()[0];
         }
     }
 }

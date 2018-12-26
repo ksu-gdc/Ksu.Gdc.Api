@@ -19,75 +19,79 @@ namespace Ksu.Gdc.Api.Core.Services
     {
         private readonly KsuGdcContext _ksuGdcContext;
         private readonly IAmazonS3 _s3Client;
+        private readonly IUserService _userService;
 
-        public OfficerService(KsuGdcContext ksuGdcContext, IAmazonS3 s3Client)
+        public OfficerService(KsuGdcContext ksuGdcContext, IAmazonS3 s3Client, IUserService userService)
         {
             _ksuGdcContext = ksuGdcContext;
             _s3Client = s3Client;
+            _userService = userService;
         }
 
         #region CREATE
 
-        public async Task<DbEntity_Officer> CreateOfficerAsync(CreateDto_Officer newOfficer)
+        public async Task<bool> CreateAsync(DbEntity_Officer createdOfficer)
         {
-            var newDbOfficer = Mapper.Map<DbEntity_Officer>(newOfficer);
-            await _ksuGdcContext.Officers.AddAsync(newDbOfficer);
-            await _ksuGdcContext.SaveChangesAsync();
-            return newDbOfficer;
+            await _ksuGdcContext.Officers.AddAsync(createdOfficer);
+            return true;
         }
 
         #endregion CREATE
 
         #region GET
 
-        public async Task<List<DbEntity_Officer>> GetOfficersAsync()
+        public async Task<List<DbEntity_Officer>> GetAllAsync()
         {
-            var dbOfficers = await _ksuGdcContext.Officers
-                                                 .Include(o => o.User)
-                                                 .ToListAsync();
-            return dbOfficers;
+            var officers = await _ksuGdcContext.Officers
+                .Include(o => o.User)
+                .ToListAsync();
+            return officers;
         }
 
-        public async Task<DbEntity_Officer> GetOfficerByIdAsync(int officerId)
+        public async Task<DbEntity_Officer> GetByIdAsync(int officerId)
         {
-            var dbOfficer = await _ksuGdcContext.Officers
-                                                .Where(o => o.OfficerId == officerId)
-                                                .Include(o => o.User)
-                                                .FirstOrDefaultAsync();
-            if (dbOfficer == null)
+            var officer = await _ksuGdcContext.Officers
+                .Where(o => o.OfficerId == officerId)
+                .Include(o => o.User)
+                .FirstOrDefaultAsync();
+            if (officer == null)
             {
                 throw new NotFoundException($"No officer with id '{officerId}' was found.");
             }
-            return dbOfficer;
+            return officer;
         }
 
-        public async Task<List<DbEntity_Officer>> GetOfficersByPositionAsync(string position)
+        public async Task<List<DbEntity_Officer>> GetByPositionAsync(string position)
         {
-            var dbOfficers = await _ksuGdcContext.Officers
-                                                 .Where(o => o.Position == position)
-                                                 .Include(o => o.User)
-                                                 .ToListAsync();
-            return dbOfficers;
+            var officers = await _ksuGdcContext.Officers
+                .Where(o => o.Position == position)
+                .Include(o => o.User)
+                .ToListAsync();
+            return officers;
         }
 
-        public async Task<List<DbEntity_Officer>> GetOfficersByUserIdAsync(int userId)
+        public async Task<List<DbEntity_Officer>> GetByUserAsync(DbEntity_User user)
         {
-            var dbOfficers = await _ksuGdcContext.Officers
-                                                 .Where(o => o.UserId == userId)
-                                                 .ToListAsync();
-            return dbOfficers;
+            var officers = await _ksuGdcContext.Officers
+                .Where(o => o.UserId == user.UserId)
+                .ToListAsync();
+            return officers;
+        }
+        public async Task<List<DbEntity_Officer>> GetByUserAsync(int userId)
+        {
+            var user = await _userService.GetByIdAsync(userId);
+            var officers = await GetByUserAsync(user);
+            return officers;
         }
 
         #endregion GET
 
         #region UPDATE
 
-        public async Task<bool> UpdateOfficerAsync(DbEntity_Officer dbOfficer, UpdateDto_Officer updateOfficer)
+        public async Task<bool> UpdateAsync(DbEntity_Officer updatedOfficer)
         {
-            Mapper.Map(updateOfficer, dbOfficer);
-            dbOfficer.UpdatedOn = DateTimeOffset.Now;
-            _ksuGdcContext.Update(dbOfficer);
-            await _ksuGdcContext.SaveChangesAsync();
+            updatedOfficer.UpdatedOn = DateTimeOffset.Now;
+            _ksuGdcContext.Update(updatedOfficer);
             return true;
         }
 
@@ -95,22 +99,36 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region DELETE
 
-        public async Task<bool> DeleteOfficerByIdAsync(int officerId)
+        public async Task<bool> DeleteAsync(DbEntity_Officer officer)
         {
-            var dbOfficer = await GetOfficerByIdAsync(officerId);
-            _ksuGdcContext.Officers.Remove(dbOfficer);
-            await _ksuGdcContext.SaveChangesAsync();
+            _ksuGdcContext.Officers.Remove(officer);
+            return true;
+        }
+        public async Task<bool> DeleteAsync(List<DbEntity_Officer> officers)
+        {
+            _ksuGdcContext.Officers.RemoveRange(officers);
             return true;
         }
 
-        public async Task<bool> DeleteOfficersByPositionAsync(string position)
+        public async Task<bool> DeleteByIdAsync(int officerId)
         {
-            var dbOfficers = await GetOfficersByPositionAsync(position);
-            _ksuGdcContext.Officers.RemoveRange(dbOfficers);
-            await _ksuGdcContext.SaveChangesAsync();
-            return true;
+            var officer = await GetByIdAsync(officerId);
+            var success = await DeleteAsync(officer);
+            return success;
+        }
+
+        public async Task<bool> DeleteByPositionAsync(string position)
+        {
+            var officers = await GetByPositionAsync(position);
+            var success = await DeleteAsync(officers);
+            return success;
         }
 
         #endregion DELETE
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _ksuGdcContext.SaveChangesAsync();
+        }
     }
 }

@@ -15,7 +15,6 @@ namespace Ksu.Gdc.Api.Core.Models
         [MaxLength(1000)]
         public string Description { get; set; }
 
-        [Required]
         [Url]
         public string HostUrl { get; set; }
     }
@@ -40,7 +39,6 @@ namespace Ksu.Gdc.Api.Core.Models
         [MaxLength(1000)]
         public string Description { get; set; }
 
-        [Required]
         [Url]
         public string HostUrl { get; set; }
     }

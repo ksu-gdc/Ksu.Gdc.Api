@@ -17,7 +17,6 @@ namespace Ksu.Gdc.Api.Data.Entities
         [MaxLength(1000)]
         public string Description { get; set; }
 
-        [Required]
         [MaxLength(2000)]
         public string HostUrl { get; set; }
 

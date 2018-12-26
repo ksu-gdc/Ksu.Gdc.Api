@@ -1,8 +1,7 @@
-<Project Sdk="Microsoft.NET.Sdk" DefaultTargets="Build">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <ProjectGuid>{3C3E2FF1-02C7-4ED7-A4FF-36B7A8211D17}</ProjectGuid>
   </PropertyGroup>
 
   <ItemGroup>
@@ -30,6 +29,7 @@
     <Compile Remove="..\src\Exceptions\NotFoundException.cs" />
     <Compile Remove="Models\Dto_User %28copy%29.cs" />
     <Compile Remove="Configurations\GameConfig.cs" />
+    <Compile Remove="Contracts\IUtilityService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ksu.Gdc.Api.Core.csproj" />
@@ -39,8 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Ksu.Gdc.Api.Data\Ksu.Gdc.Api.Data.csproj">
-      <Project>{53282DC1-BB7D-45DF-8B29-A60B54259F1D}</Project>
-      <Name>Ksu.Gdc.Api.Data</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

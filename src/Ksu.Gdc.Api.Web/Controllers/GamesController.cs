@@ -27,13 +27,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("", Name = "GetGames")]
-        public async Task<IActionResult> GetGames([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        [Route("")]
+        public async Task<IActionResult> GetAll([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
-                var dbGames = await _gameService.GetGamesAsync();
-                var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+                var games = await _gameService.GetAllAsync();
+                var dtoGames = Mapper.Map<List<Dto_Game>>(games);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
                 {
                     PaginatedList paginatedGames = new PaginatedList<Dto_Game>(dtoGames, pageNumber, pageSize);
@@ -44,42 +44,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
             catch (PaginationException ex)
             {
                 return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("featured", Name = "GetFeaturedGames")]
-        public async Task<IActionResult> GetFeaturedGames([FromQuery] int pageNumber, [FromQuery] int pageSize)
-        {
-            try
-            {
-                var dbGames = await _gameService.GetFeaturedGamesAsync();
-                var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
-                if (PaginatedList.IsValid(pageNumber, pageSize))
-                {
-                    PaginatedList paginatedGames = new PaginatedList<Dto_Game>(dtoGames, pageNumber, pageSize);
-                    return Ok(paginatedGames);
-                }
-                return Ok(dtoGames);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("{gameId}", Name = "GetGameById")]
-        public async Task<IActionResult> GetGameById(int gameId)
-        {
-            try
-            {
-                var game = await _gameService.GetGameByIdAsync(gameId);
-                return Ok(Mapper.Map<Dto_Game>(game));
             }
             catch (NotFoundException ex)
             {
@@ -92,13 +56,113 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{gameId}/thumbnail-image", Name = "GetGameThumbnailImage")]
-        public async Task<IActionResult> GetGameThumbnailImage([FromRoute] int gameId)
+        [Route("featured")]
+        public async Task<IActionResult> GetFeatured([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
-                var stream = await _gameService.GetGameThumbnailImageAsync(gameId);
+                var games = await _gameService.GetFeaturedAsync();
+                var dtoGames = Mapper.Map<List<Dto_Game>>(games);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
+                {
+                    PaginatedList paginatedGames = new PaginatedList<Dto_Game>(dtoGames, pageNumber, pageSize);
+                    return Ok(paginatedGames);
+                }
+                return Ok(dtoGames);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{gameId}")]
+        public async Task<IActionResult> GetById(int gameId)
+        {
+            try
+            {
+                var game = await _gameService.GetByIdAsync(gameId);
+                var dtoGame = Mapper.Map<Dto_Game>(game);
+                return Ok(dtoGame);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{gameId}/thumbnail-image")]
+        public async Task<IActionResult> GetImage([FromRoute] int gameId)
+        {
+            try
+            {
+                var stream = await _gameService.GetImageAsync(gameId);
                 return File(stream, "image/jpg");
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{gameId}/users")]
+        public async Task<IActionResult> GetCollaborators([FromRoute] int gameId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            try
+            {
+                var collaborators = await _gameService.GetCollaboratorsAsync(gameId);
+                var dtoCollaborators = Mapper.Map<List<Dto_User>>(collaborators);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
+                {
+                    PaginatedList paginatedUsers = new PaginatedList<Dto_User>(dtoCollaborators, pageNumber, pageSize);
+                    return Ok(paginatedUsers);
+                }
+                return Ok(dtoCollaborators);
+            }
+            catch (PaginationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (NotFoundException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("{gameId}")]
+        public async Task<IActionResult> UpdateById([FromRoute] int gameId, [FromBody] UpdateDto_Game gameUpdate)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var game = await _gameService.GetByIdAsync(gameId);
+                Mapper.Map(gameUpdate, game);
+                await _gameService.UpdateAsync(game);
+                await _gameService.SaveChangesAsync();
+                return Ok();
             }
             catch (NotFoundException ex)
             {
@@ -111,76 +175,31 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        [Route("{gameId}/thumbnail-image", Name = "UpdateGameThumbnailImage")]
-        public async Task<IActionResult> UpdateGameThumbnailImage([FromRoute] int gameId, [FromForm] IFormFile image)
+        [Route("{gameId}/thumbnail-image")]
+        public async Task<IActionResult> UpdateImage([FromRoute] int gameId, [FromForm] IFormFile image)
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (image.Length == 0)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest("An image is required.");
                 }
-                await _gameService.UpdateGameThumbnailImageAsync(gameId, image.OpenReadStream());
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("{gameId}/users", Name = "GetUsersOfGame")]
-        public async Task<IActionResult> GetUsersOfGame([FromRoute] int gameId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
-        {
-            try
-            {
-                var dbUsers = await _gameService.GetUsersOfGame(gameId);
-                var dtoUsers = Mapper.Map<List<Dto_User>>(dbUsers);
-                if (PaginatedList.IsValid(pageNumber, pageSize))
-                {
-                    PaginatedList paginatedUsers = new PaginatedList<Dto_User>(dtoUsers, pageNumber, pageSize);
-                    return Ok(paginatedUsers);
-                }
-                return Ok(dtoUsers);
-            }
-            catch (PaginationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpPut]
-        [Route("{gameId}", Name = "UpdateGame")]
-        public async Task<IActionResult> UpdateGame([FromRoute] int gameId, [FromBody] UpdateDto_Game updateGame)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var dbGame = await _gameService.GetGameByIdAsync(gameId);
-                await _gameService.UpdateGameAsync(dbGame, updateGame);
+                await _gameService.UpdateImageAsync(gameId, image.OpenReadStream());
                 return Ok();
             }
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
         [HttpPatch]
-        [Route("{gameId}", Name = "PatchGame")]
-        public async Task<IActionResult> PatchGame([FromRoute] int gameId, [FromBody] JsonPatchDocument<UpdateDto_Game> patchGame)
+        [Route("{gameId}")]
+        public async Task<IActionResult> PatchById([FromRoute] int gameId, [FromBody] JsonPatchDocument<UpdateDto_Game> gamePatch)
         {
             try
             {
@@ -188,14 +207,16 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var dbGame = await _gameService.GetGameByIdAsync(gameId);
-                var updateGame = Mapper.Map<UpdateDto_Game>(dbGame);
-                patchGame.ApplyTo(updateGame, ModelState);
+                var game = await _gameService.GetByIdAsync(gameId);
+                var gameUpdate = Mapper.Map<UpdateDto_Game>(game);
+                gamePatch.ApplyTo(gameUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
-                await _gameService.UpdateGameAsync(dbGame, updateGame);
+                Mapper.Map(gameUpdate, game);
+                await _gameService.UpdateAsync(game);
+                await _gameService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -209,12 +230,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpDelete]
-        [Route("{gameId}", Name = "DeleteGameById")]
-        public async Task<IActionResult> DeleteGameById([FromRoute] int gameId)
+        [Route("{gameId}")]
+        public async Task<IActionResult> DeleteById([FromRoute] int gameId)
         {
             try
             {
-                await _gameService.DeleteGameByIdAsync(gameId);
+                await _gameService.DeleteByIdAsync(gameId);
+                await _gameService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)

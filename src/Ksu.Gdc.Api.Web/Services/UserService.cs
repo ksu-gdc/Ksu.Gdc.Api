@@ -32,30 +32,34 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region CREATE
 
-        public async Task<DbEntity_User> CreateUserAsync(CreateDto_User newUser)
+        public async Task<bool> CreateAsync(DbEntity_User createdUser)
         {
-            var newDbUser = Mapper.Map<DbEntity_User>(newUser);
-            await _ksuGdcContext.Users.AddAsync(newDbUser);
-            await _ksuGdcContext.SaveChangesAsync();
-            return newDbUser;
+            await _ksuGdcContext.Users.AddAsync(createdUser);
+            return true;
+        }
+        public async Task<DbEntity_User> CreateAsync(CreateDto_User newUser)
+        {
+            var createdUser = Mapper.Map<DbEntity_User>(newUser);
+            var success = await CreateAsync(createdUser);
+            return createdUser;
         }
 
         #endregion CREATE
 
         #region GET
 
-        public async Task<List<DbEntity_User>> GetUsersAsync()
+        public async Task<List<DbEntity_User>> GetAllAsync()
         {
-            var dbUsers = await _ksuGdcContext.Users
-                                            .ToListAsync();
-            return dbUsers;
+            var users = await _ksuGdcContext.Users
+                .ToListAsync();
+            return users;
         }
 
-        public async Task<DbEntity_User> GetUserByIdAsync(int userId)
+        public async Task<DbEntity_User> GetByIdAsync(int userId)
         {
             var user = await _ksuGdcContext.Users
-                                             .Where(u => u.UserId == userId)
-                                             .FirstOrDefaultAsync();
+                .Where(u => u.UserId == userId)
+                .FirstOrDefaultAsync();
             if (user == null)
             {
                 throw new NotFoundException($"No user with id '{userId}' was found.");
@@ -63,19 +67,7 @@ namespace Ksu.Gdc.Api.Core.Services
             return user;
         }
 
-        public async Task<DbEntity_User> GetUserByUsernameAsync(string username)
-        {
-            var user = await _ksuGdcContext.Users
-                                             .Where(u => u.Username == username)
-                                             .FirstOrDefaultAsync();
-            if (user == null)
-            {
-                throw new NotFoundException($"No user with username '{username}' was found.");
-            }
-            return user;
-        }
-
-        public async Task<Stream> GetUserProfileImageAsync(int userId)
+        public async Task<Stream> GetImageAsync(DbEntity_User user)
         {
             try
             {
@@ -83,7 +75,7 @@ namespace Ksu.Gdc.Api.Core.Services
                 var transferRequest = new TransferUtilityOpenStreamRequest()
                 {
                     BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                    Key = $"{UserConfig.DataStoreDirPath}/{userId}/profile.jpg"
+                    Key = $"{UserConfig.DataStoreDirPath}/{user.UserId}/profile.jpg"
                 };
                 var stream = await transferUtility.OpenStreamAsync(transferRequest);
                 return stream;
@@ -92,19 +84,31 @@ namespace Ksu.Gdc.Api.Core.Services
             {
                 if (ex.Message.Contains("key does not exist"))
                 {
-                    throw new NotFoundException($"No profile image for user with id '{userId}' was found.");
+                    throw new NotFoundException($"No profile image for user with id '{user.UserId}' was found.");
                 }
                 throw ex;
             }
         }
+        public async Task<Stream> GetImageAsync(int userId)
+        {
+            var user = await GetByIdAsync(userId);
+            var stream = await GetImageAsync(user);
+            return stream;
+        }
 
-        public async Task<List<DbEntity_Game>> GetGamesOfUserAsync(int userId)
+        public async Task<List<DbEntity_Game>> GetGamesAsync(DbEntity_User user)
         {
             var games = await _ksuGdcContext.GameUsers
-                .Where(gu => gu.UserId == userId)
+                .Where(gu => gu.UserId == user.UserId)
                 .Include(gu => gu.Game)
                 .Select(gu => gu.Game)
                 .ToListAsync();
+            return games;
+        }
+        public async Task<List<DbEntity_Game>> GetGamesAsync(int userId)
+        {
+            var user = await GetByIdAsync(userId);
+            var games = await GetGamesAsync(user);
             return games;
         }
 
@@ -112,56 +116,43 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region UPDATE
 
-        public async Task<bool> UpdateUserAsync(DbEntity_User dbUser, UpdateDto_User updateUser)
+        public async Task<bool> UpdateAsync(DbEntity_User updatedUser)
         {
-            Mapper.Map(updateUser, dbUser);
-            dbUser.UpdatedOn = DateTimeOffset.Now;
-            _ksuGdcContext.Update(dbUser);
-            await _ksuGdcContext.SaveChangesAsync();
+            updatedUser.UpdatedOn = DateTimeOffset.Now;
+            _ksuGdcContext.Update(updatedUser);
             return true;
         }
 
-        public async Task<bool> UpdateUserProfileImageAsync(int userId, Stream imageStream)
+        public async Task<bool> UpdateImageAsync(DbEntity_User user, Stream image)
         {
             var transferUtility = new TransferUtility(_s3Client);
             var transferRequest = new TransferUtilityUploadRequest()
             {
                 BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                Key = $"{UserConfig.DataStoreDirPath}/{userId}/profile.jpg",
-                InputStream = imageStream,
+                Key = $"{UserConfig.DataStoreDirPath}/{user.UserId}/profile.jpg",
+                InputStream = image,
                 StorageClass = S3StorageClass.Standard,
                 CannedACL = S3CannedACL.PublicRead
             };
             await transferUtility.UploadAsync(transferRequest);
             return true;
         }
-
-        public async Task<bool> AddGameToUser(int userId, int gameId)
+        public async Task<bool> UpdateImageAsync(int userId, Stream image)
         {
-            var userGame = new DbEntity_GameUser()
-            {
-                UserId = userId,
-                GameId = gameId
-            };
-            await _ksuGdcContext.GameUsers.AddAsync(userGame);
-            await _ksuGdcContext.SaveChangesAsync();
-            return true;
+            var user = await GetByIdAsync(userId);
+            var success = await UpdateImageAsync(user, image);
+            return success;
         }
 
         #endregion UPDATE
 
         #region DELETE
 
-        public async Task<bool> RemoveGameFromUser(int userId, int gameId)
-        {
-            var dbUserGame = await _ksuGdcContext.GameUsers
-                .Where(ug => ug.UserId == userId && ug.GameId == gameId)
-                .FirstOrDefaultAsync();
-            _ksuGdcContext.GameUsers.Remove(dbUserGame);
-            await _ksuGdcContext.SaveChangesAsync();
-            return true;
-        }
-
         #endregion DELETE
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _ksuGdcContext.SaveChangesAsync();
+        }
     }
 }

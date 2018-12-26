@@ -24,13 +24,12 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 23, 0, 41, 50, 358, DateTimeKind.Unspecified).AddTicks(3210), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 25, 14, 1, 49, 708, DateTimeKind.Unspecified).AddTicks(730), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
 
                     b.Property<string>("HostUrl")
-                        .IsRequired()
                         .HasMaxLength(2000);
 
                     b.Property<bool>("IsFeatured")
@@ -43,7 +42,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 23, 0, 41, 50, 358, DateTimeKind.Unspecified).AddTicks(3790), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 25, 14, 1, 49, 708, DateTimeKind.Unspecified).AddTicks(1210), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("GameId");
 
@@ -58,7 +57,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 23, 0, 41, 50, 360, DateTimeKind.Unspecified).AddTicks(8790), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 25, 14, 1, 49, 710, DateTimeKind.Unspecified).AddTicks(3030), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("UserId", "GameId");
 
@@ -74,7 +73,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 23, 0, 41, 50, 344, DateTimeKind.Unspecified).AddTicks(220), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 25, 14, 1, 49, 696, DateTimeKind.Unspecified).AddTicks(4430), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Position")
                         .IsRequired()
@@ -82,7 +81,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 23, 0, 41, 50, 357, DateTimeKind.Unspecified).AddTicks(3060), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 25, 14, 1, 49, 707, DateTimeKind.Unspecified).AddTicks(2090), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<int?>("UserId");
 
@@ -100,7 +99,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("CreatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 23, 0, 41, 50, 357, DateTimeKind.Unspecified).AddTicks(7950), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 25, 14, 1, 49, 707, DateTimeKind.Unspecified).AddTicks(6520), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(500);
@@ -113,7 +112,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<DateTimeOffset>("UpdatedOn")
                         .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 23, 0, 41, 50, 357, DateTimeKind.Unspecified).AddTicks(8620), new TimeSpan(0, -6, 0, 0, 0)));
+                        .HasDefaultValue(new DateTimeOffset(new DateTime(2018, 12, 25, 14, 1, 49, 707, DateTimeKind.Unspecified).AddTicks(7030), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Username")
                         .IsRequired();

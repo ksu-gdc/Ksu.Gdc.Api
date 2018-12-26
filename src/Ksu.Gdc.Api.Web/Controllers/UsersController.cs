@@ -12,6 +12,7 @@ using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
+using Ksu.Gdc.Api.Data.Entities;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
@@ -30,8 +31,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPost]
-        [Route("{userId}/portfolio/games", Name = "CreateUserGame")]
-        public async Task<IActionResult> CreateUserGame([FromRoute] int userId, [FromBody] CreateDto_Game newGame)
+        [Route("{userId}/portfolio/games")]
+        public async Task<IActionResult> CreateGameByUser([FromRoute] int userId, [FromBody] CreateDto_Game newGame)
         {
             try
             {
@@ -39,49 +40,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var dbGame = await _gameService.CreateGameAsync(newGame);
-                await _userService.AddGameToUser(userId, dbGame.GameId);
-                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Game>(dbGame));
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("", Name = "GetUsers")]
-        public async Task<IActionResult> GetUsers([FromQuery] int pageNumber, [FromQuery] int pageSize)
-        {
-            try
-            {
-                var dbUsers = await _userService.GetUsersAsync();
-                var dtoUsers = Mapper.Map<List<Dto_User>>(dbUsers);
-                if (PaginatedList.IsValid(pageNumber, pageSize))
-                {
-                    PaginatedList paginatedUsers = new PaginatedList<Dto_User>(dtoUsers, pageNumber, pageSize);
-                    return Ok(paginatedUsers);
-                }
-                return Ok(dtoUsers);
-            }
-            catch (PaginationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("{userId}", Name = "GetUserById")]
-        public async Task<IActionResult> GetUserById([FromRoute] int userId)
-        {
-            try
-            {
-                var user = await _userService.GetUserByIdAsync(userId);
-                return Ok(Mapper.Map<Dto_User>(user));
+                var createdGame = await _gameService.CreateAsync(newGame);
+                await _gameService.AddCollaboratorAsync(createdGame, userId);
+                await _gameService.SaveChangesAsync();
+                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Game>(createdGame));
             }
             catch (NotFoundException ex)
             {
@@ -94,12 +56,61 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{userId}/profile-image", Name = "GetUserProfileImage")]
-        public async Task<IActionResult> GetUserProfileImage([FromRoute] int userId)
+        [Route("")]
+        public async Task<IActionResult> GetAll([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
-                var stream = await _userService.GetUserProfileImageAsync(userId);
+                var users = await _userService.GetAllAsync();
+                var dtoUsers = Mapper.Map<List<Dto_User>>(users);
+                if (PaginatedList.IsValid(pageNumber, pageSize))
+                {
+                    PaginatedList paginatedUsers = new PaginatedList<Dto_User>(dtoUsers, pageNumber, pageSize);
+                    return Ok(paginatedUsers);
+                }
+                return Ok(dtoUsers);
+            }
+            catch (PaginationException ex)
+            {
+                return BadRequest(ex.Message);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{userId}")]
+        public async Task<IActionResult> GetById([FromRoute] int userId)
+        {
+            try
+            {
+                var user = await _userService.GetByIdAsync(userId);
+                var dtoUser = Mapper.Map<Dto_User>(user);
+                return Ok(dtoUser);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet]
+        [Route("{userId}/profile-image")]
+        public async Task<IActionResult> GetImage([FromRoute] int userId)
+        {
+            try
+            {
+                var stream = await _userService.GetImageAsync(userId);
                 return File(stream, "image/jpg");
             }
             catch (NotFoundException ex)
@@ -113,13 +124,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet]
-        [Route("{userId}/portfolio/games", Name = "GetGamesOfUser")]
+        [Route("{userId}/portfolio/games")]
         public async Task<IActionResult> GetGamesOfUser([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
-                var dbGames = await _userService.GetGamesOfUserAsync(userId);
-                var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+                var games = await _userService.GetGamesAsync(userId);
+                var dtoGames = Mapper.Map<List<Dto_Game>>(games);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
                 {
                     PaginatedList paginatedGames = new PaginatedList<Dto_Game>(dtoGames, pageNumber, pageSize);
@@ -131,6 +142,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 return BadRequest(ex.Message);
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
@@ -138,36 +153,16 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPost, DisableRequestSizeLimit]
-        [Route("{userId}/profile-image", Name = "UpdateUserProfileImage")]
-        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int userId, [FromForm] IFormFile image)
+        [Route("{userId}/profile-image")]
+        public async Task<IActionResult> UpdateImage([FromRoute] int userId, [FromForm] IFormFile image)
         {
             try
             {
-                if (!ModelState.IsValid)
+                if (image.Length == 0)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest("An image is required.");
                 }
-                await _userService.UpdateUserProfileImageAsync(userId, image.OpenReadStream());
-                return Ok();
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpPut]
-        [Route("{userId}", Name = "UpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromRoute] int userId, [FromBody] UpdateDto_User updateUser)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
-                var dbUser = await _userService.GetUserByIdAsync(userId);
-                await _userService.UpdateUserAsync(dbUser, updateUser);
+                await _userService.UpdateImageAsync(userId, image.OpenReadStream());
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -181,15 +176,44 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPut]
-        [Route("{userId}/games/{gameId}", Name = "AddGameToUser")]
-        public async Task<IActionResult> AddGameToUser([FromRoute] int userId, [FromRoute] int gameId)
+        [Route("{userId}")]
+        public async Task<IActionResult> UpdateById([FromRoute] int userId, [FromBody] UpdateDto_User userUpdate)
         {
             try
             {
-                var game = await _gameService.GetGameByIdAsync(gameId);
-                var user = await _userService.GetUserByIdAsync(userId);
-                await _userService.AddGameToUser(user.UserId, game.GameId);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
+                var user = await _userService.GetByIdAsync(userId);
+                Mapper.Map(userUpdate, user);
+                await _userService.UpdateAsync(user);
+                await _userService.SaveChangesAsync();
                 return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut]
+        [Route("{userId}/portfolio/games/{gameId}")]
+        public async Task<IActionResult> AddCollaborator([FromRoute] int userId, [FromRoute] int gameId)
+        {
+            try
+            {
+                await _gameService.AddCollaboratorAsync(gameId, userId);
+                await _gameService.SaveChangesAsync();
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(ex.Message);
             }
             catch (Exception)
             {
@@ -198,8 +222,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPatch]
-        [Route("{userId}", Name = "PatchUser")]
-        public async Task<IActionResult> PatchUser([FromRoute] int userId, [FromBody] JsonPatchDocument<UpdateDto_User> patchUser)
+        [Route("{userId}")]
+        public async Task<IActionResult> PatchById([FromRoute] int userId, [FromBody] JsonPatchDocument<UpdateDto_User> userPatch)
         {
             try
             {
@@ -207,14 +231,16 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest(ModelState);
                 }
-                var dbUser = await _userService.GetUserByIdAsync(userId);
-                var updateUser = Mapper.Map<UpdateDto_User>(dbUser);
-                patchUser.ApplyTo(updateUser, ModelState);
+                var user = await _userService.GetByIdAsync(userId);
+                var userUpdate = Mapper.Map<UpdateDto_User>(user);
+                userPatch.ApplyTo(userUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {
                     return BadRequest(ModelState);
                 }
-                await _userService.UpdateUserAsync(dbUser, updateUser);
+                Mapper.Map(userUpdate, user);
+                await _userService.UpdateAsync(user);
+                await _userService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -228,14 +254,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpDelete]
-        [Route("{userId}/portfolio/games/{gameId}", Name = "RemoveGameFromUser")]
-        public async Task<IActionResult> RemoveGameFromUser([FromRoute] int userId, [FromRoute] int gameId)
+        [Route("{userId}/portfolio/games/{gameId}")]
+        public async Task<IActionResult> RemoveCollaborator([FromRoute] int userId, [FromRoute] int gameId)
         {
             try
             {
-                var game = await _gameService.GetGameByIdAsync(gameId);
-                var user = await _userService.GetUserByIdAsync(userId);
-                await _userService.RemoveGameFromUser(userId, gameId);
+                await _gameService.RemoveCollaboratorAsync(gameId, userId);
+                await _gameService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)

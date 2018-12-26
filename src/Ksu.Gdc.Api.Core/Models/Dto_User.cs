@@ -23,8 +23,8 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public CreateDto_User(CASAttributes attributes)
         {
-            UserId = attributes.KsuPersonWildcatId[0];
-            Username = attributes.Uid[0];
+            UserId = attributes.KsuPersonWildcatId;
+            Username = attributes.Uid;
         }
     }
 

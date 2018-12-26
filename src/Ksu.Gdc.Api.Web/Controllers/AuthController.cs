@@ -64,20 +64,21 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 var response = await _authService.ValidateCASTicketAsync(service, ticket);
                 try
                 {
-                    var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
-                    var dbUser = await _userService.GetUserByIdAsync(userId);
-                    var dtoUser = Mapper.Map<AuthDto_User>(dbUser);
-                    if ((await _officerService.GetOfficersByUserIdAsync(userId)).Count > 0)
+                    var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId;
+                    var user = await _userService.GetByIdAsync(userId);
+                    var authDtoUser = Mapper.Map<AuthDto_User>(user);
+                    if ((await _officerService.GetByUserAsync(userId)).Count > 0)
                     {
-                        dtoUser.Roles.Add("officer");
+                        authDtoUser.Roles.Add("officer");
                     }
-                    return Ok(dtoUser);
+                    return Ok(authDtoUser);
                 }
                 catch (NotFoundException)
                 {
                     var newUser = new CreateDto_User(response.ServiceResponse.AuthenticationSuccess.Attributes);
-                    var dbUser = await _userService.CreateUserAsync(newUser);
-                    return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_User>(dbUser));
+                    var createdUser = await _userService.CreateAsync(newUser);
+                    await _userService.SaveChangesAsync();
+                    return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_User>(createdUser));
                 }
 
             }

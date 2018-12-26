@@ -12,13 +12,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
     [Route("")]
     public class UtilityController : ControllerBase
     {
-        private readonly IUtilityService _utilityService;
-
-        public UtilityController(IUtilityService utilityService)
-        {
-            _utilityService = utilityService;
-        }
-
         [HttpGet]
         [Route("")]
         public IActionResult KeepAwake()
