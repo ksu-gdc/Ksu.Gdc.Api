@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
@@ -14,7 +12,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
     {
         [HttpGet]
         [Route("")]
-        public IActionResult KeepAwake()
+        public async Task<IActionResult> KeepAwake()
         {
             try
             {

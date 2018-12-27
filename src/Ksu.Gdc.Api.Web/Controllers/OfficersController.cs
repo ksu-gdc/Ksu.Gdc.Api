@@ -12,6 +12,7 @@ using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.Entities;
+using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
@@ -33,7 +34,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 var createdOfficer = Mapper.Map<DbEntity_Officer>(newOfficer);
                 var dbOfficer = await _officerService.CreateAsync(createdOfficer);
@@ -41,7 +42,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -55,6 +56,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 List<DbEntity_Officer> officers;
                 if (!string.IsNullOrEmpty(position))
                 {
@@ -68,7 +73,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -82,13 +87,17 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var officer = await _officerService.GetByIdAsync(officerId);
                 var dtoOfficer = Mapper.Map<Dto_Officer>(officer);
                 return Ok(dtoOfficer);
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -104,7 +113,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 var officer = await _officerService.GetByIdAsync(officerId);
                 Mapper.Map(officerUpdate, officer);
@@ -114,7 +123,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -130,14 +139,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 var officer = await _officerService.GetByIdAsync(officerId);
                 var officerUpdate = Mapper.Map<UpdateDto_Officer>(officer);
                 officerPatch.ApplyTo(officerUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 Mapper.Map(officerUpdate, officer);
                 await _officerService.UpdateAsync(officer);
@@ -146,7 +155,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -160,9 +169,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 if (string.IsNullOrEmpty(position))
                 {
-                    return BadRequest("The 'position' query parameter is required.");
+                    return BadRequest(new ErrorResponse("The 'position' query parameter is required."));
                 }
                 else
                 {
@@ -173,7 +186,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -187,13 +200,17 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 await _officerService.DeleteByIdAsync(officerId);
                 await _officerService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {

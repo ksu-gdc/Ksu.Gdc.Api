@@ -13,6 +13,7 @@ using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.Entities;
+using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
@@ -38,7 +39,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 var createdGame = await _gameService.CreateAsync(newGame);
                 await _gameService.AddCollaboratorAsync(createdGame, userId);
@@ -47,7 +48,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -61,6 +62,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var users = await _userService.GetAllAsync();
                 var dtoUsers = Mapper.Map<List<Dto_User>>(users);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
@@ -72,11 +77,11 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (PaginationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse(ex));
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -90,13 +95,17 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var user = await _userService.GetByIdAsync(userId);
                 var dtoUser = Mapper.Map<Dto_User>(user);
                 return Ok(dtoUser);
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -110,12 +119,16 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var stream = await _userService.GetImageAsync(userId);
                 return File(stream, "image/jpg");
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -129,6 +142,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var games = await _userService.GetGamesAsync(userId);
                 var dtoGames = Mapper.Map<List<Dto_Game>>(games);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
@@ -140,11 +157,11 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (PaginationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse(ex));
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -158,9 +175,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 if (image.Length == 0)
                 {
-                    return BadRequest("An image is required.");
+                    return BadRequest(new ErrorResponse("An image is required."));
                 }
                 await _userService.UpdateImageAsync(userId, image.OpenReadStream());
                 return Ok();
@@ -183,7 +204,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 var user = await _userService.GetByIdAsync(userId);
                 Mapper.Map(userUpdate, user);
@@ -193,7 +214,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -207,13 +228,17 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 await _gameService.AddCollaboratorAsync(gameId, userId);
                 await _gameService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -229,14 +254,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 var user = await _userService.GetByIdAsync(userId);
                 var userUpdate = Mapper.Map<UpdateDto_User>(user);
                 userPatch.ApplyTo(userUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 Mapper.Map(userUpdate, user);
                 await _userService.UpdateAsync(user);
@@ -245,7 +270,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -259,11 +284,15 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var game = await _gameService.GetByIdAsync(gameId);
                 var collaborators = await _gameService.GetCollaboratorsAsync(game);
                 if (collaborators.Count <= 1)
                 {
-                    return Conflict($"Games must have a minimum of 1 collaborator.");
+                    return Conflict(new ErrorResponse($"Games must have a minimum of 1 collaborator."));
                 }
                 await _gameService.RemoveCollaboratorAsync(game, userId);
                 await _gameService.SaveChangesAsync();
@@ -271,7 +300,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {

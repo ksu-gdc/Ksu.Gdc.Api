@@ -6,6 +6,7 @@
     <ItemGroup>
         <Folder Include="Controllers\" />
         <Folder Include="Services\" />
+        <Folder Include="Models\" />
     </ItemGroup>
     <ItemGroup>
         <None Include="Ksu.Gdc.Api.Web.csproj" />

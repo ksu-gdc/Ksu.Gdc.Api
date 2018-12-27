@@ -13,6 +13,7 @@ using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.Entities;
+using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
@@ -26,12 +27,41 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _gameService = gameService;
         }
 
+        [HttpPost]
+        [Route("")]
+        public async Task<IActionResult> Create([FromBody] CreateDto_Game newGame)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                var createdGame = await _gameService.CreateAsync(newGame);
+                //await _gameService.AddCollaboratorAsync(createdGame, userId);
+                await _gameService.SaveChangesAsync();
+                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Game>(createdGame));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet]
         [Route("")]
         public async Task<IActionResult> Get([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var games = await _gameService.GetAllAsync();
                 var dtoGames = Mapper.Map<List<Dto_Game>>(games);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
@@ -43,11 +73,11 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (PaginationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse(ex));
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -61,15 +91,19 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var game = await _gameService.GetByIdAsync(gameId);
                 var dtoGame = Mapper.Map<Dto_Game>(game);
                 return Ok(dtoGame);
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -81,6 +115,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var games = await _gameService.GetFeaturedAsync();
                 var dtoGames = Mapper.Map<List<Dto_Game>>(games);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
@@ -92,7 +130,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -106,14 +144,18 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 var stream = await _gameService.GetImageAsync(gameId);
                 return File(stream, "image/jpg");
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -125,6 +167,10 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 List<DbEntity_User> collaborators;
                 if (non)
                 {
@@ -144,11 +190,11 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (PaginationException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse(ex));
             }
             catch (NotFoundException ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -164,7 +210,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 var game = await _gameService.GetByIdAsync(gameId);
                 Mapper.Map(gameUpdate, game);
@@ -174,7 +220,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -188,18 +234,22 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 if (image.Length == 0)
                 {
-                    return BadRequest("An image is required.");
+                    return BadRequest(new ErrorResponse("An image is required."));
                 }
                 await _gameService.UpdateImageAsync(gameId, image.OpenReadStream());
                 return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -213,14 +263,14 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 var game = await _gameService.GetByIdAsync(gameId);
                 var gameUpdate = Mapper.Map<UpdateDto_Game>(game);
                 gamePatch.ApplyTo(gameUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest(ModelState);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
                 Mapper.Map(gameUpdate, game);
                 await _gameService.UpdateAsync(game);
@@ -229,7 +279,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -243,13 +293,17 @@ namespace Ksu.Gdc.Api.Web.Controllers
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 await _gameService.DeleteByIdAsync(gameId);
                 await _gameService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {

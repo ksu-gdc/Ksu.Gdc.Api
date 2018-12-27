@@ -14,6 +14,7 @@ using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Data.Entities;
 using Ksu.Gdc.Api.Core.Models;
+using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
@@ -36,15 +37,22 @@ namespace Ksu.Gdc.Api.Web.Controllers
         [Route("cas/login", Name = "CAS_Login")]
         public IActionResult CAS_Login([FromQuery] string service)
         {
-            if (string.IsNullOrWhiteSpace(service))
+            try
             {
-                return BadRequest("The 'service' query parameter is required.");
+                if (string.IsNullOrWhiteSpace(service))
+                {
+                    return BadRequest("The 'service' query parameter is required.");
+                }
+                var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/login?"
+                    + $"service={service}"
+                    + $"&logoutCallback={AuthConfig.LogoutUrl}"
+                    + $"&serviceName={AppConfiguration.GetConfig("App_Name")}";
+                return Redirect(url);
             }
-            var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/login?"
-                + $"service={service}"
-                + $"&logoutCallback={AuthConfig.LogoutUrl}"
-                + $"&serviceName={AppConfiguration.GetConfig("App_Name")}";
-            return Redirect(url);
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         [HttpGet]
@@ -55,7 +63,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (string.IsNullOrWhiteSpace(service))
                 {
-                    return BadRequest("The 'service' query parameter is required.");
+                    return BadRequest(new ErrorResponse("The 'service' query parameter is required."));
                 }
                 if (string.IsNullOrWhiteSpace(ticket))
                 {
@@ -96,13 +104,20 @@ namespace Ksu.Gdc.Api.Web.Controllers
         [Route("cas/logout", Name = "CAS_Logout")]
         public IActionResult CAS_Logout([FromQuery] string service)
         {
-            if (string.IsNullOrWhiteSpace(service))
+            try
             {
-                service = AuthConfig.LogoutUrl;
+                if (string.IsNullOrWhiteSpace(service))
+                {
+                    service = AuthConfig.LogoutUrl;
+                }
+                var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/logout?"
+                    + $"url={service}";
+                return Redirect(url);
             }
-            var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/logout?"
-                + $"url={service}";
-            return Redirect(url);
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
