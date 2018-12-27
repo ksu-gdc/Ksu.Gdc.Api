@@ -38,9 +38,34 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     return BadRequest(new ErrorResponse(ModelState));
                 }
                 var createdGame = await _gameService.CreateAsync(newGame);
-                //await _gameService.AddCollaboratorAsync(createdGame, userId);
+                await _gameService.AddCollaboratorAsync(createdGame, newGame.UserId);
                 await _gameService.SaveChangesAsync();
-                return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Game>(createdGame));
+                var dtoGame = Mapper.Map<Dto_Game>(createdGame);
+                return StatusCode(StatusCodes.Status201Created, dtoGame);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost]
+        [Route("{gameId}/users")]
+        public async Task<IActionResult> AddCollaborator([FromRoute] int gameId, CreateDto_Collaborator collaborator)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                await _gameService.AddCollaboratorAsync(gameId, collaborator.UserId);
+                await _gameService.SaveChangesAsync();
+                return StatusCode(StatusCodes.Status201Created);
             }
             catch (NotFoundException ex)
             {
@@ -298,6 +323,36 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     return BadRequest(new ErrorResponse(ModelState));
                 }
                 await _gameService.DeleteByIdAsync(gameId);
+                await _gameService.SaveChangesAsync();
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpDelete]
+        [Route("{gameId}/users/{userId}")]
+        public async Task<IActionResult> RemoveCollaborator([FromRoute] int gameId, [FromRoute] int userId)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                var game = await _gameService.GetByIdAsync(gameId);
+                var collaborators = await _gameService.GetCollaboratorsAsync(game);
+                if (collaborators.Count <= 1)
+                {
+                    return Conflict(new ErrorResponse($"Games must have a minimum of 1 collaborator."));
+                }
+                await _gameService.RemoveCollaboratorAsync(game, userId);
                 await _gameService.SaveChangesAsync();
                 return Ok();
             }
