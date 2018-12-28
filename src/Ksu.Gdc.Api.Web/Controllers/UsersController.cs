@@ -144,6 +144,32 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("{userId}")]
+        public async Task<IActionResult> UpdateById([FromRoute] int userId, [FromBody] UpdateDto_User userUpdate)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                var user = await _userService.GetByIdAsync(userId);
+                Mapper.Map(userUpdate, user);
+                await _userService.UpdateAsync(user);
+                await _userService.SaveChangesAsync();
+                return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpPost, DisableRequestSizeLimit]
         [Route("{userId}/profile-image")]
         public async Task<IActionResult> UpdateImage([FromRoute] int userId, [FromForm] IFormFile image)
@@ -164,32 +190,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
             catch (NotFoundException ex)
             {
                 return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpPut]
-        [Route("{userId}")]
-        public async Task<IActionResult> UpdateById([FromRoute] int userId, [FromBody] UpdateDto_User userUpdate)
-        {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(new ErrorResponse(ModelState));
-                }
-                var user = await _userService.GetByIdAsync(userId);
-                Mapper.Map(userUpdate, user);
-                await _userService.UpdateAsync(user);
-                await _userService.SaveChangesAsync();
-                return Ok();
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
