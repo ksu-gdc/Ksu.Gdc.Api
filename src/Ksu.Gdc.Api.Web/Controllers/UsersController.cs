@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
@@ -17,7 +18,8 @@ using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("[controller]")]
+    [Authorize]
+    [Route("users")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;

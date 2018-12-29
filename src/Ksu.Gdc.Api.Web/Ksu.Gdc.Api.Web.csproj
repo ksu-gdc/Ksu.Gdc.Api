@@ -21,4 +21,7 @@
     <ItemGroup>
         <Compile Remove="Services\GroupService.cs" />
     </ItemGroup>
+    <ItemGroup>
+      <Content Remove="appSettings.Production.json" />
+    </ItemGroup>
 </Project>

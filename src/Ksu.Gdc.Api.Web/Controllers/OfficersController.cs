@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Exceptions;
@@ -16,7 +17,8 @@ using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("[controller]")]
+    [Authorize]
+    [Route("officers")]
     public class OfficersController : ControllerBase
     {
         private readonly IOfficerService _officerService;

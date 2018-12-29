@@ -47,8 +47,6 @@ namespace Ksu.Gdc.Api.Core.Models
         public string LastName { get; set; }
 
         public string Description { get; set; }
-
-        public string Email => Username + "@ksu.edu";
     }
 
     public class UpdateDto_User

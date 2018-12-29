@@ -1,34 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Amazon.Runtime;
 using Amazon;
 using Amazon.S3;
 using Amazon.Extensions.NETCore.Setup;
-using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Services;
 using Ksu.Gdc.Api.Data;
 using Ksu.Gdc.Api.Data.DbContexts;
-using Ksu.Gdc.Api.Data.Entities;
-using Ksu.Gdc.Api.Core.Models;
 
 namespace Ksu.Gdc.Api.Web
 {
@@ -46,13 +36,25 @@ namespace Ksu.Gdc.Api.Web
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowAny", p => p
-                                  .AllowAnyOrigin()
-                                  .AllowAnyMethod()
-                                  .AllowAnyHeader());
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
                 options.AddPolicy("AllowAppOnly", p => p
-                                  .WithOrigins(AppConfiguration.GetConfig("App_Url"))
-                                  .AllowAnyMethod()
-                                  .AllowAnyHeader());
+                    .WithOrigins(AppConfiguration.GetConfig("App_Url"))
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
+            });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = AppConfiguration.GetConfig("JwtAuth_Authority");
+                options.Audience = AppConfiguration.GetConfig("JwtAuth_Audience");
+                options.Validate();
             });
 
             services.AddScoped<IAuthService, AuthService>();
@@ -63,7 +65,7 @@ namespace Ksu.Gdc.Api.Web
             var awsOptions = new AWSOptions()
             {
                 Credentials = new BasicAWSCredentials(AppConfiguration.GetConfig("AWS_S3_AccessKey"),
-                                                      AppConfiguration.GetConfig("AWS_S3_SecretKey")),
+                    AppConfiguration.GetConfig("AWS_S3_SecretKey")),
                 Region = RegionEndpoint.USEast2
             };
             services.AddAWSService<IAmazonS3>(awsOptions);
@@ -73,13 +75,12 @@ namespace Ksu.Gdc.Api.Web
             services.AddScoped<DisconnectedData>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                    .AddMvcOptions(options =>
-                    {
-                        options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
-                    });
+                .AddMvcOptions(options =>
+                {
+                    options.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
@@ -101,6 +102,7 @@ namespace Ksu.Gdc.Api.Web
                 app.UseHttpsRedirection();
                 app.UseStatusCodePages();
                 app.UseCors("AllowAppOnly");
+                app.UseAuthentication();
                 app.UseMvc();
             }
         }

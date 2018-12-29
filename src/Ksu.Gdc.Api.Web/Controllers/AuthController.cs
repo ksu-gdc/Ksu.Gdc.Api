@@ -1,24 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
-using Ksu.Gdc.Api.Data.Entities;
 using Ksu.Gdc.Api.Core.Models;
-using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("[controller]")]
+    [Authorize]
+    [Route("auth")]
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
@@ -41,7 +36,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (string.IsNullOrWhiteSpace(service))
                 {
-                    return BadRequest("The 'service' query parameter is required.");
+                    service = AuthConfig.LoginUrl;
                 }
                 var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/login?"
                     + $"service={service}"
@@ -63,7 +58,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 if (string.IsNullOrWhiteSpace(service))
                 {
-                    return BadRequest(new ErrorResponse("The 'service' query parameter is required."));
+                    service = AuthConfig.LoginUrl;
                 }
                 if (string.IsNullOrWhiteSpace(ticket))
                 {
@@ -100,6 +95,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         [Route("cas/logout", Name = "CAS_Logout")]
         public IActionResult CAS_Logout([FromQuery] string service)
