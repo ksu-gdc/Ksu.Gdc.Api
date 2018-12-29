@@ -19,7 +19,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
 {
     [Authorize]
     [Route("officers")]
-    public class OfficersController : ControllerBase
+    public class OfficersController : Controller
     {
         private readonly IOfficerService _officerService;
 
@@ -28,8 +28,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _officerService = officerService;
         }
 
-        [HttpPost]
-        [Route("")]
+        [HttpPost("")]
         public async Task<IActionResult> Create([FromBody] CreateDto_Officer newOfficer)
         {
             try
@@ -52,8 +51,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]
         public async Task<IActionResult> Get([FromQuery] string position)
         {
             try
@@ -83,8 +81,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{officerId}")]
+        [HttpGet("{officerId}")]
         public async Task<IActionResult> GetById([FromRoute] int officerId)
         {
             try
@@ -107,8 +104,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("{officerId}")]
+        [HttpPut("{officerId}")]
         public async Task<IActionResult> UpdateById([FromRoute] int officerId, [FromBody] UpdateDto_Officer officerUpdate)
         {
             try
@@ -133,8 +129,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPatch]
-        [Route("{officerId}")]
+        [HttpPatch("{officerId}")]
         public async Task<IActionResult> PatchById([FromRoute] int officerId, [FromBody] JsonPatchDocument<UpdateDto_Officer> officerPatch)
         {
             try
@@ -165,8 +160,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("")]
+        [HttpDelete("")]
         public async Task<IActionResult> Delete([FromQuery] string position)
         {
             try
@@ -196,8 +190,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("{officerId}")]
+        [HttpDelete("{officerId}")]
         public async Task<IActionResult> DeleteById([FromRoute] int officerId)
         {
             try

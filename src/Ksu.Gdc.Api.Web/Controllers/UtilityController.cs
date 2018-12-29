@@ -8,11 +8,9 @@ using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("")]
-    public class UtilityController : ControllerBase
+    public class UtilityController : Controller
     {
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]
         public async Task<IActionResult> KeepAwake()
         {
             try

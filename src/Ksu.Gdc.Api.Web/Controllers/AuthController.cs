@@ -28,8 +28,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        [Route("cas/login", Name = "CAS_Login")]
+        [HttpGet("cas/login")]
         public IActionResult CAS_Login([FromQuery] string service)
         {
             try
@@ -50,8 +49,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("cas/validate", Name = "CAS_Validate")]
+        [HttpGet("cas/validate")]
         public async Task<IActionResult> CAS_Validate([FromQuery] string service, [FromQuery] string ticket)
         {
             try
@@ -96,8 +94,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
-        [Route("cas/logout", Name = "CAS_Logout")]
+        [HttpGet("cas/logout")]
         public IActionResult CAS_Logout([FromQuery] string service)
         {
             try

@@ -20,7 +20,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
 {
     [Authorize]
     [Route("users")]
-    public class UsersController : ControllerBase
+    public class UsersController : Controller
     {
         private readonly IUserService _userService;
         private readonly IOfficerService _officerService;
@@ -33,8 +33,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _gameService = gameService;
         }
 
-        [HttpGet]
-        [Route("")]
+        [HttpGet("")]
         public async Task<IActionResult> Get([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
@@ -66,8 +65,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{userId}")]
+        [HttpGet("{userId}")]
         public async Task<IActionResult> GetById([FromRoute] int userId)
         {
             try
@@ -90,8 +88,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{userId}/profile-image")]
+        [HttpGet("{userId}/profile-image")]
         public async Task<IActionResult> GetImage([FromRoute] int userId)
         {
             try
@@ -113,8 +110,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{userId}/portfolio/games")]
+        [HttpGet("{userId}/portfolio/games")]
         public async Task<IActionResult> GetGames([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
@@ -146,8 +142,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("{userId}")]
+        [HttpPut("{userId}")]
         public async Task<IActionResult> UpdateById([FromRoute] int userId, [FromBody] UpdateDto_User userUpdate)
         {
             try
@@ -172,8 +167,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPost, DisableRequestSizeLimit]
-        [Route("{userId}/profile-image")]
+        [HttpPost("{userId}/profile-image"), DisableRequestSizeLimit]
         public async Task<IActionResult> UpdateImage([FromRoute] int userId, [FromForm] IFormFile image)
         {
             try
@@ -199,8 +193,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPatch]
-        [Route("{userId}")]
+        [HttpPatch("{userId}")]
         public async Task<IActionResult> PatchById([FromRoute] int userId, [FromBody] JsonPatchDocument<UpdateDto_User> userPatch)
         {
             try
