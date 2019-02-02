@@ -35,6 +35,8 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Username { get; set; }
 
         public List<string> Roles { get; set; } = new List<string>();
+
+        public string Token { get; set; }
     }
     public class Dto_User
     {
@@ -47,8 +49,6 @@ namespace Ksu.Gdc.Api.Core.Models
         public string LastName { get; set; }
 
         public string Description { get; set; }
-
-        public string Email => Username + "@ksu.edu";
     }
 
     public class UpdateDto_User

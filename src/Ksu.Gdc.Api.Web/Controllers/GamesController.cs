@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
@@ -17,8 +18,9 @@ using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("portfolio/[controller]")]
-    public class GamesController : ControllerBase
+    [Authorize]
+    [Route("portfolio/games")]
+    public class GamesController : Controller
     {
         private readonly IGameService _gameService;
 
@@ -27,8 +29,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _gameService = gameService;
         }
 
-        [HttpPost]
-        [Route("")]
+        [HttpPost("")]
         public async Task<IActionResult> Create([FromBody] CreateDto_Game newGame)
         {
             try
@@ -53,8 +54,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPost]
-        [Route("{gameId}/users")]
+        [HttpPost("{gameId}/users")]
         public async Task<IActionResult> AddCollaborator([FromRoute] int gameId, CreateDto_Collaborator collaborator)
         {
             try
@@ -77,8 +77,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("")]
+        [AllowAnonymous]
+        [HttpGet("")]
         public async Task<IActionResult> Get([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
@@ -110,8 +110,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{gameId}")]
+        [AllowAnonymous]
+        [HttpGet("{gameId}")]
         public async Task<IActionResult> GetById(int gameId)
         {
             try
@@ -134,8 +134,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("featured")]
+        [AllowAnonymous]
+        [HttpGet("featured")]
         public async Task<IActionResult> GetByFeatured([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
@@ -163,8 +163,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{gameId}/thumbnail-image")]
+        [AllowAnonymous]
+        [HttpGet("{gameId}/thumbnail-image")]
         public async Task<IActionResult> GetImage([FromRoute] int gameId)
         {
             try
@@ -186,8 +186,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{gameId}/users")]
+        [AllowAnonymous]
+        [HttpGet("{gameId}/users")]
         public async Task<IActionResult> GetCollaborators([FromRoute] int gameId, [FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] bool non)
         {
             try
@@ -227,8 +227,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("{gameId}")]
+        [HttpPut("{gameId}")]
         public async Task<IActionResult> UpdateById([FromRoute] int gameId, [FromBody] UpdateDto_Game gameUpdate)
         {
             try
@@ -252,9 +251,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-
-        [HttpPost, DisableRequestSizeLimit]
-        [Route("{gameId}/thumbnail-image")]
+            
+        [HttpPost("{gameId}/thumbnail-image"), DisableRequestSizeLimit]
         public async Task<IActionResult> UpdateImage([FromRoute] int gameId, [FromForm] IFormFile image)
         {
             try
@@ -280,8 +278,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPatch]
-        [Route("{gameId}")]
+        [HttpPatch("{gameId}")]
         public async Task<IActionResult> PatchById([FromRoute] int gameId, [FromBody] JsonPatchDocument<UpdateDto_Game> gamePatch)
         {
             try
@@ -312,8 +309,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("{gameId}")]
+        [HttpDelete("{gameId}")]
         public async Task<IActionResult> DeleteById([FromRoute] int gameId)
         {
             try
@@ -336,8 +332,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("{gameId}/users/{userId}")]
+        [HttpDelete("{gameId}/users/{userId}")]
         public async Task<IActionResult> RemoveCollaborator([FromRoute] int gameId, [FromRoute] int userId)
         {
             try

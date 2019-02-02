@@ -37,12 +37,7 @@
 							],
 							"request": {
 								"method": "GET",
-								"header": [
-									{
-										"key": "Content-Type",
-										"value": "application/x-www-form-urlencoded"
-									}
-								],
+								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": ""
@@ -1803,7 +1798,22 @@
 			"item": [
 				{
 					"name": "Keep Awake",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f0acc2cd-8d2c-419f-93e4-9be4c7ceacdd",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
+						"auth": {
+							"type": "noauth"
+						},
 						"method": "GET",
 						"header": [],
 						"body": {
@@ -1842,8 +1852,74 @@
 					}
 				}
 			]
+		},
+		{
+			"name": "Get Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb7914e3-40bc-45f3-8f13-a32790752503",
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"const accessToken = jsonData[\"access_token\"];",
+							"",
+							"pm.environment.set(\"jwtAuth_AccessToken\", accessToken);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e54ab0f2-c895-4eb9-8838-8d667d516a43",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"client_id\": \"{{jwtAuth_ClientId}}\",\n\t\"client_secret\": \"{{jwtAuth_ClientSecret}}\",\n\t\"audience\": \"{{jwtAuth_Audience}}\",\n\t\"grant_type\": \"client_credentials\"\n}"
+				},
+				"url": {
+					"raw": "https://{{jwtAuth_Domain}}/oauth/token",
+					"protocol": "https",
+					"host": [
+						"{{jwtAuth_Domain}}"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
 		}
 	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtAuth_AccessToken}}",
+				"type": "string"
+			}
+		]
+	},
 	"event": [
 		{
 			"listen": "prerequest",
@@ -1868,13 +1944,13 @@
 	],
 	"variable": [
 		{
-			"id": "8a3e9980-251c-4617-a70a-b83262d22eea",
+			"id": "27de0418-d060-49f4-9d87-124ee42d0295",
 			"key": "controllerUrl",
 			"value": "",
 			"type": "string"
 		},
 		{
-			"id": "235b9ed4-0013-4167-ad5a-ec83d2363754",
+			"id": "b89f8410-d61d-42c3-9cc5-22e26f555aab",
 			"key": "routeUrl",
 			"value": "",
 			"type": "string"
