@@ -33,6 +33,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _gameService = gameService;
         }
 
+        [AllowAnonymous]
         [HttpGet("")]
         public async Task<IActionResult> Get([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
@@ -65,6 +66,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{userId}")]
         public async Task<IActionResult> GetById([FromRoute] int userId)
         {
@@ -88,6 +90,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{userId}/profile-image")]
         public async Task<IActionResult> GetImage([FromRoute] int userId)
         {
@@ -110,6 +113,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{userId}/portfolio/games")]
         public async Task<IActionResult> GetGames([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {

@@ -51,6 +51,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("")]
         public async Task<IActionResult> Get([FromQuery] string position)
         {
@@ -81,6 +82,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{officerId}")]
         public async Task<IActionResult> GetById([FromRoute] int officerId)
         {

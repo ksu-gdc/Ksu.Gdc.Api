@@ -12,7 +12,6 @@ using Ksu.Gdc.Api.Core.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Authorize]
     [Route("auth")]
     public class AuthController : Controller
     {
@@ -27,7 +26,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _officerService = officerService;
         }
 
-        [AllowAnonymous]
         [HttpGet("cas/login")]
         public IActionResult CAS_Login([FromQuery] string service)
         {
@@ -72,6 +70,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     {
                         authDtoUser.Roles.Add("officer");
                     }
+                    authDtoUser.Token = _authService.BuildToken(authDtoUser);
                     return Ok(authDtoUser);
                 }
                 catch (NotFoundException)
@@ -93,7 +92,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [AllowAnonymous]
         [HttpGet("cas/logout")]
         public IActionResult CAS_Logout([FromQuery] string service)
         {

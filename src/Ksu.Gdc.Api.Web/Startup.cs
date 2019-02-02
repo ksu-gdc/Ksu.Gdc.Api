@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Amazon.Runtime;
 using Amazon;
 using Amazon.S3;
@@ -45,16 +47,19 @@ namespace Ksu.Gdc.Api.Web
                     .AllowAnyHeader());
             });
 
-            services.AddAuthentication(options =>
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-            }).AddJwtBearer(options =>
-            {
-                options.Authority = AppConfiguration.GetConfig("JwtAuth_Authority");
-                options.Audience = AppConfiguration.GetConfig("JwtAuth_Audience");
-                options.Validate();
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = AppConfiguration.GetConfig("JwtAuth_Issuer"),
+                    ValidAudience = AppConfiguration.GetConfig("JwtAuth_Audience"),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfiguration.GetConfig("JwtAuth_Key")))
+                };
             });
 
             services.AddScoped<IAuthService, AuthService>();

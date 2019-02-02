@@ -77,6 +77,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("")]
         public async Task<IActionResult> Get([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
@@ -109,6 +110,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{gameId}")]
         public async Task<IActionResult> GetById(int gameId)
         {
@@ -132,6 +134,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("featured")]
         public async Task<IActionResult> GetByFeatured([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
@@ -160,6 +163,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{gameId}/thumbnail-image")]
         public async Task<IActionResult> GetImage([FromRoute] int gameId)
         {
@@ -182,6 +186,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet("{gameId}/users")]
         public async Task<IActionResult> GetCollaborators([FromRoute] int gameId, [FromQuery] int pageNumber, [FromQuery] int pageSize, [FromQuery] bool non)
         {
