@@ -94,6 +94,25 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
+        [HttpGet("cas/logout")]
+        public IActionResult CAS_Logout([FromQuery] string service)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(service))
+                {
+                    service = AuthConfig.LogoutUrl;
+                }
+                var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/logout?"
+                    + $"url={service}";
+                return Redirect(url);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [Authorize]
         [HttpGet("validate/token")]
         public async Task<IActionResult> CAS_ValidateToken()
@@ -113,25 +132,6 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 .Select(h => h.Value)
                 .FirstOrDefault();
             return Ok(authDtoUser);
-        }
-
-        [HttpGet("cas/logout")]
-        public IActionResult CAS_Logout([FromQuery] string service)
-        {
-            try
-            {
-                if (string.IsNullOrWhiteSpace(service))
-                {
-                    service = AuthConfig.LogoutUrl;
-                }
-                var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/logout?"
-                    + $"url={service}";
-                return Redirect(url);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
         }
     }
 }
