@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
-using Amazon.S3;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Exceptions;
@@ -18,13 +17,11 @@ namespace Ksu.Gdc.Api.Core.Services
     public class OfficerService : IOfficerService
     {
         private readonly KsuGdcContext _ksuGdcContext;
-        private readonly IAmazonS3 _s3Client;
         private readonly IUserService _userService;
 
-        public OfficerService(KsuGdcContext ksuGdcContext, IAmazonS3 s3Client, IUserService userService)
+        public OfficerService(KsuGdcContext ksuGdcContext, IUserService userService)
         {
             _ksuGdcContext = ksuGdcContext;
-            _s3Client = s3Client;
             _userService = userService;
         }
 

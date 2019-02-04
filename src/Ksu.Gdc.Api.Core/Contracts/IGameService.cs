@@ -24,8 +24,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<DbEntity_Game> GetByIdAsync(int gameId);
 
-        Task<Stream> GetImageAsync(DbEntity_Game game);
-        Task<Stream> GetImageAsync(int gameId);
+        Task<DbEntity_Image> GetImageAsync(DbEntity_Game game);
+        Task<DbEntity_Image> GetImageAsync(int gameId);
 
         Task<List<DbEntity_User>> GetCollaboratorsAsync(DbEntity_Game game);
         Task<List<DbEntity_User>> GetCollaboratorsAsync(int gameId);
@@ -41,8 +41,7 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<bool> UpdateAsync(DbEntity_Game updatedGame);
 
-        Task<bool> UpdateImageAsync(DbEntity_Game game, Stream image);
-        Task<bool> UpdateImageAsync(int gameId, Stream image);
+        Task<bool> UpdateImageAsync(int gameId, UpdateDto_Image imageUpdate);
 
         Task<bool> AddCollaboratorAsync(DbEntity_GameUser collaborator);
         Task<bool> AddCollaboratorAsync(DbEntity_Game game, DbEntity_User user);

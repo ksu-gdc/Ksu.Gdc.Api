@@ -5,9 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Amazon.S3;
-using Amazon.S3.Transfer;
-using Amazon.S3.Model;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
@@ -21,13 +18,11 @@ namespace Ksu.Gdc.Api.Core.Services
     public class GameService : IGameService
     {
         private readonly KsuGdcContext _ksuGdcContext;
-        private readonly IAmazonS3 _s3Client;
         private readonly IUserService _userService;
 
-        public GameService(KsuGdcContext ksuGdcContext, IAmazonS3 s3Client, IUserService userService)
+        public GameService(KsuGdcContext ksuGdcContext, IUserService userService)
         {
             _ksuGdcContext = ksuGdcContext;
-            _s3Client = s3Client;
             _userService = userService;
         }
 
@@ -76,33 +71,23 @@ namespace Ksu.Gdc.Api.Core.Services
             return game;
         }
 
-        public async Task<Stream> GetImageAsync(DbEntity_Game game)
+        public async Task<DbEntity_Image> GetImageAsync(DbEntity_Game game)
         {
-            try
+            var image = await _ksuGdcContext.GameImages
+                .Where(gi => gi.GameId == game.GameId)
+                .Select(gi => gi.Image)
+                .FirstOrDefaultAsync();
+            if (image == null)
             {
-                var transferUtility = new TransferUtility(_s3Client);
-                var transferRequest = new TransferUtilityOpenStreamRequest()
-                {
-                    BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                    Key = $"{GameConfig.DataStoreDirPath}/{game.GameId}/thumbnail.jpg"
-                };
-                var stream = await transferUtility.OpenStreamAsync(transferRequest);
-                return stream;
+                throw new NotFoundException($"No image with game id '{game.GameId}' was found.");
             }
-            catch (AmazonS3Exception ex)
-            {
-                if (ex.Message.Contains("key does not exist"))
-                {
-                    throw new NotFoundException($"No image for game with id '{game.GameId}' was found.");
-                }
-                throw ex;
-            }
+            return image;
         }
-        public async Task<Stream> GetImageAsync(int gameId)
+        public async Task<DbEntity_Image> GetImageAsync(int gameId)
         {
             var game = await GetByIdAsync(gameId);
-            var stream = await GetImageAsync(game);
-            return stream;
+            var image = await GetImageAsync(game);
+            return image;
         }
 
         public async Task<List<DbEntity_User>> GetCollaboratorsAsync(DbEntity_Game game)
@@ -161,25 +146,29 @@ namespace Ksu.Gdc.Api.Core.Services
             return true;
         }
 
-        public async Task<bool> UpdateImageAsync(DbEntity_Game game, Stream image)
-        {
-            var transferUtility = new TransferUtility(_s3Client);
-            var transferRequest = new TransferUtilityUploadRequest()
-            {
-                BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                Key = $"{GameConfig.DataStoreDirPath}/{game.GameId}/thumbnail.jpg",
-                InputStream = image,
-                StorageClass = S3StorageClass.Standard,
-                CannedACL = S3CannedACL.PublicRead
-            };
-            await transferUtility.UploadAsync(transferRequest);
-            return true;
-        }
-        public async Task<bool> UpdateImageAsync(int gameId, Stream image)
+        public async Task<bool> UpdateImageAsync(int gameId, UpdateDto_Image imageUpdate)
         {
             var game = await GetByIdAsync(gameId);
-            var success = await UpdateImageAsync(game, image);
-            return success;
+            DbEntity_Image image;
+            try
+            {
+                image = await GetImageAsync(game);
+            }
+            catch (NotFoundException)
+            {
+                var newImage = Mapper.Map<DbEntity_Image>(imageUpdate);
+                await _ksuGdcContext.Images.AddAsync(newImage);
+                var gameImage = new DbEntity_GameImage()
+                {
+                    GameId = game.GameId,
+                    ImageId = newImage.ImageId
+                };
+                await _ksuGdcContext.GameImages.AddAsync(gameImage);
+                return true;
+            }
+            Mapper.Map(imageUpdate, image);
+            _ksuGdcContext.Images.Update(image);
+            return true;
         }
 
         public async Task<bool> AddCollaboratorAsync(DbEntity_GameUser collaborator)

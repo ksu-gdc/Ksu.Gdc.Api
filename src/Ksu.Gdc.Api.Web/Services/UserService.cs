@@ -5,9 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Amazon.S3;
-using Amazon.S3.Transfer;
-using Amazon.S3.Model;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
@@ -22,12 +19,10 @@ namespace Ksu.Gdc.Api.Core.Services
     public class UserService : IUserService
     {
         private readonly KsuGdcContext _ksuGdcContext;
-        private readonly IAmazonS3 _s3Client;
 
-        public UserService(KsuGdcContext ksuGdcContext, IAmazonS3 s3Client)
+        public UserService(KsuGdcContext ksuGdcContext)
         {
             _ksuGdcContext = ksuGdcContext;
-            _s3Client = s3Client;
         }
 
         #region CREATE
@@ -67,33 +62,23 @@ namespace Ksu.Gdc.Api.Core.Services
             return user;
         }
 
-        public async Task<Stream> GetImageAsync(DbEntity_User user)
+        public async Task<DbEntity_Image> GetImageAsync(DbEntity_User user)
         {
-            try
+            var image = await _ksuGdcContext.UserImages
+                .Where(ui => ui.UserId == user.UserId)
+                .Select(ui => ui.Image)
+                .FirstOrDefaultAsync();
+            if (image == null)
             {
-                var transferUtility = new TransferUtility(_s3Client);
-                var transferRequest = new TransferUtilityOpenStreamRequest()
-                {
-                    BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                    Key = $"{UserConfig.DataStoreDirPath}/{user.UserId}/profile.jpg"
-                };
-                var stream = await transferUtility.OpenStreamAsync(transferRequest);
-                return stream;
+                throw new NotFoundException($"No image with user id '{user.UserId}' was found.");
             }
-            catch (AmazonS3Exception ex)
-            {
-                if (ex.Message.Contains("key does not exist"))
-                {
-                    throw new NotFoundException($"No profile image for user with id '{user.UserId}' was found.");
-                }
-                throw ex;
-            }
+            return image;
         }
-        public async Task<Stream> GetImageAsync(int userId)
+        public async Task<DbEntity_Image> GetImageAsync(int userId)
         {
             var user = await GetByIdAsync(userId);
-            var stream = await GetImageAsync(user);
-            return stream;
+            var image = await GetImageAsync(user);
+            return image;
         }
 
         public async Task<List<DbEntity_Game>> GetGamesAsync(DbEntity_User user)
@@ -123,25 +108,29 @@ namespace Ksu.Gdc.Api.Core.Services
             return true;
         }
 
-        public async Task<bool> UpdateImageAsync(DbEntity_User user, Stream image)
-        {
-            var transferUtility = new TransferUtility(_s3Client);
-            var transferRequest = new TransferUtilityUploadRequest()
-            {
-                BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                Key = $"{UserConfig.DataStoreDirPath}/{user.UserId}/profile.jpg",
-                InputStream = image,
-                StorageClass = S3StorageClass.Standard,
-                CannedACL = S3CannedACL.PublicRead
-            };
-            await transferUtility.UploadAsync(transferRequest);
-            return true;
-        }
-        public async Task<bool> UpdateImageAsync(int userId, Stream image)
+        public async Task<bool> UpdateImageAsync(int userId, UpdateDto_Image imageUpdate)
         {
             var user = await GetByIdAsync(userId);
-            var success = await UpdateImageAsync(user, image);
-            return success;
+            DbEntity_Image image;
+            try
+            {
+                image = await GetImageAsync(user);
+            }
+            catch (NotFoundException)
+            {
+                var newImage = Mapper.Map<DbEntity_Image>(imageUpdate);
+                await _ksuGdcContext.Images.AddAsync(newImage);
+                var userImage = new DbEntity_UserImage()
+                {
+                    UserId = user.UserId,
+                    ImageId = newImage.ImageId
+                };
+                await _ksuGdcContext.UserImages.AddAsync(userImage);
+                return true;
+            }
+            Mapper.Map(imageUpdate, image);
+            _ksuGdcContext.Images.Update(image);
+            return true;
         }
 
         #endregion UPDATE

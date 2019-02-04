@@ -27,7 +27,6 @@
     <Compile Remove="..\src\Contracts\IUserService.cs" />
     <Compile Remove="..\src\Exceptions\NotAuthorizedException.cs" />
     <Compile Remove="..\src\Exceptions\NotFoundException.cs" />
-    <Compile Remove="Models\Dto_User %28copy%29.cs" />
     <Compile Remove="Configurations\GameConfig.cs" />
     <Compile Remove="Contracts\IUtilityService.cs" />
   </ItemGroup>

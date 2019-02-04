@@ -37,6 +37,9 @@ namespace Ksu.Gdc.Api.Core.Configurations
         {
             Mapper.Initialize(cfg =>
             {
+                // Image
+                cfg.CreateMap<UpdateDto_Image, DbEntity_Image>();
+
                 // Officer
                 cfg.CreateMap<DbEntity_Officer, Dto_Officer>();
                 cfg.CreateMap<DbEntity_Officer, CreateDto_Officer>();

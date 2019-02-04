@@ -25,8 +25,8 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<DbEntity_User> GetByIdAsync(int userId);
 
-        Task<Stream> GetImageAsync(DbEntity_User user);
-        Task<Stream> GetImageAsync(int userId);
+        Task<DbEntity_Image> GetImageAsync(DbEntity_User user);
+        Task<DbEntity_Image> GetImageAsync(int userId);
 
         Task<List<DbEntity_Game>> GetGamesAsync(DbEntity_User user);
         Task<List<DbEntity_Game>> GetGamesAsync(int userId);
@@ -37,8 +37,7 @@ namespace Ksu.Gdc.Api.Core.Contracts
 
         Task<bool> UpdateAsync(DbEntity_User updatedUser);
 
-        Task<bool> UpdateImageAsync(DbEntity_User user, Stream image);
-        Task<bool> UpdateImageAsync(int userId, Stream image);
+        Task<bool> UpdateImageAsync(int userId, UpdateDto_Image imageUpdate);
 
         #endregion UPDATE
 

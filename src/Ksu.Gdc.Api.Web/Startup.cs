@@ -11,10 +11,6 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using Amazon.Runtime;
-using Amazon;
-using Amazon.S3;
-using Amazon.Extensions.NETCore.Setup;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Contracts;
@@ -66,14 +62,6 @@ namespace Ksu.Gdc.Api.Web
             services.AddScoped<IOfficerService, OfficerService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IGameService, GameService>();
-
-            var awsOptions = new AWSOptions()
-            {
-                Credentials = new BasicAWSCredentials(AppConfiguration.GetConfig("AWS_S3_AccessKey"),
-                    AppConfiguration.GetConfig("AWS_S3_SecretKey")),
-                Region = RegionEndpoint.USEast2
-            };
-            services.AddAWSService<IAmazonS3>(awsOptions);
 
             services.AddDbContext<KsuGdcContext>(options => options
                                                  .UseMySql(AppConfiguration.GetConfig("connectionStrings:MySql_KsuGdc")));

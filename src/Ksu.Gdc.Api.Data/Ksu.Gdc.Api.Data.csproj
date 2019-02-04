@@ -57,6 +57,8 @@
     <Compile Remove="Migrations\20181223064150_initial.cs" />
     <Compile Remove="Migrations\20181225112903_initial.cs" />
     <Compile Remove="Migrations\20181225113030_initial.cs" />
+    <Compile Remove="Migrations\20181225200149_initial.cs" />
+    <Compile Remove="Migrations\20190204061312_initial.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />

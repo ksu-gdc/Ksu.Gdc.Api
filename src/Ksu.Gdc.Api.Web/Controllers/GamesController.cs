@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -173,8 +174,8 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest(new ErrorResponse(ModelState));
                 }
-                var stream = await _gameService.GetImageAsync(gameId);
-                return File(stream, "image/jpg");
+                var image = await _gameService.GetImageAsync(gameId);
+                return File(image.Data, image.ContentType);
             }
             catch (NotFoundException ex)
             {
@@ -251,7 +252,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
-            
+
         [HttpPost("{gameId}/thumbnail-image"), DisableRequestSizeLimit]
         public async Task<IActionResult> UpdateImage([FromRoute] int gameId, [FromForm] IFormFile image)
         {
@@ -261,11 +262,25 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 {
                     return BadRequest(new ErrorResponse(ModelState));
                 }
-                if (image.Length == 0)
+                if (image == null || image.Length == 0)
                 {
-                    return BadRequest(new ErrorResponse("An image is required."));
+                    return BadRequest(new ErrorResponse("A valid image is required."));
                 }
-                await _gameService.UpdateImageAsync(gameId, image.OpenReadStream());
+                var contentType = image.ContentType.Trim().ToLower();
+                if (!contentType.StartsWith("image/", StringComparison.CurrentCulture))
+                {
+                    return BadRequest(new ErrorResponse("Uploaded file must be an image"));
+                }
+                var stream = new MemoryStream();
+                await image.OpenReadStream().CopyToAsync(stream);
+                var imageUpdate = new UpdateDto_Image()
+                {
+                    Name = "game_thumbnail",
+                    Data = stream.ToArray(),
+                    ContentType = contentType
+                };
+                await _gameService.UpdateImageAsync(gameId, imageUpdate);
+                await _gameService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
