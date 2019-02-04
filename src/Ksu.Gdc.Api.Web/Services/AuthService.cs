@@ -64,7 +64,7 @@ namespace Ksu.Gdc.Api.Core.Services
                 claims,
                 expires: DateTime.Now.AddMinutes(60),
                 signingCredentials: creds);
-            return "Bearer" + new JwtSecurityTokenHandler().WriteToken(token);
+            return "Bearer " + new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }
