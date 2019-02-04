@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
@@ -109,6 +111,27 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        [Authorize]
+        [HttpGet("validate/token")]
+        public async Task<IActionResult> CAS_ValidateToken()
+        {
+            var userId = User.Claims
+                .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                .Select(c => Convert.ToInt32(c.Value))
+                .FirstOrDefault();
+            var user = await _userService.GetByIdAsync(userId);
+            var authDtoUser = Mapper.Map<AuthDto_User>(user);
+            if ((await _officerService.GetByUserAsync(userId)).Count > 0)
+            {
+                authDtoUser.Roles.Add("officer");
+            }
+            authDtoUser.Token = Request.Headers
+                .Where(h => h.Key == "Authorization")
+                .Select(h => h.Value)
+                .FirstOrDefault();
+            return Ok(authDtoUser);
         }
     }
 }
