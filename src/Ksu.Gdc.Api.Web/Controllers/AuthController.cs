@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
@@ -11,6 +12,7 @@ using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
+using Ksu.Gdc.Api.Data.Entities;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
@@ -63,34 +65,33 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     throw new NotAuthorizedException();
                 }
                 var response = await _authService.ValidateCASTicketAsync(service, ticket);
+                var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId;
+                DbEntity_User user;
                 try
                 {
-                    var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId;
-                    var user = await _userService.GetByIdAsync(userId);
-                    var authDtoUser = Mapper.Map<AuthDto_User>(user);
-                    if ((await _officerService.GetByUserAsync(userId)).Count > 0)
-                    {
-                        authDtoUser.Roles.Add("officer");
-                    }
-                    authDtoUser.Token = _authService.BuildToken(authDtoUser);
-                    return Ok(authDtoUser);
+                    user = await _userService.GetByIdAsync(userId);
                 }
                 catch (NotFoundException)
                 {
                     var newUser = new CreateDto_User(response.ServiceResponse.AuthenticationSuccess.Attributes);
-                    var createdUser = await _userService.CreateAsync(newUser);
+                    user = await _userService.CreateAsync(newUser);
                     await _userService.SaveChangesAsync();
-                    return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_User>(createdUser));
                 }
-
+                var authDtoUser = Mapper.Map<AuthDto_User>(user);
+                if ((await _officerService.GetByUserAsync(userId)).Count > 0)
+                {
+                    authDtoUser.Roles.Add("officer");
+                }
+                authDtoUser.Token = _authService.BuildToken(authDtoUser);
+                return Ok(authDtoUser);
             }
             catch (NotAuthorizedException)
             {
                 return StatusCode(StatusCodes.Status401Unauthorized);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
 
@@ -123,15 +124,22 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 .FirstOrDefault();
             var user = await _userService.GetByIdAsync(userId);
             var authDtoUser = Mapper.Map<AuthDto_User>(user);
-            if ((await _officerService.GetByUserAsync(userId)).Count > 0)
-            {
-                authDtoUser.Roles.Add("officer");
-            }
+            authDtoUser.Roles.AddRange(await GetUserRoles(userId));
             authDtoUser.Token = Request.Headers
                 .Where(h => h.Key == "Authorization")
                 .Select(h => h.Value)
                 .FirstOrDefault();
             return Ok(authDtoUser);
+        }
+
+        private async Task<List<string>> GetUserRoles(int userId)
+        {
+            var roles = new List<string>();
+            if ((await _officerService.GetByUserAsync(userId)).Count > 0)
+            {
+                roles.Add("officer");
+            }
+            return roles;
         }
     }
 }
