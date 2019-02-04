@@ -206,9 +206,9 @@ namespace Ksu.Gdc.Api.Web.Controllers
             {
                 return NotFound(ex.Message);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
