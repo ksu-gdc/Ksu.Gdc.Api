@@ -56,7 +56,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPost("{gameId}/users")]
-        public async Task<IActionResult> AddCollaborator([FromRoute] int gameId, CreateDto_Collaborator collaborator)
+        public async Task<IActionResult> AddCollaborator([FromRoute] int gameId, [FromBody] CreateDto_Collaborator collaborator)
         {
             try
             {
