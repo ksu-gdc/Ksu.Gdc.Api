@@ -31,7 +31,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet("cas/login")]
-        public IActionResult CAS_Login([FromQuery] string service)
+        public IActionResult LoginCAS([FromQuery] string service)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet("cas/validate")]
-        public async Task<IActionResult> CAS_Validate([FromQuery] string service, [FromQuery] string ticket)
+        public async Task<IActionResult> ValidateCASTicket([FromQuery] string service, [FromQuery] string ticket)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpGet("cas/logout")]
-        public IActionResult CAS_Logout([FromQuery] string service)
+        public IActionResult LogoutCAS([FromQuery] string service)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
 
         [Authorize]
         [HttpGet("validate/token")]
-        public async Task<IActionResult> CAS_ValidateToken()
+        public async Task<IActionResult> ValidateToken()
         {
             var userId = User.Claims
                 .Where(c => c.Type == ClaimTypes.NameIdentifier)
