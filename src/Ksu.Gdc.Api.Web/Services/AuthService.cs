@@ -62,7 +62,7 @@ namespace Ksu.Gdc.Api.Core.Services
             var token = new JwtSecurityToken(AppConfiguration.GetConfig("JwtAuth_Issuer"),
                 AppConfiguration.GetConfig("JwtAuth_Audience"),
                 claims,
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.Now.AddHours(2),
                 signingCredentials: creds);
             return "Bearer " + new JwtSecurityTokenHandler().WriteToken(token);
         }
