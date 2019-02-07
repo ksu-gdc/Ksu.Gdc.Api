@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Ksu.Gdc.Api.Core.Exceptions;
+
 namespace Ksu.Gdc.Api.Core.Models
 {
     public class PaginatedList
@@ -9,22 +11,26 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public static bool IsValid(int pageNumber, int pageSize)
         {
+            if (pageNumber < 0 || pageSize < 0)
+            {
+                throw new PaginationException("The 'pageNumber' and 'pageSize' query parameters must be greater than 0.");
+            }
             if (pageNumber == 0)
             {
-                if (pageSize != 0)
+                if (pageSize == 0)
                 {
-                    throw new ArgumentException();
+                    return false;
                 }
-                return false;
+                else
+                {
+                    throw new PaginationException("The 'pageNumber' and 'pageSize' query parameters are both required if one is given.");
+                }
             }
-            else
+            else if (pageSize == 0)
             {
-                if (pageNumber < 0 || pageSize < 0)
-                {
-                    throw new ArgumentException();
-                }
-                return true;
+                throw new PaginationException("The 'pageNumber' and 'pageSize' query parameters are both required if one is given.");
             }
+            return true;
         }
 
         protected List<T> Paginate<T>(List<T> list, int pageNumber, int pageSize)

@@ -1,27 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
-using Ksu.Gdc.Api.Core.Contracts;
+using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("")]
-    public class UtilityController : ControllerBase
+    public class UtilityController : Controller
     {
-        private readonly IUtilityService _utilityService;
-
-        public UtilityController(IUtilityService utilityService)
-        {
-            _utilityService = utilityService;
-        }
-
-        [HttpGet]
-        [Route("")]
-        public IActionResult KeepAwake()
+        [HttpGet("")]
+        public async Task<IActionResult> KeepAwake()
         {
             try
             {

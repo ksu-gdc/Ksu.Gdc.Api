@@ -1,23 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
-using Ksu.Gdc.Api.Data.Entities;
 using Ksu.Gdc.Api.Core.Models;
+using Ksu.Gdc.Api.Data.Entities;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("[controller]")]
+    [Route("auth")]
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
@@ -31,52 +30,20 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _officerService = officerService;
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("cas/login", Name = "CAS_Login")]
-        public IActionResult CAS_Login([FromQuery] string service)
-        {
-            if (string.IsNullOrWhiteSpace(service))
-            {
-                return BadRequest();
-            }
-            var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/login?"
-                + $"service={service}"
-                + $"&logoutCallback={AuthConfig.LogoutUrl}"
-                + $"&serviceName={AppConfiguration.GetConfig("App_Name")}";
-            return Redirect(url);
-        }
-
-        [HttpGet]
-        [Route("cas/validate", Name = "CAS_Validate")]
-        public async Task<IActionResult> CAS_Validate([FromQuery] string service, [FromQuery] string ticket)
+        [HttpGet("cas/login")]
+        public IActionResult LoginCAS([FromQuery] string service)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(ticket) || string.IsNullOrWhiteSpace(service))
+                if (string.IsNullOrWhiteSpace(service))
                 {
-                    return BadRequest();
+                    service = AuthConfig.LoginUrl;
                 }
-                var response = await _authService.ValidateCASTicketAsync(service, ticket);
-                try
-                {
-                    var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId[0];
-                    var dbUser = await _userService.GetUserByIdAsync(userId);
-                    var dtoUser = Mapper.Map<AuthDto_User>(dbUser);
-                    dtoUser.IsOfficer = (await _officerService.GetOfficersByUserIdAsync(userId)).Count > 0;
-                    return Ok(dtoUser);
-                }
-                catch (NotFoundException)
-                {
-                    var newUser = new CreateDto_User(response.ServiceResponse.AuthenticationSuccess.Attributes);
-                    var dbUser = await _userService.CreateUserAsync(newUser);
-                    return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_User>(dbUser));
-                }
-
-            }
-            catch (NotAuthorizedException)
-            {
-                return StatusCode(StatusCodes.Status401Unauthorized);
+                var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/login?"
+                    + $"service={service}"
+                    + $"&logoutCallback={AuthConfig.LogoutUrl}"
+                    + $"&serviceName={AppConfiguration.GetConfig("App_Name")}";
+                return Redirect(url);
             }
             catch (Exception)
             {
@@ -84,17 +51,95 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("cas/logout", Name = "CAS_Logout")]
-        public IActionResult CAS_Logout([FromQuery] string service)
+        [HttpGet("cas/validate")]
+        public async Task<IActionResult> ValidateCASTicket([FromQuery] string service, [FromQuery] string ticket)
         {
-            if (string.IsNullOrWhiteSpace(service))
+            try
             {
-                service = AuthConfig.LogoutUrl;
+                if (string.IsNullOrWhiteSpace(service))
+                {
+                    service = AuthConfig.LoginUrl;
+                }
+                if (string.IsNullOrWhiteSpace(ticket))
+                {
+                    throw new NotAuthorizedException();
+                }
+                var response = await _authService.ValidateCASTicketAsync(service, ticket);
+                var userId = response.ServiceResponse.AuthenticationSuccess.Attributes.KsuPersonWildcatId;
+                DbEntity_User user;
+                try
+                {
+                    user = await _userService.GetByIdAsync(userId);
+                }
+                catch (NotFoundException)
+                {
+                    var newUser = new CreateDto_User(response.ServiceResponse.AuthenticationSuccess.Attributes);
+                    user = await _userService.CreateAsync(newUser);
+                    await _userService.SaveChangesAsync();
+                }
+                var authDtoUser = Mapper.Map<AuthDto_User>(user);
+                if ((await _officerService.GetByUserAsync(userId)).Count > 0)
+                {
+                    authDtoUser.Roles.Add("officer");
+                }
+                authDtoUser.Token = _authService.BuildToken(authDtoUser);
+                return Ok(authDtoUser);
             }
-            var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/logout?"
-                + $"url={service}";
-            return Redirect(url);
+            catch (NotAuthorizedException)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet("cas/logout")]
+        public IActionResult LogoutCAS([FromQuery] string service)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(service))
+                {
+                    service = AuthConfig.LogoutUrl;
+                }
+                var url = $"{AppConfiguration.GetConfig("KsuCas_BaseUrl")}/logout?"
+                    + $"url={service}";
+                return Redirect(url);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [Authorize]
+        [HttpGet("validate/token")]
+        public async Task<IActionResult> ValidateToken()
+        {
+            var userId = User.Claims
+                .Where(c => c.Type == ClaimTypes.NameIdentifier)
+                .Select(c => Convert.ToInt32(c.Value))
+                .FirstOrDefault();
+            var user = await _userService.GetByIdAsync(userId);
+            var authDtoUser = Mapper.Map<AuthDto_User>(user);
+            authDtoUser.Roles.AddRange(await GetUserRoles(userId));
+            authDtoUser.Token = Request.Headers
+                .Where(h => h.Key == "Authorization")
+                .Select(h => h.Value)
+                .FirstOrDefault();
+            return Ok(authDtoUser);
+        }
+
+        private async Task<List<string>> GetUserRoles(int userId)
+        {
+            var roles = new List<string>();
+            if ((await _officerService.GetByUserAsync(userId)).Count > 0)
+            {
+                roles.Add("officer");
+            }
+            return roles;
         }
     }
 }

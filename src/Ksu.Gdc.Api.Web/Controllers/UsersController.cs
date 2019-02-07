@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -6,35 +7,45 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
+using Ksu.Gdc.Api.Data.Entities;
+using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("[controller]")]
-    public class UsersController : ControllerBase
+    [Authorize]
+    [Route("users")]
+    public class UsersController : Controller
     {
         private readonly IUserService _userService;
         private readonly IOfficerService _officerService;
+        private readonly IGameService _gameService;
 
-        public UsersController(IUserService userService, IOfficerService officerService)
+        public UsersController(IUserService userService, IOfficerService officerService, IGameService gameService)
         {
             _userService = userService;
             _officerService = officerService;
+            _gameService = gameService;
         }
 
-        [HttpGet]
-        [Route("", Name = "GetUsers")]
-        public async Task<IActionResult> GetUsers([FromQuery] int pageNumber, [FromQuery] int pageSize)
+        [AllowAnonymous]
+        [HttpGet("")]
+        public async Task<IActionResult> Get([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
             try
             {
-                var dbUsers = await _userService.GetUsersAsync();
-                var dtoUsers = Mapper.Map<List<Dto_User>>(dbUsers);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                var users = await _userService.GetAllAsync();
+                var dtoUsers = Mapper.Map<List<Dto_User>>(users);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
                 {
                     PaginatedList paginatedUsers = new PaginatedList<Dto_User>(dtoUsers, pageNumber, pageSize);
@@ -42,28 +53,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 }
                 return Ok(dtoUsers);
             }
-            catch (ArgumentException)
+            catch (PaginationException ex)
             {
-                return BadRequest();
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("{userId}", Name = "GetUserById")]
-        public async Task<IActionResult> GetUserById([FromRoute] int userId)
-        {
-            try
-            {
-                var user = await _userService.GetUserByIdAsync(userId);
-                return Ok(Mapper.Map<Dto_User>(user));
+                return BadRequest(new ErrorResponse(ex));
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -71,43 +67,23 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{userId}/profile-image", Name = "GetUserProfileImage")]
-        public async Task<IActionResult> GetUserProfileImage([FromRoute] int userId)
+        [AllowAnonymous]
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetById([FromRoute] int userId)
         {
             try
             {
-                var stream = await _userService.GetUserProfileImageAsync(userId);
-                return File(stream, "image/jpg");
-            }
-            catch (NotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("{userId}/groups", Name = "GetGroupsOfUser")]
-        public async Task<IActionResult> GetGroupsOfUser([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
-        {
-            try
-            {
-                var dbGroups = await _userService.GetGroupsOfUserAsync(userId);
-                var dtoGroups = Mapper.Map<List<Dto_Group>>(dbGroups);
-                if (PaginatedList.IsValid(pageNumber, pageSize))
+                if (!ModelState.IsValid)
                 {
-                    PaginatedList paginatedGroups = new PaginatedList<Dto_Group>(dtoGroups, pageNumber, pageSize);
-                    return Ok(paginatedGroups);
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                return Ok(dtoGroups);
+                var user = await _userService.GetByIdAsync(userId);
+                var dtoUser = Mapper.Map<Dto_User>(user);
+                return Ok(dtoUser);
             }
-            catch (ArgumentException)
+            catch (NotFoundException ex)
             {
-                return BadRequest();
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -115,14 +91,41 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("{userId}/portfolio/games", Name = "GetGamesOfUser")]
-        public async Task<IActionResult> GetGamesOfUser([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        [AllowAnonymous]
+        [HttpGet("{userId}/profile-image")]
+        public async Task<IActionResult> GetImage([FromRoute] int userId)
         {
             try
             {
-                var dbGames = await _userService.GetGamesOfUserAsync(userId);
-                var dtoGames = Mapper.Map<List<Dto_Game>>(dbGames);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                var image = await _userService.GetImageAsync(userId);
+                return File(image.Data, image.ContentType);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [AllowAnonymous]
+        [HttpGet("{userId}/portfolio/games")]
+        public async Task<IActionResult> GetGames([FromRoute] int userId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                var games = await _userService.GetGamesAsync(userId);
+                var dtoGames = Mapper.Map<List<Dto_Game>>(games);
                 if (PaginatedList.IsValid(pageNumber, pageSize))
                 {
                     PaginatedList paginatedGames = new PaginatedList<Dto_Game>(dtoGames, pageNumber, pageSize);
@@ -130,9 +133,13 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 }
                 return Ok(dtoGames);
             }
-            catch (ArgumentException)
+            catch (PaginationException ex)
             {
-                return BadRequest();
+                return BadRequest(new ErrorResponse(ex));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -140,37 +147,59 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPost, DisableRequestSizeLimit]
-        [Route("{userId}/profile-image", Name = "UpdateUserProfileImage")]
-        public async Task<IActionResult> UpdateUserProfileImage([FromRoute] int userId, [FromForm] IFormFile image)
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateById([FromRoute] int userId, [FromBody] UpdateDto_User userUpdate)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                await _userService.UpdateUserProfileImageAsync(userId, image.OpenReadStream());
+                var user = await _userService.GetByIdAsync(userId);
+                Mapper.Map(userUpdate, user);
+                await _userService.UpdateAsync(user);
+                await _userService.SaveChangesAsync();
                 return Ok();
             }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
+            }
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
 
-        [HttpPut]
-        [Route("{userId}", Name = "UpdateUser")]
-        public async Task<IActionResult> UpdateUser([FromRoute] int userId, [FromBody] UpdateDto_User updateUser)
+        [HttpPost("{userId}/profile-image"), DisableRequestSizeLimit]
+        public async Task<IActionResult> UpdateImage([FromRoute] int userId, [FromForm] IFormFile image)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                var dbUser = await _userService.GetUserByIdAsync(userId);
-                await _userService.UpdateUserAsync(dbUser, updateUser);
+                if (image == null || image.Length == 0)
+                {
+                    return BadRequest(new ErrorResponse("A valid image is required."));
+                }
+                var contentType = image.ContentType.Trim().ToLower();
+                if (!contentType.StartsWith("image/", StringComparison.CurrentCulture))
+                {
+                    return BadRequest(new ErrorResponse("Uploaded file must be an image"));
+                }
+                var stream = new MemoryStream();
+                await image.OpenReadStream().CopyToAsync(stream);
+                var imageUpdate = new UpdateDto_Image()
+                {
+                    Name = "user_profile",
+                    Data = stream.ToArray(),
+                    ContentType = contentType
+                };
+                await _userService.UpdateImageAsync(userId, imageUpdate);
+                await _userService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -183,29 +212,30 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPatch]
-        [Route("{userId}", Name = "PatchUser")]
-        public async Task<IActionResult> PatchUser([FromRoute] int userId, [FromBody] JsonPatchDocument<UpdateDto_User> patchUser)
+        [HttpPatch("{userId}")]
+        public async Task<IActionResult> PatchById([FromRoute] int userId, [FromBody] JsonPatchDocument<UpdateDto_User> userPatch)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                var dbUser = await _userService.GetUserByIdAsync(userId);
-                var updateUser = Mapper.Map<UpdateDto_User>(dbUser);
-                patchUser.ApplyTo(updateUser, ModelState);
+                var user = await _userService.GetByIdAsync(userId);
+                var userUpdate = Mapper.Map<UpdateDto_User>(user);
+                userPatch.ApplyTo(userUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                await _userService.UpdateUserAsync(dbUser, updateUser);
+                Mapper.Map(userUpdate, user);
+                await _userService.UpdateAsync(user);
+                await _userService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {

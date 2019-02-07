@@ -5,9 +5,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
-using Amazon.S3;
-using Amazon.S3.Transfer;
-using Amazon.S3.Model;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Configurations;
@@ -22,40 +19,42 @@ namespace Ksu.Gdc.Api.Core.Services
     public class UserService : IUserService
     {
         private readonly KsuGdcContext _ksuGdcContext;
-        private readonly IAmazonS3 _s3Client;
 
-        public UserService(KsuGdcContext ksuGdcContext, IAmazonS3 s3Client)
+        public UserService(KsuGdcContext ksuGdcContext)
         {
             _ksuGdcContext = ksuGdcContext;
-            _s3Client = s3Client;
         }
 
         #region CREATE
 
-        public async Task<DbEntity_User> CreateUserAsync(CreateDto_User newUser)
+        public async Task<bool> CreateAsync(DbEntity_User createdUser)
         {
-            var newDbUser = Mapper.Map<DbEntity_User>(newUser);
-            await _ksuGdcContext.Users.AddAsync(newDbUser);
-            await _ksuGdcContext.SaveChangesAsync();
-            return newDbUser;
+            await _ksuGdcContext.Users.AddAsync(createdUser);
+            return true;
+        }
+        public async Task<DbEntity_User> CreateAsync(CreateDto_User newUser)
+        {
+            var createdUser = Mapper.Map<DbEntity_User>(newUser);
+            var success = await CreateAsync(createdUser);
+            return createdUser;
         }
 
         #endregion CREATE
 
         #region GET
 
-        public async Task<List<DbEntity_User>> GetUsersAsync()
+        public async Task<List<DbEntity_User>> GetAllAsync()
         {
-            var dbUsers = await _ksuGdcContext.Users
-                                            .ToListAsync();
-            return dbUsers;
+            var users = await _ksuGdcContext.Users
+                .ToListAsync();
+            return users;
         }
 
-        public async Task<DbEntity_User> GetUserByIdAsync(int userId)
+        public async Task<DbEntity_User> GetByIdAsync(int userId)
         {
             var user = await _ksuGdcContext.Users
-                                             .Where(u => u.UserId == userId)
-                                             .FirstOrDefaultAsync();
+                .Where(u => u.UserId == userId)
+                .FirstOrDefaultAsync();
             if (user == null)
             {
                 throw new NotFoundException($"No user with id '{userId}' was found.");
@@ -63,56 +62,38 @@ namespace Ksu.Gdc.Api.Core.Services
             return user;
         }
 
-        public async Task<DbEntity_User> GetUserByUsernameAsync(string username)
+        public async Task<DbEntity_Image> GetImageAsync(DbEntity_User user)
         {
-            var user = await _ksuGdcContext.Users
-                                             .Where(u => u.Username == username)
-                                             .FirstOrDefaultAsync();
-            if (user == null)
+            var image = await _ksuGdcContext.UserImages
+                .Where(ui => ui.UserId == user.UserId)
+                .Select(ui => ui.Image)
+                .FirstOrDefaultAsync();
+            if (image == null)
             {
-                throw new NotFoundException($"No user with username '{username}' was found.");
+                throw new NotFoundException($"No image with user id '{user.UserId}' was found.");
             }
-            return user;
+            return image;
+        }
+        public async Task<DbEntity_Image> GetImageAsync(int userId)
+        {
+            var user = await GetByIdAsync(userId);
+            var image = await GetImageAsync(user);
+            return image;
         }
 
-        public async Task<Stream> GetUserProfileImageAsync(int userId)
+        public async Task<List<DbEntity_Game>> GetGamesAsync(DbEntity_User user)
         {
-            try
-            {
-                var transferUtility = new TransferUtility(_s3Client);
-                var transferRequest = new TransferUtilityOpenStreamRequest()
-                {
-                    BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                    Key = $"{UserConfig.DataStoreDirPath}/{userId}/profile.jpg"
-                };
-                var stream = await transferUtility.OpenStreamAsync(transferRequest);
-                return stream;
-            }
-            catch (AmazonS3Exception ex)
-            {
-                if (ex.Message.Contains("key does not exist"))
-                {
-                    throw new NotFoundException($"No profile image for user with id '{userId}' was found.");
-                }
-                throw ex;
-            }
+            var games = await _ksuGdcContext.GameUsers
+                .Where(gu => gu.UserId == user.UserId)
+                .Include(gu => gu.Game)
+                .Select(gu => gu.Game)
+                .ToListAsync();
+            return games;
         }
-
-        public async Task<List<DbEntity_Group>> GetGroupsOfUserAsync(int userId)
+        public async Task<List<DbEntity_Game>> GetGamesAsync(int userId)
         {
-            var groups = await _ksuGdcContext.GroupUsers
-                                               .Where(ug => ug.UserId == userId)
-                                               .Include(ug => ug.Group)
-                                               .Select(ug => ug.Group)
-                                               .ToListAsync();
-            return groups;
-        }
-
-        public async Task<List<DbEntity_Game>> GetGamesOfUserAsync(int userId)
-        {
-            var games = await _ksuGdcContext.Games
-                                              .Where(g => g.UserId == userId)
-                                              .ToListAsync();
+            var user = await GetByIdAsync(userId);
+            var games = await GetGamesAsync(user);
             return games;
         }
 
@@ -120,27 +101,35 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region UPDATE
 
-        public async Task<bool> UpdateUserAsync(DbEntity_User dbUser, UpdateDto_User updateUser)
+        public async Task<bool> UpdateAsync(DbEntity_User updatedUser)
         {
-            Mapper.Map(updateUser, dbUser);
-            dbUser.UpdatedOn = DateTimeOffset.Now;
-            _ksuGdcContext.Update(dbUser);
-            await _ksuGdcContext.SaveChangesAsync();
+            updatedUser.UpdatedOn = DateTimeOffset.Now;
+            _ksuGdcContext.Update(updatedUser);
             return true;
         }
 
-        public async Task<bool> UpdateUserProfileImageAsync(int userId, Stream imageStream)
+        public async Task<bool> UpdateImageAsync(int userId, UpdateDto_Image imageUpdate)
         {
-            var transferUtility = new TransferUtility(_s3Client);
-            var transferRequest = new TransferUtilityUploadRequest()
+            var user = await GetByIdAsync(userId);
+            DbEntity_Image image;
+            try
             {
-                BucketName = AppConfiguration.GetConfig("AWS_S3_BucketName"),
-                Key = $"{UserConfig.DataStoreDirPath}/{userId}/profile.jpg",
-                InputStream = imageStream,
-                StorageClass = S3StorageClass.Standard,
-                CannedACL = S3CannedACL.PublicRead
-            };
-            await transferUtility.UploadAsync(transferRequest);
+                image = await GetImageAsync(user);
+            }
+            catch (NotFoundException)
+            {
+                var newImage = Mapper.Map<DbEntity_Image>(imageUpdate);
+                await _ksuGdcContext.Images.AddAsync(newImage);
+                var userImage = new DbEntity_UserImage()
+                {
+                    UserId = user.UserId,
+                    ImageId = newImage.ImageId
+                };
+                await _ksuGdcContext.UserImages.AddAsync(userImage);
+                return true;
+            }
+            Mapper.Map(imageUpdate, image);
+            _ksuGdcContext.Images.Update(image);
             return true;
         }
 
@@ -148,14 +137,11 @@ namespace Ksu.Gdc.Api.Core.Services
 
         #region DELETE
 
-        public async Task<bool> DeleteUserByIdAsync(int userId)
-        {
-            var dbUser = await GetUserByIdAsync(userId);
-            _ksuGdcContext.Users.Remove(dbUser);
-            await _ksuGdcContext.SaveChangesAsync();
-            return true;
-        }
-
         #endregion DELETE
+
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _ksuGdcContext.SaveChangesAsync();
+        }
     }
 }

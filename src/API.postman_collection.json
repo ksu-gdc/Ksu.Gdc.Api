@@ -1,0 +1,1959 @@
+{
+	"info": {
+		"_postman_id": "073c1200-b6a5-40aa-af80-37baafe5423a",
+		"name": "API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "cas",
+					"item": [
+						{
+							"name": "Redirect To Login",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "80d6afe1-84c1-4e92-a41d-0ca751e06729",
+										"exec": [
+											"pm.variables.set(\"service\", \"\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "971a6c6c-372f-4aac-a8c6-1b0c61f69908",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}/login?service={{service}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"login"
+									],
+									"query": [
+										{
+											"key": "service",
+											"value": "{{service}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Validate Ticket",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "07924f29-7e55-44d9-9f2f-fd65bf6d97ac",
+										"exec": [
+											"pm.variables.set(\"service\", \"\");",
+											"pm.variables.set(\"ticket\", \"\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "4f69f923-5452-4025-8f01-431499ac5d16",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}/validate?service={{service}}&ticket={{ticket}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"validate"
+									],
+									"query": [
+										{
+											"key": "service",
+											"value": "{{service}}"
+										},
+										{
+											"key": "ticket",
+											"value": "{{ticket}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Redirect To Logout",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "c9cbc8bf-4d6a-4c05-a886-eafcf03cbdab",
+										"exec": [
+											"pm.variables.set(\"service\", \"\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "8213cef3-9bc8-4cf9-b8f8-1c5cf3461d88",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}/logout?service={{service}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"logout"
+									],
+									"query": [
+										{
+											"key": "service",
+											"value": "{{service}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "b22bb5d8-8249-4bc4-a82e-3ec32b4367da",
+								"type": "text/javascript",
+								"exec": [
+									"var controllerUrl = pm.variables.get(\"controllerUrl\");",
+									"pm.variables.set(\"routeUrl\", controllerUrl + \"/cas\");"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "f890d2f5-a72a-44f1-b699-cd4c163208a0",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "978f9625-0c6d-418f-a986-1843e4841acd",
+						"type": "text/javascript",
+						"exec": [
+							"var apiUrl = pm.environment.get(\"apiUrl\");",
+							"pm.variables.set(\"controllerUrl\", apiUrl + \"/auth\");"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "3122b3d7-d08b-4365-8819-61330c475914",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "officers",
+			"item": [
+				{
+					"name": "Create",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "941c7bbf-cbea-404c-8b83-9d9d88fdad88",
+								"exec": [
+									"pm.variables.set(\"position\", \"\");",
+									"pm.variables.set(\"userId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9252bee3-b27a-45f2-bc82-2be60e4f79d5",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"position\": \"{{position}}\",\n\t\"userId\": {{userId}}\n}"
+						},
+						"url": {
+							"raw": "{{controllerUrl}}",
+							"host": [
+								"{{controllerUrl}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "6f653db6-24da-4f3a-8f38-a894ff6eb054",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "cc40619d-2c6f-4b05-bd70-9450e217659f",
+								"exec": [
+									"pm.variables.set(\"position\", \"\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{controllerUrl}}?position={{position}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"query": [
+								{
+									"key": "position",
+									"value": "{{position}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "09116b62-81b6-4b07-b848-046687da2cda",
+								"exec": [
+									"pm.variables.set(\"officerId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "fa4df0da-b19a-4392-9889-bde084f8254d",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{officerId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{officerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2ba002cf-b276-4be0-af47-07e5f7ebe814",
+								"exec": [
+									"pm.variables.set(\"officerId\", 0);",
+									"",
+									"pm.variables.set(\"position\", \"\");",
+									"pm.variables.set(\"userId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "4b1db555-f647-4aa4-9701-a18f84cdb778",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"position\": \"{{position}}\",\n\t\"userId\": {{userId}}\n}"
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{officerId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{officerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch By Id (Position)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1a201ab3-b9ae-4467-8f8a-dfdec5f24341",
+								"exec": [
+									"pm.variables.set(\"officerId\", 0);",
+									"",
+									"pm.variables.set(\"position\", \"\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9a87305d-58c9-4d96-a1b7-4fc29a75a23b",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/position\",\n    \t\"value\": {{position}}\n    }\n]"
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{officerId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{officerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch By Id (User Id)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "1baaf09a-e50f-487c-8269-8fe796432156",
+								"exec": [
+									"pm.variables.set(\"officerId\", 0);",
+									"",
+									"pm.variables.set(\"userId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "0ab11134-bcd0-4778-bfc6-d551ce2862ee",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/userId\",\n    \t\"value\": {{userId}}\n    }\n]"
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{officerId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{officerId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a569e58e-1ca0-49d1-b766-c08a58b036db",
+								"exec": [
+									"pm.variables.set(\"position\", \"\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "ee84f1e9-0f2b-49e4-aa3f-b40e7f981de1",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{controllerUrl}}?position={{position}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"query": [
+								{
+									"key": "position",
+									"value": "{{position}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete By Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "69497318-8074-4504-9140-445899cf3f7f",
+								"exec": [
+									"pm.variables.set(\"officerId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "8017651c-bbfc-46a3-9320-1cedc3cb5995",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{controllerUrl}}/{{officerId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{officerId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "05bde234-59bb-4b1b-8c16-893a386781c9",
+						"type": "text/javascript",
+						"exec": [
+							"var apiUrl = pm.environment.get(\"apiUrl\");",
+							"pm.variables.set(\"controllerUrl\", apiUrl + \"/officers\");"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "0cf1c942-8bd6-4ea8-aef8-b9f89fb58139",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "portfolio",
+			"item": [
+				{
+					"name": "games",
+					"item": [
+						{
+							"name": "Create",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "35ba705b-898d-46e8-9e7e-7509d4e49a15",
+										"exec": [
+											"pm.variables.set(\"title\", \"\");",
+											"pm.variables.set(\"description\", \"\");",
+											"pm.variables.set(\"hostUrl\", \"\");",
+											"pm.variables.set(\"userId\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "0fba069c-5377-4a77-827c-890041a0b76f",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"title\": \"{{title}}\",\n\t\"description\": \"{{description}}\",\n\t\"hostUrl\": \"{{hostUrl}}\",\n\t\"userId\": {{userId}}\n}"
+								},
+								"url": {
+									"raw": "{{controllerUrl}}",
+									"host": [
+										"{{controllerUrl}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Add Collaborator",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "ad926976-90e8-447d-a56f-dfb9db04a4cc",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);",
+											"",
+											"pm.variables.set(\"userId\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "96a16f0b-3609-4d54-ad22-6ccd1e95d957",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"userId\": {{userId}}\n}"
+								},
+								"url": {
+									"raw": "{{controllerUrl}}/{{gameId}}/users",
+									"host": [
+										"{{controllerUrl}}"
+									],
+									"path": [
+										"{{gameId}}",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "f464c2b8-b0c4-4517-aebe-a6b03aebd8f5",
+										"exec": [
+											"pm.variables.set(\"pageNumber\", 0);",
+											"pm.variables.set(\"pageSize\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "b15201fe-5239-4bf0-83ad-d69f57a74248",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumber}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSize}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "6389d9bc-2418-4e6d-8ff0-2e69ee226a56",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get By Featured",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "3e6dff6b-4d0b-4eb4-a30f-d8f08d8b3306",
+										"exec": [
+											"pm.variables.set(\"pageNumber\", 0);",
+											"pm.variables.set(\"pageSize\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "91a247b7-ba93-4c29-9d1f-5d3d6252f654",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}/featured?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"featured"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumber}}",
+											"description": "(optional)"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSize}}",
+											"description": "(optional)"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Image",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "8532f128-54ba-4ba1-84c0-7c31b5eeabfe",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "cf2257c4-d0ca-480f-ab98-664f19d11bda",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}/thumbnail-image",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}",
+										"thumbnail-image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Collaborators",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "d6945261-7937-48f6-8946-d7ad0ec31b4d",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);",
+											"pm.variables.set(\"pageNumber\", 0);",
+											"pm.variables.set(\"pageSize\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "69aacd1f-efec-4dc5-8e53-9228ed84cd54",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}/users?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}",
+										"users"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumber}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSize}}"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Non Collaborators",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "4cdf5493-646f-4076-8b37-2bc7106d61b7",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);",
+											"pm.variables.set(\"pageNumber\", 0);",
+											"pm.variables.set(\"pageSize\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "e0346a66-e68c-458c-94ef-5b9a5af59fe6",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}/users?pageNumber={{pageNumber}}&pageSize={{pageSize}}&non=true",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}",
+										"users"
+									],
+									"query": [
+										{
+											"key": "pageNumber",
+											"value": "{{pageNumber}}"
+										},
+										{
+											"key": "pageSize",
+											"value": "{{pageSize}}"
+										},
+										{
+											"key": "non",
+											"value": "true"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update By Id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "755cc89b-5575-4281-93e5-f1621dbee26a",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);",
+											"",
+											"pm.variables.set(\"title\", \"\");",
+											"pm.variables.set(\"description\", \"\");",
+											"pm.variables.set(\"hostUrl\", \"\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "bd5fc580-d257-4e26-81c0-760057d860ae",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n\t\"title\": \"{{title}}\",\n\t\"description\": \"{{description}}\",\n\t\"hostUrl\": \"{{hostUrl}}\"\n}"
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Image",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "be035f49-705d-47a5-8f0a-8cd034b44dfd",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "b5fc0740-0820-4359-8c2b-ba9daccc6178",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "image/jpg",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "file",
+									"file": {}
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}/thumbnail-image",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}",
+										"thumbnail-image"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Patch By Id (Title)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "ff8da34b-92f6-4853-83d8-cca2e71e4765",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);",
+											"",
+											"pm.variables.set(\"title\", \"\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "e69d61cb-1223-4234-b87b-13b84d24e603",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/title\",\n    \t\"value\": \"{{title}}\"\n    }\n]"
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Patch By Id (Description)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "0f195c9b-3cad-4e06-aa9d-ec73e71884ea",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);",
+											"",
+											"pm.variables.set(\"description\", \"\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "e83fdf7c-fb6b-40eb-a26e-7f8c915e43b7",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/description\",\n    \t\"value\": \"{{description}}\"\n    }\n]"
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Patch By Id (Host Url)",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "d57ffa21-f5f9-4a3f-8fd1-b9f5a10c93cd",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);",
+											"",
+											"pm.variables.set(\"hostUrl\", \"\");"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "fb4b0506-1db3-4131-a9c5-576d11098523",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/hostUrl\",\n    \t\"value\": \"{{hostUrl}}\"\n    }\n]"
+								},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete By Id",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "5ed9d586-51c9-4a5e-8478-64bed6a642bd",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "07619520-57c5-4a7d-9043-9856f366f1a2",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Remove Collaborator",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"id": "2f7b1813-2c97-4aa0-9db5-083689d3158b",
+										"exec": [
+											"pm.variables.set(\"gameId\", 0);",
+											"pm.variables.set(\"userId\", 0);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"id": "89289d43-be05-4fac-91dd-e2be4967a672",
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {},
+								"url": {
+									"raw": "{{routeUrl}}/{{gameId}}/users/{{userId}}",
+									"host": [
+										"{{routeUrl}}"
+									],
+									"path": [
+										"{{gameId}}",
+										"users",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "8a8e4c5f-75cd-4fb7-8563-3c1dca896214",
+								"type": "text/javascript",
+								"exec": [
+									"var controllerUrl = pm.variables.get(\"controllerUrl\");",
+									"pm.variables.set(\"routeUrl\", controllerUrl + \"/games\");"
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "bf22cdbe-da76-4509-86b4-1d41ba12ce54",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "b41c409d-40e5-4495-97b0-43c9a4becb84",
+						"type": "text/javascript",
+						"exec": [
+							"var apiUrl = pm.environment.get(\"apiUrl\");",
+							"pm.variables.set(\"controllerUrl\", apiUrl + \"/portfolio\");"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "23cd79ee-a4b3-4864-9e8b-7f568a6bb582",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Get",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "2f9a4a6d-764d-44dc-a964-ea2f15b48ab9",
+								"exec": [
+									"pm.variables.set(\"pageNumber\", 0);",
+									"pm.variables.set(\"pageSize\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "d9a0e889-1c9d-4424-ba82-3281346f00cf",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{controllerUrl}}?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "da51e648-7326-414b-b2ae-6921723e7168",
+								"exec": [
+									"pm.variables.set(\"userId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "31819327-d57d-4187-a1ef-22394cac8e07",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{userId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Image",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "27717227-efe9-4443-bb4b-ffaf2b75c679",
+								"exec": [
+									"pm.variables.set(\"userId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "db5db6fe-d30b-40e7-aba9-dbfe84c84131",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{userId}}/profile-image",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{userId}}",
+								"profile-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Games",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "7ecd98d7-bc58-4e9b-8aee-03b1135a62b3",
+								"exec": [
+									"pm.variables.set(\"userId\", 0);",
+									"pm.variables.set(\"pageNumber\", 0);",
+									"pm.variables.set(\"pageSize\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "f4702692-b076-4284-be39-418721153f33",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{userId}}/portfolio/games?pageNumber={{pageNumber}}&pageSize={{pageSize}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{userId}}",
+								"portfolio",
+								"games"
+							],
+							"query": [
+								{
+									"key": "pageNumber",
+									"value": "{{pageNumber}}"
+								},
+								{
+									"key": "pageSize",
+									"value": "{{pageSize}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update By Id",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "5869a0a2-e610-4d8c-add6-0bfa11844316",
+								"exec": [
+									"pm.variables.set(\"userId\", 0);",
+									"",
+									"pm.variables.set(\"firstName\", \"\");",
+									"pm.variables.set(\"lastName\", \"\");",
+									"pm.variables.set(\"description\", \"\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"firstName\": \"{{firstName}}\",\n\t\"lastName\": \"{{lastName}}\",\n\t\"description\": \"{{description}}\"\n}"
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{userId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Image",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "c6fc9bd6-ffec-4fe9-a230-89b16cdf16c4",
+								"exec": [
+									"pm.variables.set(\"userId\", 0);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "image/jpg"
+							}
+						],
+						"body": {
+							"mode": "file",
+							"file": {}
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{userId}}/profile-image",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{userId}}",
+								"profile-image"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch By Id (Name)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "3a75e391-c670-4042-9259-4dfe7fd0e53d",
+								"exec": [
+									"pm.variables.set(\"userId\", 0);",
+									"",
+									"pm.variables.set(\"firstName\", \"\");",
+									"pm.variables.set(\"lastName\", \"\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/firstName\",\n    \t\"value\": \"{{firstName}}\"\n    },\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/lastName\",\n    \t\"value\": \"{{lastName}}\"\n    }\n]"
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{userId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Patch By Id (Description)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "78ad17a9-a181-49e8-998c-b45dba507513",
+								"exec": [
+									"pm.variables.set(\"userId\", 0);",
+									"",
+									"pm.variables.set(\"description\", \"\");"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "[\n    {\n    \t\"op\": \"replace\",\n    \t\"path\": \"/description\",\n    \t\"value\": \"{{description}}\"\n    }\n]"
+						},
+						"url": {
+							"raw": "{{controllerUrl}}/{{userId}}",
+							"host": [
+								"{{controllerUrl}}"
+							],
+							"path": [
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "3dbf5370-daf6-4585-a2dd-d259c26dad1c",
+						"type": "text/javascript",
+						"exec": [
+							"var apiUrl = pm.environment.get(\"apiUrl\");",
+							"pm.variables.set(\"controllerUrl\", apiUrl + \"/users\");"
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "21779480-1685-48b3-a84b-431d34e52dce",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "utility",
+			"item": [
+				{
+					"name": "Keep Awake",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f0acc2cd-8d2c-419f-93e4-9be4c7ceacdd",
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{apiUrl}}",
+							"host": [
+								"{{apiUrl}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "bd15de18-a769-4e5d-a209-ccac01dc3bff",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "94489795-bd5f-4d99-9156-42b84c28ad8e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Get Access Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "fb7914e3-40bc-45f3-8f13-a32790752503",
+						"exec": [
+							"const jsonData = pm.response.json();",
+							"",
+							"const accessToken = jsonData[\"access_token\"];",
+							"",
+							"pm.environment.set(\"jwtAuth_AccessToken\", accessToken);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e54ab0f2-c895-4eb9-8838-8d667d516a43",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"client_id\": \"{{jwtAuth_ClientId}}\",\n\t\"client_secret\": \"{{jwtAuth_ClientSecret}}\",\n\t\"audience\": \"{{jwtAuth_Audience}}\",\n\t\"grant_type\": \"client_credentials\"\n}"
+				},
+				"url": {
+					"raw": "https://{{jwtAuth_Domain}}/oauth/token",
+					"protocol": "https",
+					"host": [
+						"{{jwtAuth_Domain}}"
+					],
+					"path": [
+						"oauth",
+						"token"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{jwtAuth_AccessToken}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a9799692-e404-4557-bd16-550baf4307a8",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "cd35676a-e533-47a4-9f6e-b8b8705e8012",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "27de0418-d060-49f4-9d87-124ee42d0295",
+			"key": "controllerUrl",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "b89f8410-d61d-42c3-9cc5-22e26f555aab",
+			"key": "routeUrl",
+			"value": "",
+			"type": "string"
+		}
+	]
+}

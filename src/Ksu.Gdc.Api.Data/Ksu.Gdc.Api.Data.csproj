@@ -7,7 +7,6 @@
   <ItemGroup>
     <Folder Include="DbContexts\" />
     <Folder Include="Entities\" />
-    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Ksu.Gdc.Api.Data.csproj" />
@@ -48,11 +47,23 @@
     <Compile Remove="Migrations\20181031011929_initial.cs" />
     <Compile Remove="Migrations\20181031011929_initial.Designer.cs" />
     <Compile Remove="Migrations\20181031062702_init.cs" />
+    <Compile Remove="Migrations\20181031062825_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181031062825_initial.cs" />
+    <Compile Remove="Migrations\20181219180918_initial.cs" />
+    <Compile Remove="Migrations\20181219180918_initial.Designer.cs" />
+    <Compile Remove="Migrations\KsuGdcContextModelSnapshot.cs" />
+    <Compile Remove="Extensions\KsuGdcContextExtensions.cs" />
+    <Compile Remove="Migrations\20181223064150_initial.Designer.cs" />
+    <Compile Remove="Migrations\20181223064150_initial.cs" />
+    <Compile Remove="Migrations\20181225112903_initial.cs" />
+    <Compile Remove="Migrations\20181225113030_initial.cs" />
+    <Compile Remove="Migrations\20181225200149_initial.cs" />
+    <Compile Remove="Migrations\20190204061312_initial.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.4" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.4" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.2" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.2.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="2.1.4" />
   </ItemGroup>
 </Project>

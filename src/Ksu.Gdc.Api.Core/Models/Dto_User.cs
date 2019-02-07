@@ -23,11 +23,21 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public CreateDto_User(CASAttributes attributes)
         {
-            UserId = attributes.KsuPersonWildcatId[0];
-            Username = attributes.Uid[0];
+            UserId = attributes.KsuPersonWildcatId;
+            Username = attributes.Uid;
         }
     }
 
+    public class AuthDto_User
+    {
+        public int UserId { get; set; }
+
+        public string Username { get; set; }
+
+        public List<string> Roles { get; set; } = new List<string>();
+
+        public string Token { get; set; }
+    }
     public class Dto_User
     {
         public int UserId { get; set; }
@@ -39,12 +49,6 @@ namespace Ksu.Gdc.Api.Core.Models
         public string LastName { get; set; }
 
         public string Description { get; set; }
-
-        public string Email => Username + "@ksu.edu";
-    }
-    public class AuthDto_User : Dto_User
-    {
-        public bool IsOfficer { get; set; }
     }
 
     public class UpdateDto_User

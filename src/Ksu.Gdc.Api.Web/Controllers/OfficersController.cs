@@ -6,17 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
 
 using Ksu.Gdc.Api.Core.Exceptions;
 using Ksu.Gdc.Api.Core.Contracts;
 using Ksu.Gdc.Api.Core.Models;
 using Ksu.Gdc.Api.Data.Entities;
+using Ksu.Gdc.Api.Web.Models;
 
 namespace Ksu.Gdc.Api.Web.Controllers
 {
-    [Route("[controller]")]
-    public class OfficersController : ControllerBase
+    [Authorize]
+    [Route("officers")]
+    public class OfficersController : Controller
     {
         private readonly IOfficerService _officerService;
 
@@ -25,18 +28,22 @@ namespace Ksu.Gdc.Api.Web.Controllers
             _officerService = officerService;
         }
 
-        [HttpPost]
-        [Route("", Name = "CreateOfficer")]
-        public async Task<IActionResult> CreateOfficer([FromBody] CreateDto_Officer newOfficer)
+        [HttpPost("")]
+        public async Task<IActionResult> Create([FromBody] CreateDto_Officer newOfficer)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                var dbOfficer = await _officerService.CreateOfficerAsync(newOfficer);
+                var createdOfficer = Mapper.Map<DbEntity_Officer>(newOfficer);
+                var dbOfficer = await _officerService.CreateAsync(createdOfficer);
                 return StatusCode(StatusCodes.Status201Created, Mapper.Map<Dto_Officer>(dbOfficer));
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -44,41 +51,30 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("", Name = "GetOfficers")]
-        public async Task<IActionResult> GetOfficers([FromQuery] string position)
+        [AllowAnonymous]
+        [HttpGet("")]
+        public async Task<IActionResult> Get([FromQuery] string position)
         {
             try
             {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
                 List<DbEntity_Officer> officers;
                 if (!string.IsNullOrEmpty(position))
                 {
-                    officers = await _officerService.GetOfficersByPositionAsync(position);
+                    officers = await _officerService.GetByPositionAsync(position);
                 }
                 else
                 {
-                    officers = await _officerService.GetOfficersAsync();
+                    officers = await _officerService.GetAllAsync();
                 }
                 return Ok(Mapper.Map<List<Dto_Officer>>(officers));
             }
-            catch (Exception)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
-        }
-
-        [HttpGet]
-        [Route("{officerId}", Name = "GetOfficerById")]
-        public async Task<IActionResult> GetOfficerById([FromRoute] int officerId)
-        {
-            try
-            {
-                var officer = await _officerService.GetOfficerByIdAsync(officerId);
-                return Ok(Mapper.Map<Dto_Officer>(officer));
-            }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -86,23 +82,48 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("{officerId}", Name = "UpdateOfficer")]
-        public async Task<IActionResult> UpdateOfficer([FromRoute] int officerId, [FromBody] UpdateDto_Officer updateOfficer)
+        [AllowAnonymous]
+        [HttpGet("{officerId}")]
+        public async Task<IActionResult> GetById([FromRoute] int officerId)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                var dbOfficer = await _officerService.GetOfficerByIdAsync(officerId);
-                await _officerService.UpdateOfficerAsync(dbOfficer, updateOfficer);
+                var officer = await _officerService.GetByIdAsync(officerId);
+                var dtoOfficer = Mapper.Map<Dto_Officer>(officer);
+                return Ok(dtoOfficer);
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPut("{officerId}")]
+        public async Task<IActionResult> UpdateById([FromRoute] int officerId, [FromBody] UpdateDto_Officer officerUpdate)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                var officer = await _officerService.GetByIdAsync(officerId);
+                Mapper.Map(officerUpdate, officer);
+                await _officerService.UpdateAsync(officer);
+                await _officerService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -110,29 +131,30 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpPatch]
-        [Route("{officerId}", Name = "PatchOfficer")]
-        public async Task<IActionResult> PatchOfficer([FromRoute] int officerId, [FromBody] JsonPatchDocument<UpdateDto_Officer> patchOfficer)
+        [HttpPatch("{officerId}")]
+        public async Task<IActionResult> PatchById([FromRoute] int officerId, [FromBody] JsonPatchDocument<UpdateDto_Officer> officerPatch)
         {
             try
             {
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                var dbOfficer = await _officerService.GetOfficerByIdAsync(officerId);
-                var updateOfficer = Mapper.Map<UpdateDto_Officer>(dbOfficer);
-                patchOfficer.ApplyTo(updateOfficer, ModelState);
+                var officer = await _officerService.GetByIdAsync(officerId);
+                var officerUpdate = Mapper.Map<UpdateDto_Officer>(officer);
+                officerPatch.ApplyTo(officerUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {
-                    return BadRequest();
+                    return BadRequest(new ErrorResponse(ModelState));
                 }
-                await _officerService.UpdateOfficerAsync(dbOfficer, updateOfficer);
+                Mapper.Map(officerUpdate, officer);
+                await _officerService.UpdateAsync(officer);
+                await _officerService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -140,21 +162,29 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("", Name = "DeleteOfficers")]
-        public async Task<IActionResult> DeleteOfficers([FromQuery] string position)
+        [HttpDelete("")]
+        public async Task<IActionResult> Delete([FromQuery] string position)
         {
             try
             {
-                if (!string.IsNullOrEmpty(position))
+                if (!ModelState.IsValid)
                 {
-                    await _officerService.DeleteOfficersByPositionAsync(position);
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                if (string.IsNullOrEmpty(position))
+                {
+                    return BadRequest(new ErrorResponse("The 'position' query parameter is required."));
                 }
                 else
                 {
-                    return BadRequest();
+                    await _officerService.DeleteByPositionAsync(position);
+                    await _officerService.SaveChangesAsync();
                 }
                 return Ok();
+            }
+            catch (NotFoundException ex)
+            {
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {
@@ -162,18 +192,22 @@ namespace Ksu.Gdc.Api.Web.Controllers
             }
         }
 
-        [HttpDelete]
-        [Route("{officerId}", Name = "DeleteOfficerById")]
-        public async Task<IActionResult> DeleteOfficerById([FromRoute] int officerId)
+        [HttpDelete("{officerId}")]
+        public async Task<IActionResult> DeleteById([FromRoute] int officerId)
         {
             try
             {
-                await _officerService.DeleteOfficerByIdAsync(officerId);
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(new ErrorResponse(ModelState));
+                }
+                await _officerService.DeleteByIdAsync(officerId);
+                await _officerService.SaveChangesAsync();
                 return Ok();
             }
             catch (NotFoundException ex)
             {
-                return NotFound(ex.Message);
+                return NotFound(new ErrorResponse(ex));
             }
             catch (Exception)
             {

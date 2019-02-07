@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Text;
 using System.Linq;
 using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using AutoMapper;
 
@@ -39,6 +42,29 @@ namespace Ksu.Gdc.Api.Core.Services
                 }
                 return response;
             }
+        }
+
+        public string BuildToken(AuthDto_User user)
+        {
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(AppConfiguration.GetConfig("JwtAuth_Key")));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var claims = new List<Claim>()
+            {
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+            };
+            foreach (string role in user.Roles)
+            {
+                claims.Add(new Claim(ClaimTypes.Role, role));
+            }
+
+            var token = new JwtSecurityToken(AppConfiguration.GetConfig("JwtAuth_Issuer"),
+                AppConfiguration.GetConfig("JwtAuth_Audience"),
+                claims,
+                expires: DateTime.Now.AddHours(2),
+                signingCredentials: creds);
+            return "Bearer " + new JwtSecurityTokenHandler().WriteToken(token);
         }
     }
 }

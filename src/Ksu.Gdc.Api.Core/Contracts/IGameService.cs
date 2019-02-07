@@ -11,32 +11,60 @@ namespace Ksu.Gdc.Api.Core.Contracts
     {
         #region CREATE
 
-        Task<DbEntity_Game> CreateGameAsync(CreateDto_Game newGame);
+        Task<bool> CreateAsync(DbEntity_Game createdGame);
+        Task<DbEntity_Game> CreateAsync(CreateDto_Game newGame);
 
         #endregion CREATE
 
         #region GET
 
-        Task<List<DbEntity_Game>> GetGamesAsync();
+        Task<List<DbEntity_Game>> GetAllAsync();
 
-        Task<DbEntity_Game> GetGameByIdAsync(int gameId);
+        Task<List<DbEntity_Game>> GetFeaturedAsync();
 
-        Task<Stream> GetGameThumbnailImageAsync(int gameId);
+        Task<DbEntity_Game> GetByIdAsync(int gameId);
+
+        Task<DbEntity_Image> GetImageAsync(DbEntity_Game game);
+        Task<DbEntity_Image> GetImageAsync(int gameId);
+
+        Task<List<DbEntity_User>> GetCollaboratorsAsync(DbEntity_Game game);
+        Task<List<DbEntity_User>> GetCollaboratorsAsync(int gameId);
+
+        Task<List<DbEntity_User>> GetNonCollaboratorsAsync(DbEntity_Game game);
+        Task<List<DbEntity_User>> GetNonCollaboratorsAsync(int gameId);
+
+        Task<DbEntity_GameUser> GetCollaboratorAsync(int gameId, int userId);
 
         #endregion GET
 
         #region UPDATE
 
-        Task<bool> UpdateGameThumbnailImageAsync(int gameId, Stream imageStream);
+        Task<bool> UpdateAsync(DbEntity_Game updatedGame);
 
-        Task<bool> UpdateGameAsync(DbEntity_Game dbGame, UpdateDto_Game updateGame);
+        Task<bool> UpdateImageAsync(int gameId, UpdateDto_Image imageUpdate);
+
+        Task<bool> AddCollaboratorAsync(DbEntity_GameUser collaborator);
+        Task<bool> AddCollaboratorAsync(DbEntity_Game game, DbEntity_User user);
+        Task<bool> AddCollaboratorAsync(DbEntity_Game game, int userId);
+        Task<bool> AddCollaboratorAsync(int gameId, DbEntity_User user);
+        Task<bool> AddCollaboratorAsync(int gameId, int userId);
 
         #endregion UPDATE
 
         #region DELETE
 
-        Task<bool> DeleteGameByIdAsync(int gameId);
+        Task<bool> DeleteAsync(DbEntity_Game game);
+
+        Task<bool> DeleteByIdAsync(int gameId);
+
+        Task<bool> RemoveCollaboratorAsync(DbEntity_GameUser collaborator);
+        Task<bool> RemoveCollaboratorAsync(DbEntity_Game game, DbEntity_User user);
+        Task<bool> RemoveCollaboratorAsync(DbEntity_Game game, int userId);
+        Task<bool> RemoveCollaboratorAsync(int gameId, DbEntity_User user);
+        Task<bool> RemoveCollaboratorAsync(int gameId, int userId);
 
         #endregion DELETE
+
+        Task<int> SaveChangesAsync();
     }
 }

@@ -15,13 +15,11 @@ namespace Ksu.Gdc.Api.Core.Models
         [MaxLength(1000)]
         public string Description { get; set; }
 
-        [Required]
         [Url]
-        public string Url { get; set; }
+        public string HostUrl { get; set; }
 
-        public int? UserId { get; set; }
-
-        public int? GroupId { get; set; }
+        [Required]
+        public int UserId { get; set; }
     }
 
     public class Dto_Game
@@ -32,11 +30,7 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public string Description { get; set; }
 
-        public string Url { get; set; }
-
-        public Dto_User User { get; set; }
-
-        public Dto_Group Group { get; set; }
+        public string HostUrl { get; set; }
     }
 
     public class UpdateDto_Game
@@ -48,13 +42,8 @@ namespace Ksu.Gdc.Api.Core.Models
         [MaxLength(1000)]
         public string Description { get; set; }
 
-        [Required]
         [Url]
-        public string Url { get; set; }
-
-        public int? UserId { get; set; }
-
-        public int? GroupId { get; set; }
+        public string HostUrl { get; set; }
     }
     public class PatchDto_Game
     {
@@ -65,10 +54,6 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Description { get; set; }
 
         [Url]
-        public string Url { get; set; }
-
-        public int? UserId { get; set; }
-
-        public int? GroupId { get; set; }
+        public string HostUrl { get; set; }
     }
 }

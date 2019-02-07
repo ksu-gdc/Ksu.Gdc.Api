@@ -14,36 +14,37 @@ namespace Ksu.Gdc.Api.Core.Contracts
     {
         #region CREATE
 
-        Task<DbEntity_User> CreateUserAsync(CreateDto_User newUser);
+        Task<bool> CreateAsync(DbEntity_User createdUser);
+        Task<DbEntity_User> CreateAsync(CreateDto_User newUser);
 
         #endregion CREATE
 
         #region GET
 
-        Task<List<DbEntity_User>> GetUsersAsync();
+        Task<List<DbEntity_User>> GetAllAsync();
 
-        Task<DbEntity_User> GetUserByIdAsync(int userId);
+        Task<DbEntity_User> GetByIdAsync(int userId);
 
-        Task<Stream> GetUserProfileImageAsync(int userId);
+        Task<DbEntity_Image> GetImageAsync(DbEntity_User user);
+        Task<DbEntity_Image> GetImageAsync(int userId);
 
-        Task<List<DbEntity_Group>> GetGroupsOfUserAsync(int userId);
-
-        Task<List<DbEntity_Game>> GetGamesOfUserAsync(int userId);
+        Task<List<DbEntity_Game>> GetGamesAsync(DbEntity_User user);
+        Task<List<DbEntity_Game>> GetGamesAsync(int userId);
 
         #endregion GET
 
         #region UPDATE
 
-        Task<bool> UpdateUserAsync(DbEntity_User dbUser, UpdateDto_User updateUser);
+        Task<bool> UpdateAsync(DbEntity_User updatedUser);
 
-        Task<bool> UpdateUserProfileImageAsync(int userId, Stream imageStream);
+        Task<bool> UpdateImageAsync(int userId, UpdateDto_Image imageUpdate);
 
         #endregion UPDATE
 
         #region DELETE
 
-        Task<bool> DeleteUserByIdAsync(int userId);
-
         #endregion DELETE
+
+        Task<int> SaveChangesAsync();
     }
 }
