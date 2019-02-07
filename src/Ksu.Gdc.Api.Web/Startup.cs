@@ -64,7 +64,7 @@ namespace Ksu.Gdc.Api.Web
             services.AddScoped<IGameService, GameService>();
 
             services.AddDbContext<KsuGdcContext>(options => options
-                                                 .UseMySql(AppConfiguration.GetConfig("connectionStrings:MySql_KsuGdc")));
+                                                 .UseMySql(AppConfiguration.GetConfig("MySql_KsuGdc_Connection_String")));
             services.AddScoped<DisconnectedData>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
