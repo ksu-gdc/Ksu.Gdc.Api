@@ -9,6 +9,33 @@
     <Folder Include="Entities\" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="releases\Ksu.Gdc.Api.Data.deps.json" />
+    <None Remove="releases\Microsoft.EntityFrameworkCore.Abstractions.dll" />
+    <None Remove="releases\Microsoft.Extensions.Caching.Abstractions.dll" />
+    <None Remove="releases\Microsoft.EntityFrameworkCore.Relational.dll" />
+    <None Remove="releases\Ksu.Gdc.Api.Data.pdb" />
+    <None Remove="releases\Ksu.Gdc.Api.Data.dll" />
+    <None Remove="releases\Microsoft.EntityFrameworkCore.Design.dll" />
+    <None Remove="releases\Microsoft.Extensions.Caching.Memory.dll" />
+    <None Remove="releases\Microsoft.Extensions.Configuration.dll" />
+    <None Remove="releases\Microsoft.Extensions.Configuration.Binder.dll" />
+    <None Remove="releases\Microsoft.Extensions.Configuration.Abstractions.dll" />
+    <None Remove="releases\Microsoft.EntityFrameworkCore.dll" />
+    <None Remove="releases\Microsoft.Extensions.DependencyInjection.dll" />
+    <None Remove="releases\Microsoft.Extensions.DependencyInjection.Abstractions.dll" />
+    <None Remove="releases\Microsoft.Extensions.Logging.Abstractions.dll" />
+    <None Remove="releases\Microsoft.Extensions.Options.dll" />
+    <None Remove="releases\Microsoft.Extensions.Logging.dll" />
+    <None Remove="releases\Newtonsoft.Json.dll" />
+    <None Remove="releases\Pomelo.EntityFrameworkCore.MySql.dll" />
+    <None Remove="releases\Microsoft.Extensions.Primitives.dll" />
+    <None Remove="releases\MySqlConnector.dll" />
+    <None Remove="releases\Remotion.Linq.dll" />
+    <None Remove="releases\System.Interactive.Async.dll" />
+    <None Remove="releases\System.Runtime.CompilerServices.Unsafe.dll" />
+    <None Remove="releases\Pomelo.JsonObject.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Ksu.Gdc.Api.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
