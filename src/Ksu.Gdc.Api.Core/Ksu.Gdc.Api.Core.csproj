@@ -37,7 +37,6 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Ksu.Gdc.Api.Data\Ksu.Gdc.Api.Data.csproj">
-    </ProjectReference>
+    <ProjectReference Include="..\Ksu.Gdc.Api.Data\Ksu.Gdc.Api.Data.csproj" />
   </ItemGroup>
 </Project>
