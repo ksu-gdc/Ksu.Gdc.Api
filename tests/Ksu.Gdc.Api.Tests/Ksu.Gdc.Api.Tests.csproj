@@ -12,4 +12,7 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="releases\CodeCoverage\amd64\covrun64.dll" />
+  </ItemGroup>
 </Project>

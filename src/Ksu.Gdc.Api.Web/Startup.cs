@@ -111,7 +111,7 @@ namespace Ksu.Gdc.Api.Web
                 .AddEnvironmentVariables()
                 .Build();
             var builder = new DbContextOptionsBuilder<KsuGdcContext>();
-            var connectionString = configuration.GetConnectionString("MySql_KsuGdc");
+            var connectionString = configuration.GetConnectionString("MySql_KsuGdc_Connection_String");
             builder.UseMySql(connectionString);
             return new KsuGdcContext(builder.Options);
         }
