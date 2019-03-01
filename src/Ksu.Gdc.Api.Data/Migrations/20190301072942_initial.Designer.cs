@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksu.Gdc.Api.Data.Migrations
 {
     [DbContext(typeof(KsuGdcContext))]
-    [Migration("20190301072809_initial")]
+    [Migration("20190301072942_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
