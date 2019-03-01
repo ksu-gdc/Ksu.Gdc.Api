@@ -18,11 +18,5 @@ namespace Ksu.Gdc.Api.Data.Entities
         [ForeignKey("User")]
         public int? UserId { get; set; }
         public DbEntity_User User { get; set; }
-
-        [Required]
-        public DateTimeOffset CreatedOn { get; set; }
-
-        [Required]
-        public DateTimeOffset UpdatedOn { get; set; }
     }
 }

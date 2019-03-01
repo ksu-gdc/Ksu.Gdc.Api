@@ -20,8 +20,5 @@ namespace Ksu.Gdc.Api.Data.Entities
         [Required]
         [MaxLength(20)]
         public string ContentType { get; set; }
-
-        [Required]
-        public DateTimeOffset CreatedOn { get; set; }
     }
 }

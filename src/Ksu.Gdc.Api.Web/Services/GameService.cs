@@ -141,7 +141,6 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<bool> UpdateAsync(DbEntity_Game updatedGame)
         {
-            updatedGame.UpdatedOn = DateTimeOffset.Now;
             _ksuGdcContext.Update(updatedGame);
             return true;
         }

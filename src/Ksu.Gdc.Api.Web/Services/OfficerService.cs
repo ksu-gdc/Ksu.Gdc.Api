@@ -87,7 +87,6 @@ namespace Ksu.Gdc.Api.Core.Services
 
         public async Task<bool> UpdateAsync(DbEntity_Officer updatedOfficer)
         {
-            updatedOfficer.UpdatedOn = DateTimeOffset.Now;
             _ksuGdcContext.Update(updatedOfficer);
             return true;
         }

@@ -15,8 +15,5 @@ namespace Ksu.Gdc.Api.Data.Entities
         [ForeignKey("Image")]
         public int ImageId { get; set; }
         public DbEntity_Image Image { get; set; }
-
-        [Required]
-        public DateTimeOffset CreatedOn { get; set; }
     }
 }
