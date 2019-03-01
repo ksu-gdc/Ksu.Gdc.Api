@@ -19,8 +19,8 @@ dotnet restore -r $1 $project_file_path
 if [ $? -ne 0 ]; then
     exit $?
 fi
-dotnet build --no-restore -r $1 $project_file_path
+dotnet build -r $1 $project_file_path
 if [ $? -ne 0 ]; then
     exit $?
 fi
-dotnet publish --no-build -r $1 -c Release -o ./Releases/$output_dir $project_file_path
+dotnet publish -r $1 -c Release -o ./Releases/$output_dir $project_file_path
