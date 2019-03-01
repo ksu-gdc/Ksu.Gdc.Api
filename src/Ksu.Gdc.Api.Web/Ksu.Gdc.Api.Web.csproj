@@ -510,5 +510,11 @@
       <Content Remove="Releases\appSettings.json" />
       <Content Remove="Releases\web.config" />
       <Content Remove="Releases\ubuntu.18.04-x64\appSettings.json" />
+      <Content Remove="Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\web.config" />
+      <Content Remove="Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\web.config" />
+      <Content Remove="Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\web.config" />
+      <Content Remove="Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Ksu.Gdc.Api.Web.runtimeconfig.json" />
+      <Content Remove="Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Ksu.Gdc.Api.Web.deps.json" />
+      <Content Remove="Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Releases\ubuntu.18.04-x64\Ksu.Gdc.Api.Web.deps.json" />
     </ItemGroup>
 </Project>
