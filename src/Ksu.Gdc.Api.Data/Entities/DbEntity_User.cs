@@ -20,5 +20,8 @@ namespace Ksu.Gdc.Api.Data.Entities
 
         [MaxLength(500)]
         public string Description { get; set; }
+
+        [Required]
+        public bool HasVerifiedInfo { get; set; }
     }
 }

@@ -33,6 +33,10 @@ namespace Ksu.Gdc.Api.Data.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<DbEntity_User>()
+                .Property(u => u.HasVerifiedInfo)
+                .HasDefaultValue(false);
+
             modelBuilder.Entity<DbEntity_UserImage>()
                 .HasKey(ui => new { ui.UserId, ui.ImageId });
 
