@@ -52,19 +52,23 @@ namespace Ksu.Gdc.Api.Core.Configurations
                 cfg.CreateMap<DbEntity_User, Dto_User>();
                 cfg.CreateMap<DbEntity_User, CreateDto_User>();
                 cfg.CreateMap<DbEntity_User, UpdateDto_User>();
+                cfg.CreateMap<DbEntity_User, PatchDto_User>();
                 cfg.CreateMap<DbEntity_User, AuthDto_User>();
 
                 cfg.CreateMap<Dto_User, DbEntity_User>();
                 cfg.CreateMap<CreateDto_User, DbEntity_User>();
                 cfg.CreateMap<UpdateDto_User, DbEntity_User>();
+                cfg.CreateMap<PatchDto_User, DbEntity_User>();
                 // Game
                 cfg.CreateMap<DbEntity_Game, Dto_Game>();
                 cfg.CreateMap<DbEntity_Game, CreateDto_Game>();
                 cfg.CreateMap<DbEntity_Game, UpdateDto_Game>();
+                cfg.CreateMap<DbEntity_Game, PatchDto_Game>();
 
                 cfg.CreateMap<Dto_Game, DbEntity_Game>();
                 cfg.CreateMap<CreateDto_Game, DbEntity_Game>();
                 cfg.CreateMap<UpdateDto_Game, DbEntity_Game>();
+                cfg.CreateMap<PatchDto_Game, DbEntity_Game>();
             });
         }
     }

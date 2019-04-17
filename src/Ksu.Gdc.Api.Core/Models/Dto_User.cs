@@ -21,6 +21,9 @@ namespace Ksu.Gdc.Api.Core.Models
         [MaxLength(500)]
         public string Description { get; set; }
 
+        [Required]
+        public bool HasVerifiedInfo { get; set; }
+
         public CreateDto_User(CASAttributes attributes)
         {
             UserId = attributes.KsuPersonWildcatId;
@@ -34,15 +37,16 @@ namespace Ksu.Gdc.Api.Core.Models
 
         public string Username { get; set; }
 
-        public List<string> Roles { get; set; } = new List<string>();
-
-        public string Token { get; set; }
+        public bool HasVerifiedInfo { get; set; }
     }
+
     public class Dto_User
     {
         public int UserId { get; set; }
 
         public string Username { get; set; }
+
+        public bool HasVerifiedInfo { get; set; }
 
         public string FirstName { get; set; }
 
@@ -53,20 +57,32 @@ namespace Ksu.Gdc.Api.Core.Models
 
     public class UpdateDto_User
     {
+        [Required]
+        public bool HasVerifiedInfo { get; set; }
+
+        [Required]
+        [MinLength(1)]
         [MaxLength(50)]
         public string FirstName { get; set; }
 
+        [Required]
+        [MinLength(1)]
         [MaxLength(50)]
         public string LastName { get; set; }
 
         [MaxLength(500)]
         public string Description { get; set; }
     }
+
     public class PatchDto_User
     {
+        public bool HasVerifiedInfo { get; set; }
+
+        [MinLength(1)]
         [MaxLength(50)]
         public string FirstName { get; set; }
 
+        [MinLength(1)]
         [MaxLength(50)]
         public string LastName { get; set; }
 

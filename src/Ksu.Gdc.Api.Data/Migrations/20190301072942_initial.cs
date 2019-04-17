@@ -17,9 +17,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     Title = table.Column<string>(maxLength: 100, nullable: false),
                     Description = table.Column<string>(maxLength: 1000, nullable: true),
                     HostUrl = table.Column<string>(maxLength: 2000, nullable: true),
-                    IsFeatured = table.Column<bool>(nullable: false, defaultValue: false),
-                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 93, DateTimeKind.Unspecified).AddTicks(6850), new TimeSpan(0, -6, 0, 0, 0))),
-                    UpdatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 93, DateTimeKind.Unspecified).AddTicks(7330), new TimeSpan(0, -6, 0, 0, 0)))
+                    IsFeatured = table.Column<bool>(nullable: false, defaultValue: false)
                 },
                 constraints: table =>
                 {
@@ -34,8 +32,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(maxLength: 200, nullable: false),
                     Data = table.Column<byte[]>(nullable: false),
-                    ContentType = table.Column<string>(maxLength: 20, nullable: false),
-                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 72, DateTimeKind.Unspecified).AddTicks(7770), new TimeSpan(0, -6, 0, 0, 0)))
+                    ContentType = table.Column<string>(maxLength: 20, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -51,9 +48,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     Username = table.Column<string>(nullable: false),
                     FirstName = table.Column<string>(maxLength: 50, nullable: true),
                     LastName = table.Column<string>(maxLength: 50, nullable: true),
-                    Description = table.Column<string>(maxLength: 500, nullable: true),
-                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 86, DateTimeKind.Unspecified).AddTicks(4000), new TimeSpan(0, -6, 0, 0, 0))),
-                    UpdatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 86, DateTimeKind.Unspecified).AddTicks(4400), new TimeSpan(0, -6, 0, 0, 0)))
+                    Description = table.Column<string>(maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -65,8 +60,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 columns: table => new
                 {
                     GameId = table.Column<int>(nullable: false),
-                    ImageId = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 95, DateTimeKind.Unspecified).AddTicks(370), new TimeSpan(0, -6, 0, 0, 0)))
+                    ImageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -90,8 +84,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    GameId = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 95, DateTimeKind.Unspecified).AddTicks(6760), new TimeSpan(0, -6, 0, 0, 0)))
+                    GameId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -117,9 +110,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     OfficerId = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Position = table.Column<string>(maxLength: 100, nullable: false),
-                    UserId = table.Column<int>(nullable: true),
-                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 85, DateTimeKind.Unspecified).AddTicks(9890), new TimeSpan(0, -6, 0, 0, 0))),
-                    UpdatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 86, DateTimeKind.Unspecified).AddTicks(360), new TimeSpan(0, -6, 0, 0, 0)))
+                    UserId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -137,8 +128,7 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<int>(nullable: false),
-                    ImageId = table.Column<int>(nullable: false),
-                    CreatedOn = table.Column<DateTimeOffset>(nullable: false, defaultValue: new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 93, DateTimeKind.Unspecified).AddTicks(3370), new TimeSpan(0, -6, 0, 0, 0)))
+                    ImageId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

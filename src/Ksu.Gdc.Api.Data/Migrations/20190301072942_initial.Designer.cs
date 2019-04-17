@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ksu.Gdc.Api.Data.Migrations
 {
     [DbContext(typeof(KsuGdcContext))]
-    [Migration("20190205020331_initial")]
+    [Migration("20190301072942_initial")]
     partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,10 +23,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                 {
                     b.Property<int>("GameId")
                         .ValueGeneratedOnAdd();
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 93, DateTimeKind.Unspecified).AddTicks(6850), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Description")
                         .HasMaxLength(1000);
@@ -42,10 +38,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(100);
 
-                    b.Property<DateTimeOffset>("UpdatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 93, DateTimeKind.Unspecified).AddTicks(7330), new TimeSpan(0, -6, 0, 0, 0)));
-
                     b.HasKey("GameId");
 
                     b.ToTable("Games");
@@ -56,10 +48,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("GameId");
 
                     b.Property<int>("ImageId");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 95, DateTimeKind.Unspecified).AddTicks(370), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("GameId", "ImageId");
 
@@ -73,10 +61,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("UserId");
 
                     b.Property<int>("GameId");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 95, DateTimeKind.Unspecified).AddTicks(6760), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("UserId", "GameId");
 
@@ -93,10 +77,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<string>("ContentType")
                         .IsRequired()
                         .HasMaxLength(20);
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 72, DateTimeKind.Unspecified).AddTicks(7770), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<byte[]>("Data")
                         .IsRequired();
@@ -115,17 +95,9 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("OfficerId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 85, DateTimeKind.Unspecified).AddTicks(9890), new TimeSpan(0, -6, 0, 0, 0)));
-
                     b.Property<string>("Position")
                         .IsRequired()
                         .HasMaxLength(100);
-
-                    b.Property<DateTimeOffset>("UpdatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 86, DateTimeKind.Unspecified).AddTicks(360), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<int?>("UserId");
 
@@ -141,10 +113,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 86, DateTimeKind.Unspecified).AddTicks(4000), new TimeSpan(0, -6, 0, 0, 0)));
-
                     b.Property<string>("Description")
                         .HasMaxLength(500);
 
@@ -153,10 +121,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
 
                     b.Property<string>("LastName")
                         .HasMaxLength(50);
-
-                    b.Property<DateTimeOffset>("UpdatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 86, DateTimeKind.Unspecified).AddTicks(4400), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.Property<string>("Username")
                         .IsRequired();
@@ -171,10 +135,6 @@ namespace Ksu.Gdc.Api.Data.Migrations
                     b.Property<int>("UserId");
 
                     b.Property<int>("ImageId");
-
-                    b.Property<DateTimeOffset>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasDefaultValue(new DateTimeOffset(new DateTime(2019, 2, 4, 20, 3, 31, 93, DateTimeKind.Unspecified).AddTicks(3370), new TimeSpan(0, -6, 0, 0, 0)));
 
                     b.HasKey("UserId", "ImageId");
 

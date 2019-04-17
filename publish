@@ -1,12 +1,12 @@
 #!/bin/bash
 
 project_file_path="./src/Ksu.Gdc.Api.Web/Ksu.Gdc.Api.Web.csproj"
-output_dir=$1
 
 if [ -z $1 ]; then
     echo "ERROR :- 1st argument required - target runtime to publish for"
     exit 1
 fi
+output_dir=$1
 if [ ! -z $2 ]; then
     if [ $2 == *"/"* ]; then
         echo "ERROR :- 2nd argument invalid - output directory cannot have '/'"

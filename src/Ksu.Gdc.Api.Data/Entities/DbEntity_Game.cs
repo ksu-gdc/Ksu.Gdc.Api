@@ -22,11 +22,5 @@ namespace Ksu.Gdc.Api.Data.Entities
 
         [Required]
         public bool IsFeatured { get; set; }
-
-        [Required]
-        public DateTimeOffset CreatedOn { get; set; }
-
-        [Required]
-        public DateTimeOffset UpdatedOn { get; set; }
     }
 }

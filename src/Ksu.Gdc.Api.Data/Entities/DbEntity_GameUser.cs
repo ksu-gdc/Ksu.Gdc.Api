@@ -15,8 +15,5 @@ namespace Ksu.Gdc.Api.Data.Entities
         [ForeignKey("Game")]
         public int GameId { get; set; }
         public DbEntity_Game Game { get; set; }
-
-        [Required]
-        public DateTimeOffset CreatedOn { get; set; }
     }
 }

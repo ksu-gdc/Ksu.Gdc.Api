@@ -22,9 +22,6 @@ namespace Ksu.Gdc.Api.Data.Entities
         public string Description { get; set; }
 
         [Required]
-        public DateTimeOffset CreatedOn { get; set; }
-
-        [Required]
-        public DateTimeOffset UpdatedOn { get; set; }
+        public bool HasVerifiedInfo { get; set; }
     }
 }

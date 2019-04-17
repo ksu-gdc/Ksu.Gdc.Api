@@ -33,51 +33,22 @@ namespace Ksu.Gdc.Api.Data.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<DbEntity_Image>()
-                .Property(i => i.CreatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
-
-            modelBuilder.Entity<DbEntity_Officer>()
-                .Property(o => o.CreatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
-            modelBuilder.Entity<DbEntity_Officer>()
-                .Property(o => o.UpdatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
-
             modelBuilder.Entity<DbEntity_User>()
-                .Property(u => u.CreatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
-            modelBuilder.Entity<DbEntity_User>()
-                .Property(u => u.UpdatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
+                .Property(u => u.HasVerifiedInfo)
+                .HasDefaultValue(false);
 
             modelBuilder.Entity<DbEntity_UserImage>()
                 .HasKey(ui => new { ui.UserId, ui.ImageId });
-            modelBuilder.Entity<DbEntity_UserImage>()
-                .Property(ui => ui.CreatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
 
-            modelBuilder.Entity<DbEntity_Game>()
-                .Property(g => g.CreatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
-            modelBuilder.Entity<DbEntity_Game>()
-                .Property(g => g.UpdatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
             modelBuilder.Entity<DbEntity_Game>()
                 .Property(g => g.IsFeatured)
                 .HasDefaultValue(false);
 
             modelBuilder.Entity<DbEntity_GameImage>()
                 .HasKey(gi => new { gi.GameId, gi.ImageId });
-            modelBuilder.Entity<DbEntity_GameImage>()
-                .Property(gi => gi.CreatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
 
             modelBuilder.Entity<DbEntity_GameUser>()
                 .HasKey(gu => new { gu.UserId, gu.GameId });
-            modelBuilder.Entity<DbEntity_GameUser>()
-                .Property(gu => gu.CreatedOn)
-                .HasDefaultValue(DateTimeOffset.Now);
 
             base.OnModelCreating(modelBuilder);
         }

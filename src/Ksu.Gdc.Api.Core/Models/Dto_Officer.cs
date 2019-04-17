@@ -9,6 +9,7 @@ namespace Ksu.Gdc.Api.Core.Models
     public class CreateDto_Officer
     {
         [Required]
+        [MinLength(1)]
         [MaxLength(100)]
         public string Position { get; set; }
 
@@ -27,13 +28,16 @@ namespace Ksu.Gdc.Api.Core.Models
     public class UpdateDto_Officer
     {
         [Required]
+        [MinLength(1)]
         [MaxLength(100)]
         public string Position { get; set; }
 
         public int? UserId { get; set; }
     }
+
     public class PatchDto_Officer
     {
+        [MinLength(1)]
         [MaxLength(100)]
         public string Position { get; set; }
 

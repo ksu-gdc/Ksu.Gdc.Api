@@ -294,7 +294,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPatch("{gameId}")]
-        public async Task<IActionResult> PatchById([FromRoute] int gameId, [FromBody] JsonPatchDocument<UpdateDto_Game> gamePatch)
+        public async Task<IActionResult> PatchById([FromRoute] int gameId, [FromBody] JsonPatchDocument<PatchDto_Game> gamePatch)
         {
             try
             {
@@ -303,7 +303,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     return BadRequest(new ErrorResponse(ModelState));
                 }
                 var game = await _gameService.GetByIdAsync(gameId);
-                var gameUpdate = Mapper.Map<UpdateDto_Game>(game);
+                var gameUpdate = Mapper.Map<PatchDto_Game>(game);
                 gamePatch.ApplyTo(gameUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {

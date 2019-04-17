@@ -78,11 +78,9 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     await _userService.SaveChangesAsync();
                 }
                 var authDtoUser = Mapper.Map<AuthDto_User>(user);
-                if ((await _officerService.GetByUserAsync(userId)).Count > 0)
-                {
-                    authDtoUser.Roles.Add("officer");
-                }
-                authDtoUser.Token = _authService.BuildToken(authDtoUser);
+                var newToken = _authService.BuildToken(authDtoUser);
+                Response.Headers.Add("Access-Control-Expose-Headers", "Authorization");
+                Response.Headers.Add("Authorization", newToken);
                 return Ok(authDtoUser);
             }
             catch (NotAuthorizedException)
@@ -124,8 +122,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                 .FirstOrDefault();
             var user = await _userService.GetByIdAsync(userId);
             var authDtoUser = Mapper.Map<AuthDto_User>(user);
-            authDtoUser.Roles.AddRange(await GetUserRoles(userId));
-            authDtoUser.Token = Request.Headers
+            var token = Request.Headers
                 .Where(h => h.Key == "Authorization")
                 .Select(h => h.Value)
                 .FirstOrDefault();
