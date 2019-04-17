@@ -213,7 +213,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
         }
 
         [HttpPatch("{userId}")]
-        public async Task<IActionResult> PatchById([FromRoute] int userId, [FromBody] JsonPatchDocument<UpdateDto_User> userPatch)
+        public async Task<IActionResult> PatchById([FromRoute] int userId, [FromBody] JsonPatchDocument<PatchDto_User> userPatch)
         {
             try
             {
@@ -222,7 +222,7 @@ namespace Ksu.Gdc.Api.Web.Controllers
                     return BadRequest(new ErrorResponse(ModelState));
                 }
                 var user = await _userService.GetByIdAsync(userId);
-                var userUpdate = Mapper.Map<UpdateDto_User>(user);
+                var userUpdate = Mapper.Map<PatchDto_User>(user);
                 userPatch.ApplyTo(userUpdate, ModelState);
                 if (!ModelState.IsValid)
                 {
