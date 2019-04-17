@@ -54,10 +54,6 @@ namespace Ksu.Gdc.Api.Core.Services
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
             };
-            foreach (string role in user.Roles)
-            {
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
 
             var token = new JwtSecurityToken(AppConfiguration.GetConfig("JwtAuth_Issuer"),
                 AppConfiguration.GetConfig("JwtAuth_Audience"),
