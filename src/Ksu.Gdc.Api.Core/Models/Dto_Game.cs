@@ -9,6 +9,7 @@ namespace Ksu.Gdc.Api.Core.Models
     public class CreateDto_Game
     {
         [Required]
+        [MinLength(1)]
         [MaxLength(100)]
         public string Title { get; set; }
 
@@ -16,6 +17,7 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Description { get; set; }
 
         [Url]
+        [MaxLength(2000)]
         public string HostUrl { get; set; }
 
         [Required]
@@ -36,6 +38,7 @@ namespace Ksu.Gdc.Api.Core.Models
     public class UpdateDto_Game
     {
         [Required]
+        [MinLength(1)]
         [MaxLength(100)]
         public string Title { get; set; }
 
@@ -43,10 +46,13 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Description { get; set; }
 
         [Url]
+        [MaxLength(2000)]
         public string HostUrl { get; set; }
     }
+
     public class PatchDto_Game
     {
+        [MinLength(1)]
         [MaxLength(100)]
         public string Title { get; set; }
 
@@ -54,6 +60,7 @@ namespace Ksu.Gdc.Api.Core.Models
         public string Description { get; set; }
 
         [Url]
+        [MaxLength(2000)]
         public string HostUrl { get; set; }
     }
 }
